@@ -1,4 +1,4 @@
-package com.example;
+package me.emafire003.dev.animatedparticleslib;
 
 import net.fabricmc.api.ClientModInitializer;
 

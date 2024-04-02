@@ -1,9 +1,8 @@
-# Fabric Example Mod
+# Animated Particle Effetc tests
 
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+## Credit
+This is entirely based on the bukkit plugin EffectLib! Go check it out!
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This template is available under the MIT license. Feel free to learn from it and incorporate it in your own projects.

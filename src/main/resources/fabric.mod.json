@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "animatedparticleslib",
 	"version": "${version}",
-	"name": "Example mod",
+	"name": "Animated Particles Lib",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
 		"Me!"
@@ -11,19 +11,19 @@
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "MIT",
+	"icon": "assets/animatedparticleslib/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+          "me.emafire003.dev.animatedparticleslib.AnimatedParticlesLib"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"me.emafire003.dev.animatedparticleslib.mixin.client.ExampleModClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"animatedparticleslib.mixins.json",
 		{
 			"config": "modid.client.mixins.json",
 			"environment": "client"
