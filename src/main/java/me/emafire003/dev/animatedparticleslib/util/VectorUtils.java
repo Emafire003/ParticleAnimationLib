@@ -4,8 +4,6 @@ import net.minecraft.util.math.Vec3d;
 
 public final class VectorUtils {
 
-
-
     public static Vec3d rotateVector(Vec3d vector, float angleX, float angleY, float angleZ) {
         // double x = vector.getX(), y = vector.getY(), z = vector.getZ();
         // double cosX = Math.cos(angleX), sinX = Math.sin(angleX), cosY =
@@ -61,6 +59,33 @@ public final class VectorUtils {
         x = initialZ * sinYaw + initialX * cosYaw;
 
         return new Vec3d(x, y, z);
+    }
+
+    public static Vec3d rotateAroundAxisX(Vec3d vector, double angle) {
+        double y, z, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        y = vector.getY() * cos - vector.getZ() * sin;
+        z = vector.getY() * sin + vector.getZ() * cos;
+        return new Vec3d(vector.getX(), y, z);
+    }
+
+    public static Vec3d rotateAroundAxisY(Vec3d vector, double angle) {
+        double x, z, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        x = vector.getX() * cos + vector.getZ() * sin;
+        z = vector.getX() * -sin + vector.getZ() * cos;
+        return new Vec3d(x, vector.getY(), z);
+    }
+
+    public static Vec3d rotateAroundAxisZ(Vec3d vector, double angle) {
+        double x, y, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        x = vector.getX() * cos - vector.getY() * sin;
+        y = vector.getX() * sin + vector.getY() * cos;
+        return new Vec3d(x, y, vector.getZ());
     }
 
     public static double angleToXAxis(Vec3d vector) {

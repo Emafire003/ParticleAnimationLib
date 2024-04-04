@@ -88,7 +88,7 @@ public class AnimatedBallEffect extends EffectV3 {
         //TODO make configurable
         this.particle = particle;
         this.centeredOriginEntity = centeredEntity;
-        this.alwaysCenter = true;
+        this.updatePositions = true;
         this.world = world;
         this.particles = count;
         this.iterations = iterations;
@@ -99,6 +99,7 @@ public class AnimatedBallEffect extends EffectV3 {
 
     @Override
     public void onRun() {
+        //TODO add entity locking!
         Vec3d pos = getOriginPos();
 
         if (pos == null) {
@@ -121,7 +122,8 @@ public class AnimatedBallEffect extends EffectV3 {
 
 
             Vec3d vector = new Vec3d(x,y,z);
-            VectorUtils.rotateVector(vector, (float) xRotation, (float) yRotation, (float) zRotation);
+            //TODO ah cool this didn't work
+            vector = VectorUtils.rotateVector(vector, (float) xRotation, (float) yRotation, (float) zRotation);
 
             this.displayParticle(this.particle, origin_pos.add(vector));
         }

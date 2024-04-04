@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class CuboidEffect extends EffectV3 {
 
     /**
@@ -58,6 +59,7 @@ public class CuboidEffect extends EffectV3 {
 
     /**
     * Creates a new cuboid effect.
+     * Don't use this constructor, since xyz lengths and origin-target exclude each other
      *
      * @param world The world the particles are going to spawn in
      *              TODO add @link
@@ -71,7 +73,8 @@ public class CuboidEffect extends EffectV3 {
      * @param padding The padding to add to the sides of the cuboid. A padding of 0.5 will result in having the effect closer to the border of a block, a padding of 0 will place the effect in the middle of a block
      * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
-    /*public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
+    @Deprecated
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
         this.origin_pos = origin;
@@ -82,7 +85,7 @@ public class CuboidEffect extends EffectV3 {
         this.zLength = z_length;
         this.padding = padding;
         this.blockSnap = blockSnap;
-    }*/
+    }
 
     /**
      * Creates a new cuboid effect.

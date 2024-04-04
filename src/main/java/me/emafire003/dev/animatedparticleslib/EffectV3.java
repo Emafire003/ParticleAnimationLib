@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 public class EffectV3 {
 
@@ -16,17 +15,17 @@ public class EffectV3 {
 
     //If an effect like an arc has a beginning and end pos, this is the one.
     protected Vec3d target_pos;
-    protected boolean alwaysCenter;
+    protected boolean updatePositions;
     protected Entity centeredOriginEntity;
     protected Vec3d centeredOriginOffset;
-    protected Entity centeredFinsihEntity;
-    protected Vec3d centeredFinishOffset;
+    protected Entity centeredTargetEntity;
+    protected Vec3d centeredTargetOffset;
     protected ServerWorld world;
     public EffectType type;
     protected ParticleEffect particle;
 
-    private boolean done = false;
-    private int ticks = 0;
+    protected boolean done = false;
+    protected int ticks = 0;
 
     public EffectV3(ServerWorld world, EffectType type, ParticleEffect particle){
         this.world = world;
@@ -45,6 +44,15 @@ public class EffectV3 {
 
     }
 
+    public void updatePos(){
+        if(centeredOriginEntity != null){
+            this.origin_pos = centeredOriginEntity.getPos().add(centeredOriginOffset);
+        }
+        if(centeredTargetEntity != null){
+            this.target_pos = centeredTargetEntity.getPos().add(centeredTargetOffset);
+        }
+    }
+
     public void run(){
         if(this.world.isClient){
             return;
@@ -59,8 +67,8 @@ public class EffectV3 {
                 return;
             }
 
-            if(alwaysCenter && centeredOriginEntity != null){
-                this.origin_pos = centeredOriginEntity.getPos().add(centeredOriginOffset);
+            if(updatePositions){
+                updatePos();
             }
             if(this.type == EffectType.DELAYED){
                 //Increasing tick count every tick, and executing one after the ticks reached the delay
@@ -126,12 +134,12 @@ public class EffectV3 {
         this.origin_pos = origin_pos;
     }
 
-    public boolean isAlwaysCenter() {
-        return alwaysCenter;
+    public boolean isUpdatePositions() {
+        return updatePositions;
     }
 
-    public void setAlwaysCenter(boolean alwaysCenter) {
-        this.alwaysCenter = alwaysCenter;
+    public void setUpdatePositions(boolean updatePositions) {
+        this.updatePositions = updatePositions;
     }
 
     public Entity getCenteredOriginEntity() {
@@ -158,19 +166,19 @@ public class EffectV3 {
         this.target_pos = finish_pos;
     }
 
-    public Entity getCenteredFinsihEntity() {
-        return centeredFinsihEntity;
+    public Entity getCenteredTargetEntity() {
+        return centeredTargetEntity;
     }
 
-    public void setCenteredFinsihEntity(Entity centeredFinsihEntity) {
-        this.centeredFinsihEntity = centeredFinsihEntity;
+    public void setCenteredTargetEntity(Entity centeredTargetEntity) {
+        this.centeredTargetEntity = centeredTargetEntity;
     }
 
-    public Vec3d getCenteredFinishOffset() {
-        return centeredFinishOffset;
+    public Vec3d getCenteredTargetOffset() {
+        return centeredTargetOffset;
     }
 
-    public void setCenteredFinishOffset(Vec3d centeredFinishOffset) {
-        this.centeredFinishOffset = centeredFinishOffset;
+    public void setCenteredTargetOffset(Vec3d centeredTargetOffset) {
+        this.centeredTargetOffset = centeredTargetOffset;
     }
 }
