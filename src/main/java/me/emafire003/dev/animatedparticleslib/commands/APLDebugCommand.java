@@ -5,11 +5,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.Collection;
 
@@ -21,9 +19,9 @@ public class APLDebugCommand implements APLCommand {
 
         try{
             for(Entity target : targets){
-                //ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
                 //TODO spawn the effect
-            }
+
+                }
             return 1;
         }catch(Exception e){
             e.printStackTrace();

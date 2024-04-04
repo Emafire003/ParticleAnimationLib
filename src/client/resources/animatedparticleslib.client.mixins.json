@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "com.emafire003.mixin.client",
+	"package": "me.emafire003.dev.animatedparticleslib.mixin.client",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"me.emafire003.mixin.client.ExampleClientMixin"
+
 	],
 	"injectors": {
 		"defaultRequire": 1

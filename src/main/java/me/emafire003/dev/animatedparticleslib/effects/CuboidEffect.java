@@ -61,17 +61,17 @@ public class CuboidEffect extends EffectV3 {
      *
      * @param world The world the particles are going to spawn in
      *              TODO add @link
-     * @param particle The particle that are going to be spawned. You can use ParticleTypes class for example
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
-     * @param x_length The length of the x component of the cuboid
-     * @param y_length The length of the y component of the cuboid
-     * @param z_length The length of the z component of the cuboid
-     * @param padding The padding to add to the sides of the cuboid
-     * @param blockSnap Weather or not the corners should snap to blocks to be more precise. Aka should we use the corner of blocks or not?
+     * @param x_length The length of the x component of the cuboid. The minimum is 1 block
+     * @param y_length The length of the y component of the cuboid. The minimum is 1 block
+     * @param z_length The length of the z component of the cuboid. The minimum is 1 block
+     * @param padding The padding to add to the sides of the cuboid. A padding of 0.5 will result in having the effect closer to the border of a block, a padding of 0 will place the effect in the middle of a block
+     * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
+    /*public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
         this.origin_pos = origin;
@@ -82,7 +82,127 @@ public class CuboidEffect extends EffectV3 {
         this.zLength = z_length;
         this.padding = padding;
         this.blockSnap = blockSnap;
+    }*/
+
+    /**
+     * Creates a new cuboid effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the first corner of the cuboid
+     * @param target The target position of the effect, aka the opposite corner of the cuboid
+     * @param particles_per_row How many particles should each side/row have
+     * @param padding The padding to add to the sides of the cuboid. A padding of 0.5 will result in having the effect closer to the border of a block, a padding of 0 will place the effect in the middle of a block
+     * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
+     * */
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double padding, boolean blockSnap) {
+        super(world, EffectType.REPEATING, particle);
+        this.type = EffectType.REPEATING;
+        this.origin_pos = origin;
+        this.target_pos = target;
+        this.particles = particles_per_row;
+        this.padding = padding;
+        this.blockSnap = blockSnap;
     }
+
+    /**
+     * Creates a new cuboid effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the first corner of the cuboid
+     * @param particles_per_row How many particles should each side/row have
+     * @param x_length The length of the x component of the cuboid. The minimum is 1 block.
+     * @param y_length The length of the y component of the cuboid. The minimum is 1 block
+     * @param z_length The length of the z component of the cuboid. The minimum is 1 block
+     * @param padding The padding to add to the sides of the cuboid. A padding of 0.5 will result in having the effect closer to the border of a block, a padding of 0 will place the effect in the middle of a block
+     * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
+     * */
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
+        super(world, EffectType.REPEATING, particle);
+        this.type = EffectType.REPEATING;
+        this.origin_pos = origin;
+        this.particles = particles_per_row;
+        this.xLength = x_length;
+        this.yLength = y_length;
+        this.zLength = z_length;
+        this.padding = padding;
+        this.blockSnap = blockSnap;
+    }
+
+    /**
+     * Creates a new cuboid effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the first corner of the cuboid
+     * @param particles_per_row How many particles should each side/row have
+     * @param x_length The length of the x component of the cuboid. The minimum is 1 block
+     * @param y_length The length of the y component of the cuboid. The minimum is 1 block
+     * @param z_length The length of the z component of the cuboid. The minimum is 1 block
+     * */
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length) {
+        super(world, EffectType.REPEATING, particle);
+        this.type = EffectType.REPEATING;
+        this.origin_pos = origin;
+        this.particles = particles_per_row;
+        this.xLength = x_length;
+        this.yLength = y_length;
+        this.zLength = z_length;
+    }
+
+    /**
+     * Creates a new cuboid effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the first corner of the cuboid
+     * @param target The target position of the effect, aka the opposite corner of the cuboid
+     * @param particles_per_row How many particles should each side/row have
+     * */
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row) {
+        super(world, EffectType.REPEATING, particle);
+        this.type = EffectType.REPEATING;
+        this.origin_pos = origin;
+        this.target_pos = target;
+        this.particles = particles_per_row;
+    }
+
+    /**
+     * Creates a new cuboid effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the first corner of the cuboid
+     * @param x_length The length of the x component of the cuboid. The minimum is 1 block
+     * @param y_length The length of the y component of the cuboid. The minimum is 1 block
+     * @param z_length The length of the z component of the cuboid. The minimum is 1 block
+     * */
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, double x_length, double y_length, double z_length) {
+        super(world, EffectType.REPEATING, particle);
+        this.type = EffectType.REPEATING;
+        this.origin_pos = origin;
+        this.xLength = x_length;
+        this.yLength = y_length;
+        this.zLength = z_length;
+    }
+
+
+    /**
+     * Creates a new cuboid effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the first corner of the cuboid
+     * @param target The target position of the effect, aka the opposite corner of the cuboid
+     * */
+    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target) {
+        super(world, EffectType.REPEATING, particle);
+        this.type = EffectType.REPEATING;
+        this.origin_pos = origin;
+        this.target_pos = target;
+    }
+
 
     @Override
     public void onRun() {
@@ -110,9 +230,9 @@ public class CuboidEffect extends EffectV3 {
                 double x = minCorner.getX();
                 double y = minCorner.getY();
                 double z = minCorner.getZ();
-                if (target.getX() < minCorner.getX()) x=target.getX();
-                if (target.getY() < minCorner.getY()) y=target.getY();
-                if (target.getZ() < minCorner.getZ()) z=target.getZ();
+                if (target.getX() < x) x=target.getX();
+                if (target.getY() < y) y=target.getY();
+                if (target.getZ() < z) z=target.getZ();
                 minCorner = new Vec3d(x,y,z);
 
                 useXLength = Math.abs(origin.getX() - target.getX());
@@ -186,6 +306,48 @@ public class CuboidEffect extends EffectV3 {
         }
 
         this.displayParticle(particle, minCorner.add(x,y,z));
+    }
+
+    // Methods to add stuff to the effect after it has been created:
+
+    public double getXLength() {
+        return xLength;
+    }
+
+    public void setXLength(double xLength) {
+        this.xLength = xLength;
+    }
+
+    public double getYLength() {
+        return yLength;
+    }
+
+    public void setYLength(double yLength) {
+        this.yLength = yLength;
+    }
+
+    public double getZLength() {
+        return zLength;
+    }
+
+    public void setZLength(double zLength) {
+        this.zLength = zLength;
+    }
+
+    public double getPadding() {
+        return padding;
+    }
+
+    public void setPadding(double padding) {
+        this.padding = padding;
+    }
+
+    public boolean isBlockSnap() {
+        return blockSnap;
+    }
+
+    public void setBlockSnap(boolean blockSnap) {
+        this.blockSnap = blockSnap;
     }
 
 }

@@ -3,9 +3,9 @@
 	"id": "animatedparticleslib",
 	"version": "${version}",
 	"name": "Animated Particles Lib",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A particle animation library to create cool effects!",
 	"authors": [
-		"Me!"
+		"Emafire003, elBukkit"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -19,13 +19,13 @@
           "me.emafire003.dev.animatedparticleslib.AnimatedParticlesLib"
 		],
 		"client": [
-			"me.emafire003.dev.animatedparticleslib.mixin.client.ExampleModClient"
+			"me.emafire003.dev.animatedparticleslib.ExampleModClient"
 		]
 	},
 	"mixins": [
 		"animatedparticleslib.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "animatedparticleslib.client.mixins.json",
 			"environment": "client"
 		}
 	],
