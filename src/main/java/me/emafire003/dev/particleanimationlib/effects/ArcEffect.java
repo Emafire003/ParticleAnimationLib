@@ -1,11 +1,10 @@
-package me.emafire003.dev.animatedparticleslib.effects;
+package me.emafire003.dev.particleanimationlib.effects;
 
-import me.emafire003.dev.animatedparticleslib.EffectType;
-import me.emafire003.dev.animatedparticleslib.EffectV3;
+import me.emafire003.dev.particleanimationlib.EffectType;
+import me.emafire003.dev.particleanimationlib.EffectV3;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 public class ArcEffect extends EffectV3 {
 

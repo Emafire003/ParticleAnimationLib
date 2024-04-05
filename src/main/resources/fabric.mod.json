@@ -1,29 +1,30 @@
 {
 	"schemaVersion": 1,
-	"id": "animatedparticleslib",
+	"id": "particleanimationlib",
 	"version": "${version}",
-	"name": "Animated Particles Lib",
+	"name": "Particle Animation Lib",
 	"description": "A particle animation library to create cool effects!",
 	"authors": [
-		"Emafire003, elBukkit"
+		"Emafire003, elBukkit (original code)"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/particleanimationlib",
+		"sources": "https://github.com/Emafire003/ParticleAnimationLib",
+		"issues": "https://github.com/Emafire003/ParticleAnimationLib/issues"
 	},
 	"license": "MIT",
-	"icon": "assets/animatedparticleslib/icon.png",
+	"icon": "assets/particleanimationlib/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "me.emafire003.dev.animatedparticleslib.AnimatedParticlesLib"
+			"me.emafire003.dev.particleanimationlib.ParticleAnimationLib"
 		],
 		"client": [
-			"me.emafire003.dev.animatedparticleslib.ExampleModClient"
+			"me.emafire003.dev.particleanimationlib.ExampleModClient"
 		]
 	},
 	"mixins": [
-		"animatedparticleslib.mixins.json",
+		"particleanimationlib.mixins.json",
 		{
 			"config": "animatedparticleslib.client.mixins.json",
 			"environment": "client"

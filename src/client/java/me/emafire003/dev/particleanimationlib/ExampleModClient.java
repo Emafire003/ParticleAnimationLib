@@ -1,4 +1,4 @@
-package me.emafire003.dev.animatedparticleslib;
+package me.emafire003.dev.particleanimationlib;
 
 import net.fabricmc.api.ClientModInitializer;
 

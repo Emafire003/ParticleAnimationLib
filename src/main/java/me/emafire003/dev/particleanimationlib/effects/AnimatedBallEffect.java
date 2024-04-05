@@ -1,9 +1,9 @@
-package me.emafire003.dev.animatedparticleslib.effects;
+package me.emafire003.dev.particleanimationlib.effects;
 
-import me.emafire003.dev.animatedparticleslib.EffectType;
-import me.emafire003.dev.animatedparticleslib.EffectV3;
-import me.emafire003.dev.animatedparticleslib.util.MathUtils;
-import me.emafire003.dev.animatedparticleslib.util.VectorUtils;
+import me.emafire003.dev.particleanimationlib.EffectType;
+import me.emafire003.dev.particleanimationlib.EffectV3;
+import me.emafire003.dev.particleanimationlib.util.MathUtils;
+import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;

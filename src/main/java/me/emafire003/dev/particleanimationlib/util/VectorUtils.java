@@ -1,4 +1,4 @@
-package me.emafire003.dev.animatedparticleslib.util;
+package me.emafire003.dev.particleanimationlib.util;
 
 import net.minecraft.util.math.Vec3d;
 

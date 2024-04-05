@@ -1,4 +1,4 @@
-package me.emafire003.dev.animatedparticleslib.mixin.client;
+package me.emafire003.dev.particleanimationlib.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;

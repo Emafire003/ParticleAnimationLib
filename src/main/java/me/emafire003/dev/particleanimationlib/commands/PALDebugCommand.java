@@ -1,19 +1,17 @@
-package me.emafire003.dev.animatedparticleslib.commands;
+package me.emafire003.dev.particleanimationlib.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.animatedparticleslib.effects.VortexEffect;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
 
-public class APLDebugCommand implements APLCommand {
+public class PALDebugCommand implements PALCommand {
 
     private int particleEffect(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<? extends Entity> targets = EntityArgumentType.getEntities(context, "target");
@@ -23,14 +21,13 @@ public class APLDebugCommand implements APLCommand {
             for(Entity target : targets){
                 //TODO spawn the effect
 
-                VortexEffect vortexEffect = new VortexEffect(source.getWorld(), ParticleTypes.WITCH, target.getPos().add(0, 1,0),
+                /*VortexEffect vortexEffect = new VortexEffect(source.getWorld(), ParticleTypes.WITCH, target.getPos().add(0, 1,0),
                         target.getYaw(), target.getPitch(),
                     0.7f,0.0005f, 0.1f, 0.0f,
                         Math.PI/16, 50, 10);
 
                 vortexEffect.setIterations(150);
-                vortexEffect.run();
-
+                vortexEffect.run();*/
             }
             return 1;
         }catch(Exception e){

@@ -1,4 +1,4 @@
-package me.emafire003.dev.animatedparticleslib;
+package me.emafire003.dev.particleanimationlib;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
@@ -6,8 +6,8 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
+@SuppressWarnings("unused")
 public class EffectV3 {
-
 
     protected int iterations;
     protected int delay;

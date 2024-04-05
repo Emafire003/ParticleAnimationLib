@@ -1,8 +1,9 @@
-# Animated Particle Effetc tests
+# Particle Animation Lib
+
+
 
 ## Credit
-This is entirely based on the bukkit plugin EffectLib! Go check it out!
+This mod is based on the bukkit plugin ![EffectLib](https://github.com/elBukkit/EffectLib) by elBukkit team, check it out too!
 
 ## License
-
-This template is available under the MIT license. Feel free to learn from it and incorporate it in your own projects.
+This library is available under MIT license

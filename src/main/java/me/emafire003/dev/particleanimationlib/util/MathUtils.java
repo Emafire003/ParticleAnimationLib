@@ -1,4 +1,4 @@
-package me.emafire003.dev.animatedparticleslib.util;
+package me.emafire003.dev.particleanimationlib.util;
 
 /**
  * *****************************************************************************
@@ -26,6 +26,8 @@ import java.util.Random;
  *
  * @author Nathan Sweet
  */
+//TODO remove this after all effects have been implemented?
+@SuppressWarnings("unused")
 public final class MathUtils {
 
     static public final float nanoToSec = 1 / 1000000000f;

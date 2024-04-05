@@ -1,4 +1,4 @@
-package me.emafire003.dev.animatedparticleslib.mixin;
+package me.emafire003.dev.particleanimationlib.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
