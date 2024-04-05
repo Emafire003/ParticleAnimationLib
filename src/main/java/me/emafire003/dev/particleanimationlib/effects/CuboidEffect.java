@@ -62,7 +62,6 @@ public class CuboidEffect extends EffectV3 {
      * Don't use this constructor, since xyz lengths and origin-target exclude each other
      *
      * @param world The world the particles are going to spawn in
-     *              TODO add @link
      * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid

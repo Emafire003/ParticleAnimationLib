@@ -18,9 +18,9 @@ public final class VectorUtils {
         /*rotateAroundAxisX(vector, angleX);
         rotateAroundAxisY(vector, angleY);
         rotateAroundAxisZ(vector, angleZ);*/
-        vector.rotateX(angleX);
-        vector.rotateY(angleY);
-        vector.rotateZ(angleZ);
+        vector = vector.rotateX(angleX);
+        vector = vector.rotateY(angleY);
+        vector = vector.rotateZ(angleZ);
         return vector;
     }
 

@@ -18,16 +18,58 @@ public class ArcEffect extends EffectV3 {
      */
     public int particles = 100;
 
+
     /**
      * Internal counter
      */
     protected int step = 0;
 
-    public ArcEffect(ServerWorld world, ParticleEffect particle, int count, int height, int iterations) {
+    /**
+     * Creates a new arc effect between two points
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the initial point of the arc
+     * @param target The target position of the effect, aka the finial point of the arc
+     * @param count The number of particles to spread between the two points
+     * @param height The height (in blocks) of the arc, aka its curvature.
+     */
+    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count, int height) {
         super(world, EffectType.REPEATING, particle);
+        this.setOriginPos(origin);
+        this.setTargetPos(target);
         this.particles = count;
         this.height = height;
-        this.iterations = iterations;
+    }
+
+    /**
+     * Creates a new arc effect between two points
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the initial point of the arc
+     * @param target The target position of the effect, aka the finial point of the arc
+     */
+    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target) {
+        super(world, EffectType.REPEATING, particle);
+        this.setOriginPos(origin);
+        this.setTargetPos(target);
+    }
+
+    /**
+     * Creates a new arc effect between two points
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect, aka the initial point of the arc
+     * @param target The target position of the effect, aka the finial point of the arc
+     * @param count The number of particles to spread between the two points
+     */
+    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count) {
+        super(world, EffectType.REPEATING, particle);
+        this.setOriginPos(origin);
+        this.setTargetPos(target);
+        this.particles = count;
     }
 
     @Override
@@ -51,6 +93,7 @@ public class ArcEffect extends EffectV3 {
         float x;
         float y;
 
+        //TODO make an arc on the other coordinates too
         for (int i = 0; i < particles; i++) {
             v = new Vec3d(link.getX(), link.getY(), link.getZ()).multiply(length * i / particles);
             x = ((float) i / particles) * length - length / 2;

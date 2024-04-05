@@ -4,11 +4,9 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.EffectV3;
 import me.emafire003.dev.particleanimationlib.util.MathUtils;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 /**
  * Creates an animated Sphere.. Thanks to the author for sharing it!
@@ -34,66 +32,113 @@ public class AnimatedBallEffect extends EffectV3 {
     public float size = 1F;
 
     /**
-     * Factors (1, 2, 1)
-     *
-     * TODO why the fuck was it 2? It's not a ball that way it's an oval
-     * TODO Make these variables configurable as well, like "strechiness" or something
+     * Factors (1, 1, 1)
+     * 
+     * Aka dimensions of the ball, like the "diameters"
      */
     public float xFactor = 1F, yFactor = 1F, zFactor = 1F;
 
     /**
      * Offsets (0, 0.8, 0)
      *
-     * TODO make sure this doen't do weird stuff.
      */
-    public float xOffset, yOffset = 0.8F, zOffset;
+    //public float xOffset, yOffset = 0.8F, zOffset;
 
     /**
      * Rotation of the ball.
      */
     public double xRotation, yRotation, zRotation = 0;
 
+    
+    
     /**
      * Internal Counter
      */
     protected int step = 0;
 
-    World world;
-
-    public AnimatedBallEffect(ParticleEffect particle, ServerWorld world, int count, int iterations, int particles_per_iteration, float size) {
+    /**
+     * Creates a new animated "ball" effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect
+     * @param count The total number of particles that will be displayed
+     * @param particles_per_iteration The number of particles displayed in each iteration
+     * @param size The size of the ball effect
+     * @param factors A {@link Vec3d} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
+     * @param rotation A {@link Vec3d} of xyz rotations (in radians) for the ball effect.
+     * */
+    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size, Vec3d factors, Vec3d rotation) {
         super(world, EffectType.REPEATING, particle);
-        //TODO make configurable
         this.particle = particle;
         this.world = world;
         this.particles = count;
-        this.iterations = iterations;
         this.size = size;
+        this.setOriginPos(origin);
+        this.particlesPerIteration = particles_per_iteration;
+        this.xFactor = (float) factors.getX();
+        this.yFactor = (float) factors.getY();
+        this.zFactor = (float) factors.getZ();
+        this.xRotation = rotation.getX();
+        this.yRotation = rotation.getY();
+        this.zRotation = rotation.getZ();
+    }
+
+    /**
+     * Creates a new animated "ball" effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect
+      */
+    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
+        super(world, EffectType.REPEATING, particle);
+        this.particle = particle;
+        this.world = world;
+    }
+
+    /**
+     * Creates a new animated "ball" effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect
+     * @param count The total number of particles that will be displayed
+     * @param particles_per_iteration The number of particles displayed in each iteration
+     * @param size The size of the ball effect
+     */
+    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size) {
+        super(world, EffectType.REPEATING, particle);
+        this.particle = particle;
+        this.world = world;
+        this.particles = count;
+        this.size = size;
+        this.setOriginPos(origin);
         this.particlesPerIteration = particles_per_iteration;
     }
 
-    public AnimatedBallEffect(ParticleEffect particle, ServerWorld world, Vec3d origin_pos, int count, int iterations, int particles_per_iteration, float size) {
+    /**
+     * Creates a new animated "ball" effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the effect
+     * @param count The total number of particles that will be displayed
+     * @param particles_per_iteration The number of particles displayed in each iteration
+     * @param size The size of the ball effect
+     * @param factors A {@link Vec3d} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
+     */
+    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size, Vec3d factors) {
         super(world, EffectType.REPEATING, particle);
-        //TODO make configurable
         this.particle = particle;
-        this.origin_pos = origin_pos;
         this.world = world;
         this.particles = count;
-        this.iterations = iterations;
         this.size = size;
+        this.setOriginPos(origin);
         this.particlesPerIteration = particles_per_iteration;
-    }
-
-    public AnimatedBallEffect(ParticleEffect particle, ServerWorld world, Entity centeredEntity, int count, int iterations, int particles_per_iteration, float size) {
-        super(world, EffectType.REPEATING, particle);
-        //TODO make configurable
-        this.particle = particle;
-        this.centeredOriginEntity = centeredEntity;
-        this.updatePositions = true;
-        this.world = world;
-        this.particles = count;
-        this.iterations = iterations;
-        this.size = size;
-        this.particlesPerIteration = particles_per_iteration;
+        this.xFactor = (float) factors.getX();
+        this.yFactor = (float) factors.getY();
+        this.zFactor = (float) factors.getZ();
     }
 
 
@@ -116,13 +161,12 @@ public class AnimatedBallEffect extends EffectV3 {
             t = (MathUtils.PI / particles) * step;
             r = MathUtils.sin(t) * size;
             s = 2 * MathUtils.PI * t;
-            double x = (xFactor * r * MathUtils.cos(s) + xOffset);
-            double y = (yFactor * size * MathUtils.cos(t) + yOffset);
-            double z = (zFactor * r * MathUtils.sin(s) + zOffset);
+            double x = (xFactor * r * MathUtils.cos(s) + this.centeredOriginOffset.getX());
+            double y = (yFactor * size * MathUtils.cos(t) + this.centeredOriginOffset.getY());
+            double z = (zFactor * r * MathUtils.sin(s) + this.centeredOriginOffset.getZ());
 
 
             Vec3d vector = new Vec3d(x,y,z);
-            //TODO ah cool this didn't work
             vector = VectorUtils.rotateVector(vector, (float) xRotation, (float) yRotation, (float) zRotation);
 
             this.displayParticle(this.particle, origin_pos.add(vector));

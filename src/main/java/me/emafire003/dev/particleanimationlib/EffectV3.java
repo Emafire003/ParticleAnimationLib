@@ -53,6 +53,23 @@ public class EffectV3 {
         }
     }
 
+    /**Runs the effect for the specified amount of seconds
+     *
+     * You can do the same thing by setting the number of iterations
+     * manually using {@link #setIterations(int)}. Each iteration is
+     * one tick, and 20 ticks are one second.
+     *
+     * Does not work with instant effects (wow eh?)
+     *
+     * @param seconds The number of seconds to run the effect for.
+     *                Will be rounded to the closest tick number once calculated.
+     *                For example 0.5 seconds will be 10 ticks, 0.01 seconds will be 0 ticks.*/
+    public void runFor(double seconds){
+        this.setIterations((int) (seconds*20));
+        this.run();
+    }
+
+    /**Runs the effect*/
     public void run(){
         if(this.world.isClient){
             return;
@@ -63,6 +80,7 @@ public class EffectV3 {
             return;
         }
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            //TODO add a function thing that can be provided by the user, like a lambda or something to modify stuff on the fly
             if (done) {
                 return;
             }

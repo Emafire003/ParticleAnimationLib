@@ -26,7 +26,7 @@
 	"mixins": [
 		"particleanimationlib.mixins.json",
 		{
-			"config": "animatedparticleslib.client.mixins.json",
+			"config": "particleanimationlib.client.mixins.json",
 			"environment": "client"
 		}
 	],
