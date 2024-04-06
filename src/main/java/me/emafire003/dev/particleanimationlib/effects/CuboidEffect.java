@@ -2,6 +2,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.EffectV3;
+import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -54,6 +55,7 @@ public class CuboidEffect extends EffectV3 {
      * State variables
      */
     protected Vec3d minCorner;
+    //TODO removed
     protected boolean initialized;
 
 
@@ -76,8 +78,8 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
-        this.target_pos = target;
+        this.originPos = origin;
+        this.targetPos = target;
         this.particles = particles_per_row;
         this.xLength = x_length;
         this.yLength = y_length;
@@ -100,8 +102,8 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
-        this.target_pos = target;
+        this.originPos = origin;
+        this.targetPos = target;
         this.particles = particles_per_row;
         this.padding = padding;
         this.blockSnap = blockSnap;
@@ -123,7 +125,7 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
+        this.originPos = origin;
         this.particles = particles_per_row;
         this.xLength = x_length;
         this.yLength = y_length;
@@ -146,7 +148,7 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
+        this.originPos = origin;
         this.particles = particles_per_row;
         this.xLength = x_length;
         this.yLength = y_length;
@@ -165,8 +167,8 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
-        this.target_pos = target;
+        this.originPos = origin;
+        this.targetPos = target;
         this.particles = particles_per_row;
     }
 
@@ -183,7 +185,7 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, double x_length, double y_length, double z_length) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
+        this.originPos = origin;
         this.xLength = x_length;
         this.yLength = y_length;
         this.zLength = z_length;
@@ -201,62 +203,71 @@ public class CuboidEffect extends EffectV3 {
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
-        this.origin_pos = origin;
-        this.target_pos = target;
+        this.originPos = origin;
+        this.targetPos = target;
     }
 
 
+    //TODO add a fill-in option
     @Override
-    public void onRun() {
+    protected void onRun() {
         if(this.world == null || this.world.isClient()){
             return;
         }
 
         Vec3d target = this.getTargetPos();
         Vec3d origin = this.getOriginPos();
-        if (target == null || origin == null) {
+        if (origin == null) {
+            return;
+        }
+        if(target == null && xLength == 0 && yLength == 0 && zLength == 0){
             return;
         }
 
-        if (!initialized) {
-            if (blockSnap) {
-                //TODO make sure this are ok
+
+        if (blockSnap) {
+            if(target != null){
                 target = BlockPos.ofFloored(target).toCenterPos();
-                minCorner = BlockPos.ofFloored(origin).toCenterPos();
-            } else {
-                minCorner = origin;
             }
+            minCorner = BlockPos.ofFloored(origin).toCenterPos();
+        } else {
+            minCorner = origin;
+        }
 
-            if (xLength == 0 && yLength == 0 && zLength == 0) {
+        if (xLength == 0 && yLength == 0 && zLength == 0) {
 
-                double x = minCorner.getX();
-                double y = minCorner.getY();
-                double z = minCorner.getZ();
+            double x = minCorner.getX();
+            double y = minCorner.getY();
+            double z = minCorner.getZ();
+            try{
                 if (target.getX() < x) x=target.getX();
                 if (target.getY() < y) y=target.getY();
                 if (target.getZ() < z) z=target.getZ();
-                minCorner = new Vec3d(x,y,z);
-
-                useXLength = Math.abs(origin.getX() - target.getX());
-                useYLength = Math.abs(origin.getY() - target.getY());
-                useZLength = Math.abs(origin.getZ() - target.getZ());
-            } else {
-                useXLength = xLength;
-                useYLength = yLength;
-                useZLength = zLength;
+            }catch (NullPointerException e){
+                ParticleAnimationLib.LOGGER.error("Error! The target position is null and the lengths are zero! Specify at least a target position or a length value!");
+                e.printStackTrace();
             }
 
-            double extra = padding * 2;
-            if (blockSnap) extra++;
+            minCorner = new Vec3d(x,y,z);
 
-            useXLength += extra;
-            useYLength += extra;
-            useZLength += extra;
-
-            if (padding != 0) minCorner = minCorner.add(-padding, -padding, -padding);
-
-            initialized = true;
+            useXLength = Math.abs(origin.getX() - target.getX());
+            useYLength = Math.abs(origin.getY() - target.getY());
+            useZLength = Math.abs(origin.getZ() - target.getZ());
+        } else {
+            useXLength = xLength;
+            useYLength = yLength;
+            useZLength = zLength;
         }
+
+        double extra = padding * 2;
+        if (blockSnap) extra++;
+
+        useXLength += extra;
+        useYLength += extra;
+        useZLength += extra;
+
+        if (padding != 0) minCorner = minCorner.add(-padding, -padding, -padding);
+
         drawOutline();
     }
 
@@ -350,6 +361,30 @@ public class CuboidEffect extends EffectV3 {
 
     public void setBlockSnap(boolean blockSnap) {
         this.blockSnap = blockSnap;
+    }
+
+    //TODO implement better
+    @Override
+    protected boolean checkCut(Vec3d pos){
+        if(true){
+            return true;
+        }
+        //Figure out how to do this. TODO i need to get the middle position of the effect.
+        if(this.cutBox.maxX != 0 && pos.getX() > +this.cutBox.maxX){
+            return true;
+        }
+        if(this.cutBox.maxY != 0 && pos.getY() > this.originPos.add(originOffset).getY()+this.cutBox.maxY){
+            return true;
+        }
+        if(this.cutBox.maxZ != 0 && pos.getZ() > this.originPos.add(originOffset).getZ()+this.cutBox.maxZ){
+            return true;
+        }
+
+        //Aka cut from the other side (like bottom). How the fuck do I get the max and go from the bottom?
+        if(this.cutBox.minX != 0 && pos.getX() > this.originPos.add(originOffset).getX()+this.cutBox.maxX){
+            return true;
+        }
+        return false;
     }
 
 }
