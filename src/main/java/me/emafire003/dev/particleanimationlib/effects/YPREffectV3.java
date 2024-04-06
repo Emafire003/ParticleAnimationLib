@@ -24,9 +24,9 @@ public class YPREffectV3 extends EffectV3 {
     @Override
     public void updatePos(){
         super.updatePos();
-        if(centeredOriginEntity != null){
-            this.pitch = centeredOriginEntity.getPitch()+this.pitchOffset;
-            this.yaw = centeredOriginEntity.getYaw()+this.yawOffset;
+        if(entityOrigin != null){
+            this.pitch = entityOrigin.getPitch()+this.pitchOffset;
+            this.yaw = entityOrigin.getYaw()+this.yawOffset;
             //TODO may need to add the target yaw pitch thing?
         }
     }

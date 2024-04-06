@@ -14,6 +14,7 @@ import net.minecraft.util.math.Vec3d;
  *
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
+@SuppressWarnings("unused")
 public class AnimatedBallEffect extends EffectV3 {
 
     /**
@@ -95,6 +96,7 @@ public class AnimatedBallEffect extends EffectV3 {
         super(world, EffectType.REPEATING, particle);
         this.particle = particle;
         this.world = world;
+        this.originPos = origin;
     }
 
     /**
@@ -143,8 +145,7 @@ public class AnimatedBallEffect extends EffectV3 {
 
 
     @Override
-    public void onRun() {
-        //TODO add entity locking!
+    protected void onRun() {
         Vec3d pos = getOriginPos();
 
         if (pos == null) {
@@ -161,16 +162,18 @@ public class AnimatedBallEffect extends EffectV3 {
             t = (MathUtils.PI / particles) * step;
             r = MathUtils.sin(t) * size;
             s = 2 * MathUtils.PI * t;
-            double x = (xFactor * r * MathUtils.cos(s) + this.centeredOriginOffset.getX());
-            double y = (yFactor * size * MathUtils.cos(t) + this.centeredOriginOffset.getY());
-            double z = (zFactor * r * MathUtils.sin(s) + this.centeredOriginOffset.getZ());
+            double x = (xFactor * r * MathUtils.cos(s) + this.originOffset.getX());
+            double y = (yFactor * size * MathUtils.cos(t) + this.originOffset.getY());
+            double z = (zFactor * r * MathUtils.sin(s) + this.originOffset.getZ());
 
 
             Vec3d vector = new Vec3d(x,y,z);
             vector = VectorUtils.rotateVector(vector, (float) xRotation, (float) yRotation, (float) zRotation);
 
-            this.displayParticle(this.particle, origin_pos.add(vector));
+            this.displayParticle(this.particle, originPos.add(vector));
         }
     }
+
+
 
 }

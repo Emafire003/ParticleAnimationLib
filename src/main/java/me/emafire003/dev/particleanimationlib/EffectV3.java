@@ -1,25 +1,33 @@
 package me.emafire003.dev.particleanimationlib;
 
+import me.emafire003.dev.particleanimationlib.util.EffectModifier;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.impl.base.event.EventFactoryImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class EffectV3 {
 
     protected int iterations;
     protected int delay;
-    protected Vec3d origin_pos;
+    protected Vec3d originPos;
 
     //If an effect like an arc has a beginning and end pos, this is the one.
-    protected Vec3d target_pos;
+    protected Vec3d targetPos;
     protected boolean updatePositions;
-    protected Entity centeredOriginEntity;
-    protected Vec3d centeredOriginOffset;
-    protected Entity centeredTargetEntity;
-    protected Vec3d centeredTargetOffset;
+    protected Entity entityOrigin;
+    protected Vec3d originOffset = Vec3d.ZERO;
+    protected Entity entityTarget;
+    protected Vec3d targetOffset = Vec3d.ZERO;
+    public Box cutBox = new Box(Vec3d.ZERO, Vec3d.ZERO);
+    public boolean shouldCut = false;
     protected ServerWorld world;
     public EffectType type;
     protected ParticleEffect particle;
@@ -45,11 +53,11 @@ public class EffectV3 {
     }
 
     public void updatePos(){
-        if(centeredOriginEntity != null){
-            this.origin_pos = centeredOriginEntity.getPos().add(centeredOriginOffset);
+        if(entityOrigin != null){
+            this.originPos = entityOrigin.getPos().add(originOffset);
         }
-        if(centeredTargetEntity != null){
-            this.target_pos = centeredTargetEntity.getPos().add(centeredTargetOffset);
+        if(entityTarget != null){
+            this.targetPos = entityTarget.getPos().add(targetOffset);
         }
     }
 
@@ -69,8 +77,37 @@ public class EffectV3 {
         this.run();
     }
 
+    /**Runs the effect for the specified amount of seconds
+     *
+     * You can also provide a custom
+     * lambda function to modify the effect while it runs.
+     * You have access to the effect instance and the current tick
+     *
+     * You can do the same thing by setting the number of iterations
+     * manually using {@link #setIterations(int)}. Each iteration is
+     * one tick, and 20 ticks are one second.
+     *
+     * Does not work with instant effects (wow eh?)
+     *
+     * @param seconds The number of seconds to run the effect for.
+     *                Will be rounded to the closest tick number once calculated.
+     *                For example 0.5 seconds will be 10 ticks, 0.01 seconds will be 0 ticks.*/
+    public void runFor(double seconds, EffectModifier modifier){
+        this.setIterations((int) (seconds*20));
+        this.run(modifier);
+    }
+
+
     /**Runs the effect*/
     public void run(){
+        this.run(null);
+    }
+
+    /**Runs the effect, you can also provide a custom
+     * lambda function to modify the effect while it runs.
+     * You have access to the effect instance and the current tick
+     * */
+    public void run(EffectModifier modifier){
         if(this.world.isClient){
             return;
         }
@@ -80,14 +117,20 @@ public class EffectV3 {
             return;
         }
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            //TODO add a function thing that can be provided by the user, like a lambda or something to modify stuff on the fly
             if (done) {
                 return;
             }
 
+            if(modifier != null){
+                modifier.modifyEffect(this, ticks);
+            }
+
+
+            //TODO updating position like this kind of breaks the animation, but there isn't really another way i think.
             if(updatePositions){
                 updatePos();
             }
+
             if(this.type == EffectType.DELAYED){
                 //Increasing tick count every tick, and executing one after the ticks reached the delay
                 ticks++;
@@ -109,9 +152,39 @@ public class EffectV3 {
         });
     }
 
+
+    /**You can use this method to specify a cut shape.
+     * This will cancel particles that are spawned beyond this box,
+     * centered around the {@link #originPos}.
+     *
+     * */
+    public void setCutShape(Box box){
+        this.cutBox = box;
+        this.setShouldCut(true);
+    }
+
+    /**Enable or disable particle effect cutting*/
+    public void setShouldCut(boolean shouldCut){
+        this.shouldCut = shouldCut;
+    }
+
+    public boolean getShouldCut(){
+        return this.shouldCut;
+    }
+
     public void displayParticle(ParticleEffect effect, Vec3d pos){
         //TODO make the count and speed configurable?
-        world.spawnParticles(effect, pos.getX(), pos.getY(), pos.getZ(), 1,0, 0, 0 , 0);
+        if(shouldCut && checkCut(pos)){
+            return;
+        }
+        this.displayParticle(effect, pos, Vec3d.ZERO);
+    }
+
+    /**Needs to be overridden by the other classes
+     **/
+    protected boolean checkCut(Vec3d pos){
+        //TODO figure out how to implement :( :/
+        return false;
     }
 
     public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel){
@@ -125,8 +198,6 @@ public class EffectV3 {
     public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel, boolean alwaysSpawn){
         world.addParticle(effect, alwaysSpawn, pos.getX(), pos.getY(), pos.getZ(), vel.getX(), vel.getY(), vel.getZ());
     }*/
-
-
 
     public int getIterations() {
         return iterations;
@@ -144,12 +215,13 @@ public class EffectV3 {
         this.delay = delay;
     }
 
+    /** Already sums the offsets!*/
     public Vec3d getOriginPos() {
-        return origin_pos;
+        return originPos.add(originOffset);
     }
 
     public void setOriginPos(Vec3d origin_pos) {
-        this.origin_pos = origin_pos;
+        this.originPos = origin_pos;
     }
 
     public boolean isUpdatePositions() {
@@ -160,43 +232,44 @@ public class EffectV3 {
         this.updatePositions = updatePositions;
     }
 
-    public Entity getCenteredOriginEntity() {
-        return centeredOriginEntity;
+    public Entity getEntityOrigin() {
+        return entityOrigin;
     }
 
-    public void setCenteredOriginEntity(Entity centeredOriginEntity) {
-        this.centeredOriginEntity = centeredOriginEntity;
+    public void setEntityOrigin(Entity entityOrigin) {
+        this.entityOrigin = entityOrigin;
     }
 
-    public Vec3d getCenteredOriginOffset() {
-        return centeredOriginOffset;
+    public Vec3d getOriginOffset() {
+        return originOffset;
     }
 
-    public void setCenteredOriginOffset(Vec3d centeredOriginOffset) {
-        this.centeredOriginOffset = centeredOriginOffset;
+    public void setOriginOffset(Vec3d originOffset) {
+        this.originOffset = originOffset;
     }
 
+    /** Already sums the offsets!*/
     public Vec3d getTargetPos() {
-        return target_pos;
+        return targetPos.add(targetOffset);
     }
 
     public void setTargetPos(Vec3d finish_pos) {
-        this.target_pos = finish_pos;
+        this.targetPos = finish_pos;
     }
 
-    public Entity getCenteredTargetEntity() {
-        return centeredTargetEntity;
+    public Entity getEntityTarget() {
+        return entityTarget;
     }
 
-    public void setCenteredTargetEntity(Entity centeredTargetEntity) {
-        this.centeredTargetEntity = centeredTargetEntity;
+    public void setEntityTarget(Entity entityTarget) {
+        this.entityTarget = entityTarget;
     }
 
-    public Vec3d getCenteredTargetOffset() {
-        return centeredTargetOffset;
+    public Vec3d getTargetOffset() {
+        return targetOffset;
     }
 
-    public void setCenteredTargetOffset(Vec3d centeredTargetOffset) {
-        this.centeredTargetOffset = centeredTargetOffset;
+    public void setTargetOffset(Vec3d targetOffset) {
+        this.targetOffset = targetOffset;
     }
 }

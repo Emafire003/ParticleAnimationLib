@@ -79,7 +79,7 @@ public class VortexEffect extends YPREffectV3 {
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.origin_pos = originPos;
+        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -114,7 +114,7 @@ public class VortexEffect extends YPREffectV3 {
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.origin_pos = originPos;
+        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -148,7 +148,7 @@ public class VortexEffect extends YPREffectV3 {
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.origin_pos = originPos;
+        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -179,7 +179,7 @@ public class VortexEffect extends YPREffectV3 {
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.origin_pos = originPos;
+        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -204,13 +204,13 @@ public class VortexEffect extends YPREffectV3 {
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.origin_pos = originPos;
+        this.originPos = originPos;
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
     @Override
-    public void onRun() {
+    protected void onRun() {
         Vec3d origin = this.getOriginPos();
         double angle;
         Vec3d v;
