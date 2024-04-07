@@ -162,6 +162,8 @@ public class AnimatedBallEffect extends EffectV3 {
             t = (MathUtils.PI / particles) * step;
             r = MathUtils.sin(t) * size;
             s = 2 * MathUtils.PI * t;
+            //Need the offsets here because it's not using the originPos directly
+            //TODO i think I should add the size in the x and z too
             double x = (xFactor * r * MathUtils.cos(s) + this.originOffset.getX());
             double y = (yFactor * size * MathUtils.cos(t) + this.originOffset.getY());
             double z = (zFactor * r * MathUtils.sin(s) + this.originOffset.getZ());
@@ -175,5 +177,41 @@ public class AnimatedBallEffect extends EffectV3 {
     }
 
 
+    @Override
+    @Deprecated
+    protected boolean checkCut(Vec3d pos){
+        //Applicare la box alla orgin pos centrata
+
+        //Should be the position of the center
+        Vec3d centerPos = new Vec3d(originPos.getX()+xFactor/2, originPos.getY()+yFactor/2, originPos.getZ()+zFactor/2);
+
+        //ParticleAnimationLib.LOGGER.info("The cutAbove: " + this.cutAboveRightForward);
+        //ParticleAnimationLib.LOGGER.info("The cutBelow: " + this.cutBelowLeftBackward);
+        if(cutAboveRightForward.getX() != 0 && pos.getX() > centerPos.getX()+cutAboveRightForward.getX()){
+            return true;
+        }
+        if(cutAboveRightForward.getY() != 0 && pos.getY() > centerPos.getY()+cutAboveRightForward.getY()){
+            return true;
+        }
+        if(cutAboveRightForward.getZ() != 0 && pos.getZ() > centerPos.getZ()+cutAboveRightForward.getZ()){
+            return true;
+        }
+        if(cutBelowLeftBackward.getX() != 0 && pos.getX() > centerPos.getX()-cutBelowLeftBackward.getX()){
+            return true;
+        }
+        if(cutBelowLeftBackward.getY() != 0 && pos.getY() > centerPos.getY()-cutBelowLeftBackward.getY()){
+            return true;
+        }
+        if(cutBelowLeftBackward.getZ() != 0 && pos.getZ() > centerPos.getZ()-cutBelowLeftBackward.getZ()){
+            return true;
+        }
+        //ParticleAnimationLib.LOGGER.info("Center pos: "+ centerPos.getY() + " The curBoveWhaterver" + cutAboveRightForward.getY());
+        //ParticleAnimationLib.LOGGER.info("The pos: "+ pos.getY() + " The cut+center" + (centerPos.getY()+cutAboveRightForward.getY()));
+        return false;
+        /*Box box = new Box(centerPos.getX()+cutAboveRightForward.getX(), centerPos.getY()+cutAboveRightForward.getY(), centerPos.getZ()+cutAboveRightForward.getZ(),
+                centerPos.getX()-cutBelowLeftBackward.getX(), centerPos.getY()-cutBelowLeftBackward.getY(), centerPos.getZ()-cutBelowLeftBackward.getZ());
+
+        return !box.contains(pos);*/
+    }
 
 }

@@ -365,25 +365,39 @@ public class CuboidEffect extends EffectV3 {
 
     //TODO implement better
     @Override
+    @Deprecated
     protected boolean checkCut(Vec3d pos){
-        if(true){
-            return true;
-        }
-        //Figure out how to do this. TODO i need to get the middle position of the effect.
-        if(this.cutBox.maxX != 0 && pos.getX() > +this.cutBox.maxX){
-            return true;
-        }
-        if(this.cutBox.maxY != 0 && pos.getY() > this.originPos.add(originOffset).getY()+this.cutBox.maxY){
-            return true;
-        }
-        if(this.cutBox.maxZ != 0 && pos.getZ() > this.originPos.add(originOffset).getZ()+this.cutBox.maxZ){
-            return true;
-        }
+        //Applicare la box alla orgin pos centrata
 
-        //Aka cut from the other side (like bottom). How the fuck do I get the max and go from the bottom?
-        if(this.cutBox.minX != 0 && pos.getX() > this.originPos.add(originOffset).getX()+this.cutBox.maxX){
+        //Should be the position of the center
+        Vec3d centerPos = new Vec3d(originPos.getX()+useXLength/2, originPos.getY()+useYLength/2, originPos.getZ()+useZLength/2);
+
+        /*Box box = new Box(centerPos.getX()+cutAboveRightForward.getX(), centerPos.getY()+cutAboveRightForward.getY(), centerPos.getZ()+cutAboveRightForward.getZ(),
+                centerPos.getX()-cutBelowLeftBackward.getX(), centerPos.getY()-cutBelowLeftBackward.getY(), centerPos.getZ()-cutBelowLeftBackward.getZ());
+        return !box.contains(pos);
+         */
+        //ParticleAnimationLib.LOGGER.info("The cutAbove: " + this.cutAboveRightForward);
+        //ParticleAnimationLib.LOGGER.info("The cutBelow: " + this.cutBelowLeftBackward);
+        if(cutAboveRightForward.getX() != 0 && pos.getX() > centerPos.getX()+cutAboveRightForward.getX()){
             return true;
         }
+        if(cutAboveRightForward.getY() != 0 && pos.getY() > centerPos.getY()+cutAboveRightForward.getY()){
+            return true;
+        }
+        if(cutAboveRightForward.getZ() != 0 && pos.getZ() > centerPos.getZ()+cutAboveRightForward.getZ()){
+            return true;
+        }
+        if(cutBelowLeftBackward.getX() != 0 && pos.getX() > centerPos.getX()-cutBelowLeftBackward.getX()){
+            return true;
+        }
+        if(cutBelowLeftBackward.getY() != 0 && pos.getY() > centerPos.getY()-cutBelowLeftBackward.getY()){
+            return true;
+        }
+        if(cutBelowLeftBackward.getZ() != 0 && pos.getZ() > centerPos.getZ()-cutBelowLeftBackward.getZ()){
+            return true;
+        }
+        //ParticleAnimationLib.LOGGER.info("Center pos: "+ centerPos.getY() + " The curBoveWhaterver" + cutAboveRightForward.getY());
+        //ParticleAnimationLib.LOGGER.info("The pos: "+ pos.getY() + " The cut+center" + (centerPos.getY()+cutAboveRightForward.getY()));
         return false;
     }
 

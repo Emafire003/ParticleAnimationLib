@@ -1,16 +1,11 @@
 package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
-import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.impl.base.event.EventFactoryImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class EffectV3 {
@@ -26,7 +21,8 @@ public class EffectV3 {
     protected Vec3d originOffset = Vec3d.ZERO;
     protected Entity entityTarget;
     protected Vec3d targetOffset = Vec3d.ZERO;
-    public Box cutBox = new Box(Vec3d.ZERO, Vec3d.ZERO);
+    public Vec3d cutAboveRightForward = Vec3d.ZERO;
+    public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
     public boolean shouldCut = false;
     protected ServerWorld world;
     public EffectType type;
@@ -157,37 +153,50 @@ public class EffectV3 {
      * This will cancel particles that are spawned beyond this box,
      * centered around the {@link #originPos}.
      *
-     * */
-    public void setCutShape(Box box){
-        this.cutBox = box;
+     * Set high values if you don't want to cut in that coordinate
+     *
+     * @param cutAboveLeftForward A Vec3d which cuts from the top to the bottom (Y), from the left to the right (X), from the front to the back (Z)
+     * @param cutBelowRightBackward A Vec3d that cuts the other way around
+     * Not yet ready, may be scrapped*/
+    @Deprecated
+    public void setCutShape(Vec3d cutAboveLeftForward, Vec3d cutBelowRightBackward){
+        this.cutAboveRightForward = cutAboveLeftForward;
+        this.cutBelowLeftBackward = cutBelowRightBackward;
         this.setShouldCut(true);
     }
 
-    /**Enable or disable particle effect cutting*/
+    /**Enable or disable particle effect cutting
+     *
+     * Not yet ready, may be scrapped*/
+    @Deprecated
     public void setShouldCut(boolean shouldCut){
         this.shouldCut = shouldCut;
     }
 
+    /** Not yet ready, may be scrapped*/
+    @Deprecated
     public boolean getShouldCut(){
         return this.shouldCut;
     }
 
-    public void displayParticle(ParticleEffect effect, Vec3d pos){
-        //TODO make the count and speed configurable?
-        if(shouldCut && checkCut(pos)){
-            return;
-        }
-        this.displayParticle(effect, pos, Vec3d.ZERO);
-    }
-
     /**Needs to be overridden by the other classes
-     **/
+     * Not yet ready, may be scrapped*/
+    @Deprecated
     protected boolean checkCut(Vec3d pos){
         //TODO figure out how to implement :( :/
         return false;
     }
 
+    public void displayParticle(ParticleEffect effect, Vec3d pos){
+        //TODO make the count and speed configurable?
+        this.displayParticle(effect, pos, Vec3d.ZERO);
+    }
+
+
     public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel){
+        if(shouldCut && checkCut(pos)){
+            return;
+        }
         world.spawnParticles(effect, pos.getX(), pos.getY(), pos.getZ(), 1,vel.getX(), vel.getY(), vel.getZ() , 0);
     }
 

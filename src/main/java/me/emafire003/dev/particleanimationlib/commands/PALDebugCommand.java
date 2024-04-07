@@ -3,7 +3,9 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
 import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
+import me.emafire003.dev.particleanimationlib.effects.CuboidEffect;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
@@ -24,27 +26,27 @@ public class PALDebugCommand implements PALCommand {
             for(Entity target : targets){
 
                 ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.FLAME, target.getEyePos(),
-                    200, 20, 1, 0.03f, 0.005f,
+                    200, 20, 1, 0.06f, 0.005f,
                 Math.PI/8, 0, false, true);
                 coneEffect.setPitch(target.getPitch());
                 coneEffect.setYaw(target.getYaw());
-                coneEffect.setEntityOrigin(target);
-                coneEffect.setOriginOffset(new Vec3d(0, 0.8, 0));
-                coneEffect.setUpdatePositions(true);
-                coneEffect.runFor(5);
+                //coneEffect.setEntityOrigin(target);
+                //coneEffect.setOriginOffset(new Vec3d(0, 0.8, 0));
+                //coneEffect.setUpdatePositions(true);
+                coneEffect.setIterations(5*20);
+                //The predicted max center works btw
+                //coneEffect.runFor(5);
 
-                /*ArcEffect arcEffect = new ArcEffect(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos(), target.getPos().add(5,0,0), 150, -5);
-                arcEffect.setCenteredOriginEntity(target);
-                arcEffect.setUpdatePositions(true);
-                arcEffect.runFor(5);*/
+                AnimatedBallEffect ballEffect = new AnimatedBallEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), 200, 30, 1f);
+                //ok this works in a weird way tho. Probably should get just two vectors one positive one negative/one from "above" the other from "below"
+                ballEffect.setCutShape(new Vec3d(0, 0.5, 0), new Vec3d(0, 0, 0));
+                ballEffect.setShouldCut(true);
+                //ballEffect.runFor(5);
 
-                /*VortexEffect vortexEffect = new VortexEffect(source.getWorld(), ParticleTypes.WITCH, target.getPos().add(0, 1,0),
-                        target.getYaw(), target.getPitch(),
-                    0.7f,0.0005f, 0.1f, 0.0f,
-                        Math.PI/16, 50, 10);
-
-                vortexEffect.setIterations(150);
-                vortexEffect.run();*/
+                CuboidEffect cuboidEffect = new CuboidEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), target.getPos().add(2,2,2));
+                cuboidEffect.setCutShape(new Vec3d(0.6, 1, 0), new Vec3d(0, 0.4, 0));
+                cuboidEffect.setShouldCut(true);
+                //cuboidEffect.runFor(5);
             }
             return 1;
         }catch(Exception e){
