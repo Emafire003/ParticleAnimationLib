@@ -6,7 +6,9 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
+@SuppressWarnings("unused")
 public class ArcEffect extends EffectV3 {
+
 
     /**
      * Height of the arc in blocks
@@ -104,6 +106,22 @@ public class ArcEffect extends EffectV3 {
 
             step++;
         }
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public int getParticles() {
+        return particles;
+    }
+
+    public void setParticles(int particles) {
+        this.particles = particles;
     }
 
 }

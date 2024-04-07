@@ -214,4 +214,76 @@ public class AnimatedBallEffect extends EffectV3 {
         return !box.contains(pos);*/
     }
 
+    public int getParticles() {
+        return particles;
+    }
+
+    public void setParticles(int particles) {
+        this.particles = particles;
+    }
+
+    public int getParticlesPerIteration() {
+        return particlesPerIteration;
+    }
+
+    public void setParticlesPerIteration(int particlesPerIteration) {
+        this.particlesPerIteration = particlesPerIteration;
+    }
+
+    public float getSize() {
+        return size;
+    }
+
+    public void setSize(float size) {
+        this.size = size;
+    }
+
+    public float getxFactor() {
+        return xFactor;
+    }
+
+    public void setxFactor(float xFactor) {
+        this.xFactor = xFactor;
+    }
+
+    public float getyFactor() {
+        return yFactor;
+    }
+
+    public void setyFactor(float yFactor) {
+        this.yFactor = yFactor;
+    }
+
+    public float getzFactor() {
+        return zFactor;
+    }
+
+    public void setzFactor(float zFactor) {
+        this.zFactor = zFactor;
+    }
+
+    public double getxRotation() {
+        return xRotation;
+    }
+
+    public void setxRotation(double xRotation) {
+        this.xRotation = xRotation;
+    }
+
+    public double getyRotation() {
+        return yRotation;
+    }
+
+    public void setyRotation(double yRotation) {
+        this.yRotation = yRotation;
+    }
+
+    public double getzRotation() {
+        return zRotation;
+    }
+
+    public void setzRotation(double zRotation) {
+        this.zRotation = zRotation;
+    }
+
 }

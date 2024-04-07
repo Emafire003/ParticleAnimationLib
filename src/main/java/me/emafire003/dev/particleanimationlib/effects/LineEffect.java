@@ -7,6 +7,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
+@SuppressWarnings("unused")
 public class LineEffect extends YPREffectV3 {
 
     /**
@@ -66,11 +67,29 @@ public class LineEffect extends YPREffectV3 {
     protected int step = 0;
 
 
-    public LineEffect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d origin, int particles, double length, double max_length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, EffectV3 effectAtEnd) {
-        super(world, type, particle);
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
+     * @param particles The number of particles that make up the line
+     * @param length The length of the line
+     * @param isZigZag Should the line ZigZag
+     * @param numberOfZigZags The number of zig zags that the line will do
+     * @param zigZagOffset An offset for the zigZag
+     * @param zigZagRelativeOffset A relative offsets for the zigzags
+     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, EffectV3 effectAtEnd) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
         this.particles = particles;
         this.length = length;
-        this.maxLength = max_length;
+        this.yaw = yaw;
+        this.pitch = pitch;
         this.isZigZag = isZigZag;
         this.zigZags = numberOfZigZags;
         this.zigZagOffset = zigZagOffset;
@@ -78,14 +97,198 @@ public class LineEffect extends YPREffectV3 {
         this.subEffectAtEnd = effectAtEnd;
     }
 
-    public LineEffect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, EffectV3 effectAtEnd) {
-        super(world, type, particle);
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
+     * @param particles The number of particles that make up the line
+     * @param length The length of the line
+     * @param isZigZag Should the line ZigZag
+     * @param numberOfZigZags The number of zig zags that the line will do
+     * @param zigZagOffset An offset for the zigZag
+     * @param zigZagRelativeOffset A relative offsets for the zigzags
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
         this.particles = particles;
+        this.length = length;
+        this.yaw = yaw;
+        this.pitch = pitch;
         this.isZigZag = isZigZag;
         this.zigZags = numberOfZigZags;
         this.zigZagOffset = zigZagOffset;
         this.zigZagRelativeOffset = zigZagRelativeOffset;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
+     * @param particles The number of particles that make up the line
+     * @param length The length of the line
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.particles = particles;
+        this.length = length;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
+     * @param particles The number of particles that make up the line
+     * @param length The length of the line
+     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, EffectV3 effectAtEnd) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.particles = particles;
+        this.length = length;
+        this.yaw = yaw;
+        this.pitch = pitch;
         this.subEffectAtEnd = effectAtEnd;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
+      */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param target The ending position of the line
+     * @param particles The number of particles that make up the line
+     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
+     * @param isZigZag Should the line ZigZag
+     * @param numberOfZigZags The number of zig zags that the line will do
+     * @param zigZagOffset An offset for the zigZag
+     * @param zigZagRelativeOffset A relative offsets for the zigzags
+     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, EffectV3 effectAtEnd) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.targetPos = target;
+        this.particles = particles;
+        this.isZigZag = isZigZag;
+        this.maxLength = maxLength;
+        this.zigZags = numberOfZigZags;
+        this.zigZagOffset = zigZagOffset;
+        this.zigZagRelativeOffset = zigZagRelativeOffset;
+        this.subEffectAtEnd = effectAtEnd;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param target The ending position of the line
+     * @param particles The number of particles that make up the line
+     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
+     * @param isZigZag Should the line ZigZag
+     * @param numberOfZigZags The number of zig zags that the line will do
+     * @param zigZagOffset An offset for the zigZag
+     * @param zigZagRelativeOffset A relative offsets for the zigzags
+     */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.targetPos = target;
+        this.particles = particles;
+        this.isZigZag = isZigZag;
+        this.maxLength = maxLength;
+        this.zigZags = numberOfZigZags;
+        this.zigZagOffset = zigZagOffset;
+        this.zigZagRelativeOffset = zigZagRelativeOffset;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param target The ending position of the line
+     * @param particles The number of particles that make up the line
+     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
+     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength,EffectV3 effectAtEnd) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.targetPos = target;
+        this.particles = particles;
+        this.maxLength = maxLength;
+        this.subEffectAtEnd = effectAtEnd;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param target The ending position of the line
+     * @param particles The number of particles that make up the line
+     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.targetPos = target;
+        this.particles = particles;
+        this.maxLength = maxLength;
+    }
+
+    /**
+     * Creates a new line effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param origin The origin position of the line
+     * @param target The ending position of the line
+     * @param particles The number of particles that make up the line
+     * */
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles) {
+        super(world, EffectType.REPEATING, particle);
+        this.originPos = origin;
+        this.targetPos = target;
+        this.particles = particles;
     }
 
 
@@ -112,7 +315,9 @@ public class LineEffect extends YPREffectV3 {
 
         Vec3d link = target.subtract(origin);
         float length = (float) link.length();
-        if (maxLength > 0) length = (float) Math.min(length, maxLength);
+        if (maxLength > 0){
+            length = (float) Math.min(length, maxLength);
+        }
 
         link = link.normalize();
 
@@ -142,8 +347,73 @@ public class LineEffect extends YPREffectV3 {
         }
 
         if (subEffectAtEnd != null){
+            subEffectAtEnd.setOriginPos(loc);
             subEffectAtEnd.run();
         }
+    }
+
+    public boolean isZigZag() {
+        return isZigZag;
+    }
+
+    public void setZigZag(boolean zigZag) {
+        isZigZag = zigZag;
+    }
+
+    public int getZigZags() {
+        return zigZags;
+    }
+
+    public void setZigZags(int zigZags) {
+        this.zigZags = zigZags;
+    }
+
+    public Vec3d getZigZagOffset() {
+        return zigZagOffset;
+    }
+
+    public void setZigZagOffset(Vec3d zigZagOffset) {
+        this.zigZagOffset = zigZagOffset;
+    }
+
+    public Vec3d getZigZagRelativeOffset() {
+        return zigZagRelativeOffset;
+    }
+
+    public void setZigZagRelativeOffset(Vec3d zigZagRelativeOffset) {
+        this.zigZagRelativeOffset = zigZagRelativeOffset;
+    }
+
+    public int getParticles() {
+        return particles;
+    }
+
+    public void setParticles(int particles) {
+        this.particles = particles;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public double getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(double maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public EffectV3 getSubEffectAtEnd() {
+        return subEffectAtEnd;
+    }
+
+    public void setSubEffectAtEnd(EffectV3 subEffectAtEnd) {
+        this.subEffectAtEnd = subEffectAtEnd;
     }
 
 }

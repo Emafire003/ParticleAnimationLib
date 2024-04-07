@@ -99,4 +99,28 @@ public class SphereEffect extends EffectV3 {
         }
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadiusIncrease() {
+        return radiusIncrease;
+    }
+
+    public void setRadiusIncrease(double radiusIncrease) {
+        this.radiusIncrease = radiusIncrease;
+    }
+
+    public int getParticleIncrease() {
+        return particleIncrease;
+    }
+
+    public void setParticleIncrease(int particleIncrease) {
+        this.particleIncrease = particleIncrease;
+    }
+
 }

@@ -232,4 +232,60 @@ public class VortexEffect extends YPREffectV3 {
         }
     }
 
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public float getRadiusGrow() {
+        return radiusGrow;
+    }
+
+    public void setRadiusGrow(float radiusGrow) {
+        this.radiusGrow = radiusGrow;
+    }
+
+    public float getStartRange() {
+        return startRange;
+    }
+
+    public void setStartRange(float startRange) {
+        this.startRange = startRange;
+    }
+
+    public float getGrow() {
+        return grow;
+    }
+
+    public void setGrow(float grow) {
+        this.grow = grow;
+    }
+
+    public double getRadials() {
+        return radials;
+    }
+
+    public void setRadials(double radials) {
+        this.radials = radials;
+    }
+
+    public int getCircles() {
+        return circles;
+    }
+
+    public void setCircles(int circles) {
+        this.circles = circles;
+    }
+
+    public int getHelixes() {
+        return helixes;
+    }
+
+    public void setHelixes(int helixes) {
+        this.helixes = helixes;
+    }
+
 }

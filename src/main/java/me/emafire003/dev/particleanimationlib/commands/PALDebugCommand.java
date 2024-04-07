@@ -4,8 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
-import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
-import me.emafire003.dev.particleanimationlib.effects.CuboidEffect;
+import me.emafire003.dev.particleanimationlib.effects.LineEffect;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
@@ -25,7 +24,25 @@ public class PALDebugCommand implements PALCommand {
         try{
             for(Entity target : targets){
 
-                ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.FLAME, target.getEyePos(),
+                /*LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getPos(),
+                150, 5, 5, true, 2,
+                        new Vec3d(0, 0, 0), new Vec3d(0.05, -0.03, 0), null);
+                */
+                if(target.getWorld().isClient()){
+                    return 0;
+                }
+                LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.CRIT, target.getPos(),
+                        target.getPos().add(5,0,0),
+                        150, 1, true, 3,
+                        new Vec3d(0, 0, 0), new Vec3d(0.01, -0.01, 0.01), new AnimatedBallEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos().add(3,0,0)));
+                lineEffect.setEntityOrigin(target);
+                //lineEffect.setUpdatePositions(true);
+                lineEffect.setYaw(target.getYaw());
+                lineEffect.setPitch(target.getPitch());
+                lineEffect.runFor(5);
+
+
+                /*ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.FLAME, target.getEyePos(),
                     200, 20, 1, 0.06f, 0.005f,
                 Math.PI/8, 0, false, true);
                 coneEffect.setPitch(target.getPitch());
@@ -45,7 +62,7 @@ public class PALDebugCommand implements PALCommand {
 
                 CuboidEffect cuboidEffect = new CuboidEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), target.getPos().add(2,2,2));
                 cuboidEffect.setCutShape(new Vec3d(0.6, 1, 0), new Vec3d(0, 0.4, 0));
-                cuboidEffect.setShouldCut(true);
+                cuboidEffect.setShouldCut(true);*/
                 //cuboidEffect.runFor(5);
             }
             return 1;
