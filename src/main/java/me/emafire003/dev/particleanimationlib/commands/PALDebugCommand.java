@@ -3,8 +3,7 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
-import me.emafire003.dev.particleanimationlib.effects.LineEffect;
+import me.emafire003.dev.particleanimationlib.effects.AnimatedCircleEffect;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
@@ -31,7 +30,7 @@ public class PALDebugCommand implements PALCommand {
                 if(target.getWorld().isClient()){
                     return 0;
                 }
-                LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.CRIT, target.getPos(),
+                /*LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.CRIT, target.getPos(),
                         target.getPos().add(5,0,0),
                         150, 1, true, 3,
                         new Vec3d(0, 0, 0), new Vec3d(0.01, -0.01, 0.01), new AnimatedBallEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos().add(3,0,0)));
@@ -39,7 +38,17 @@ public class PALDebugCommand implements PALCommand {
                 //lineEffect.setUpdatePositions(true);
                 lineEffect.setYaw(target.getYaw());
                 lineEffect.setPitch(target.getPitch());
-                lineEffect.runFor(5);
+                lineEffect.runFor(5);*/
+
+                //AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getEyePos(), target.getYaw(), target.getPitch());
+                AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getPos().add(0,0.7,0),
+                        target.getYaw(), target.getPitch(), 40, 1.2f, 0, Math.PI*2,
+                        false, false, true,
+                        new Vec3d(Math.PI, Math.PI, Math.PI/2).multiply(1),
+                        new Vec3d(0,0,0), new Vec3d(0,0,0));
+                //effect.setEntityOrigin(target);
+                //effect.setUpdatePositions(true);
+                effect.runFor(5);
 
 
                 /*ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.FLAME, target.getEyePos(),
@@ -68,7 +77,7 @@ public class PALDebugCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback( () -> Text.literal("Error: " + e),false);
             return 0;
         }
 

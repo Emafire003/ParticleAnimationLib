@@ -30,7 +30,7 @@ public class ArcEffect extends EffectV3 {
      * Creates a new arc effect between two points
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the initial point of the arc
      * @param target The target position of the effect, aka the finial point of the arc
      * @param count The number of particles to spread between the two points
@@ -48,7 +48,7 @@ public class ArcEffect extends EffectV3 {
      * Creates a new arc effect between two points
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the initial point of the arc
      * @param target The target position of the effect, aka the finial point of the arc
      */
@@ -62,7 +62,7 @@ public class ArcEffect extends EffectV3 {
      * Creates a new arc effect between two points
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the initial point of the arc
      * @param target The target position of the effect, aka the finial point of the arc
      * @param count The number of particles to spread between the two points

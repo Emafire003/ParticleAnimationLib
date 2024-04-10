@@ -18,17 +18,10 @@
 	"entrypoints": {
 		"main": [
 			"me.emafire003.dev.particleanimationlib.ParticleAnimationLib"
-		],
-		"client": [
-			"me.emafire003.dev.particleanimationlib.ExampleModClient"
 		]
 	},
 	"mixins": [
-		"particleanimationlib.mixins.json",
-		{
-			"config": "particleanimationlib.client.mixins.json",
-			"environment": "client"
-		}
+		"particleanimationlib.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",

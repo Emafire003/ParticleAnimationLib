@@ -18,6 +18,7 @@ public class YPREffectV3 extends EffectV3 {
     public float pitch = 0;
     public float roll = 0;
     public float rollOffset = 0;
+    public boolean shouldUpdateYPR = false;
 
     public YPREffectV3(ServerWorld world, EffectType type, ParticleEffect particle) {
         super(world, type, particle);
@@ -26,11 +27,26 @@ public class YPREffectV3 extends EffectV3 {
     @Override
     public void updatePos(){
         super.updatePos();
+        if(!this.getShouldUpdateYPR()){
+            return;
+        }
         if(entityOrigin != null){
             this.pitch = entityOrigin.getPitch()+this.pitchOffset;
             this.yaw = entityOrigin.getYaw()+this.yawOffset;
-            //TODO may need to add the target yaw pitch thing?
+            //TODO may need to add the target's yaw pitch thing?
         }
+    }
+
+    public boolean getShouldUpdateYPR() {
+        return shouldUpdateYPR;
+    }
+
+    /**Should the Yaw Pitch and Roll also be updated
+     * when updating positions?
+     *
+     * @param shouldUpdateYPR True if you want to update yaw pitch roll values*/
+    public void setShouldUpdateYPR(boolean shouldUpdateYPR) {
+        this.shouldUpdateYPR = shouldUpdateYPR;
     }
 
 

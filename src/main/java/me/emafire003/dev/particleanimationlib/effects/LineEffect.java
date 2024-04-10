@@ -71,7 +71,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -101,7 +101,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -129,7 +129,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -149,7 +149,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -171,7 +171,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -187,7 +187,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param target The ending position of the line
      * @param particles The number of particles that make up the line
@@ -215,7 +215,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param target The ending position of the line
      * @param particles The number of particles that make up the line
@@ -241,7 +241,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param target The ending position of the line
      * @param particles The number of particles that make up the line
@@ -261,7 +261,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param target The ending position of the line
      * @param particles The number of particles that make up the line
@@ -279,7 +279,7 @@ public class LineEffect extends YPREffectV3 {
      * Creates a new line effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the line
      * @param target The ending position of the line
      * @param particles The number of particles that make up the line

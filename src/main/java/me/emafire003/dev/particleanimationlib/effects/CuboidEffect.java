@@ -64,7 +64,7 @@ public class CuboidEffect extends EffectV3 {
      * Don't use this constructor, since xyz lengths and origin-target exclude each other
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
@@ -92,7 +92,7 @@ public class CuboidEffect extends EffectV3 {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
@@ -113,7 +113,7 @@ public class CuboidEffect extends EffectV3 {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
      * @param x_length The length of the x component of the cuboid. The minimum is 1 block.
@@ -138,7 +138,7 @@ public class CuboidEffect extends EffectV3 {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
      * @param x_length The length of the x component of the cuboid. The minimum is 1 block
@@ -159,7 +159,7 @@ public class CuboidEffect extends EffectV3 {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
@@ -176,7 +176,7 @@ public class CuboidEffect extends EffectV3 {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param x_length The length of the x component of the cuboid. The minimum is 1 block
      * @param y_length The length of the y component of the cuboid. The minimum is 1 block
@@ -196,7 +196,7 @@ public class CuboidEffect extends EffectV3 {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * */

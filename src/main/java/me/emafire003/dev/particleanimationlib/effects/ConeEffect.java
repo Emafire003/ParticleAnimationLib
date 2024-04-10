@@ -66,7 +66,7 @@ public class ConeEffect extends YPREffectV3 {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -94,13 +94,14 @@ public class ConeEffect extends YPREffectV3 {
         this.rotation = startRotation;
         this.solid = solid;
         this.randomize = random;
+        this.setShouldUpdateYPR(true);
     }
 
     /**
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -110,13 +111,14 @@ public class ConeEffect extends YPREffectV3 {
         this.originPos = origin;
         this.yaw = yaw;
         this.pitch = pitch;
+        this.setShouldUpdateYPR(true);
     }
 
     /**
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
@@ -128,7 +130,7 @@ public class ConeEffect extends YPREffectV3 {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -142,13 +144,14 @@ public class ConeEffect extends YPREffectV3 {
         this.pitch = pitch;
         this.particles = particlesPerIteration;
         this.particlesCone = particleConeSize;
+        this.setShouldUpdateYPR(true);
     }
 
     /**
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -168,13 +171,14 @@ public class ConeEffect extends YPREffectV3 {
         this.strands = strands_number;
         this.lengthGrow = lengthGrow;
         this.radiusGrow = radiusGrow;
+        this.setShouldUpdateYPR(true);
     }
 
     /**
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -198,13 +202,14 @@ public class ConeEffect extends YPREffectV3 {
         this.radiusGrow = radiusGrow;
         this.angularVelocity = angularVel;
         this.rotation = startRotation;
+        this.setShouldUpdateYPR(true);
     }
 
     /**
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -230,6 +235,7 @@ public class ConeEffect extends YPREffectV3 {
         this.angularVelocity = angularVel;
         this.rotation = startRotation;
         this.solid = solid;
+        this.setShouldUpdateYPR(true);
     }
 
     /** Returns the position of the center of the cone at it maximum point*/

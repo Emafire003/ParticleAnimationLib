@@ -60,7 +60,7 @@ public class VortexEffect extends YPREffectV3 {
      * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param originPos The origin position of the effect
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -97,7 +97,7 @@ public class VortexEffect extends YPREffectV3 {
      * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param originPos The origin position of the effect
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -131,7 +131,7 @@ public class VortexEffect extends YPREffectV3 {
      * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param originPos The origin position of the effect
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -164,7 +164,7 @@ public class VortexEffect extends YPREffectV3 {
      * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param originPos The origin position of the effect
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -194,7 +194,7 @@ public class VortexEffect extends YPREffectV3 {
      * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param originPos The origin position of the effect
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()

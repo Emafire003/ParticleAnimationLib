@@ -33,7 +33,7 @@ public class SphereEffect extends EffectV3 {
      * Creates a new sphere effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect. Aka the center of the sphere
      * @param particles The number of particles the sphere will be made of
      * @param radius The radius of the sphere
@@ -54,7 +54,7 @@ public class SphereEffect extends EffectV3 {
      * Creates a new sphere effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect. Aka the center of the sphere
      * */
     public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
@@ -66,7 +66,7 @@ public class SphereEffect extends EffectV3 {
      * Creates a new sphere effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect. Aka the center of the sphere
      * @param particles The number of particles the sphere will be made of
      * @param radius The radius of the sphere

@@ -34,16 +34,9 @@ public class AnimatedBallEffect extends EffectV3 {
 
     /**
      * Factors (1, 1, 1)
-     * 
      * Aka dimensions of the ball, like the "diameters"
      */
     public float xFactor = 1F, yFactor = 1F, zFactor = 1F;
-
-    /**
-     * Offsets (0, 0.8, 0)
-     *
-     */
-    //public float xOffset, yOffset = 0.8F, zOffset;
 
     /**
      * Rotation of the ball.
@@ -61,7 +54,7 @@ public class AnimatedBallEffect extends EffectV3 {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
@@ -89,7 +82,7 @@ public class AnimatedBallEffect extends EffectV3 {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect
       */
     public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
@@ -103,7 +96,7 @@ public class AnimatedBallEffect extends EffectV3 {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
@@ -123,7 +116,7 @@ public class AnimatedBallEffect extends EffectV3 {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle that are going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
