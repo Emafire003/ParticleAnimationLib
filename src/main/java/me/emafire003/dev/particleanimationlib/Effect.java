@@ -8,8 +8,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("unused")
-public class EffectV3 {
-
+public class Effect {
     protected int iterations;
     protected int delay;
     protected Vec3d originPos;
@@ -31,7 +30,7 @@ public class EffectV3 {
     protected boolean done = false;
     protected int ticks = 0;
 
-    public EffectV3(ServerWorld world, EffectType type, ParticleEffect particle){
+    public Effect(ServerWorld world, EffectType type, ParticleEffect particle){
         this.world = world;
         this.type = type;
         this.particle = particle;
@@ -58,11 +57,9 @@ public class EffectV3 {
     }
 
     /**Runs the effect for the specified amount of seconds
-     *
      * You can do the same thing by setting the number of iterations
      * manually using {@link #setIterations(int)}. Each iteration is
      * one tick, and 20 ticks are one second.
-     *
      * Does not work with instant effects (wow eh?)
      *
      * @param seconds The number of seconds to run the effect for.

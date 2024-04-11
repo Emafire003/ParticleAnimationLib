@@ -1,7 +1,7 @@
 package me.emafire003.dev.particleanimationlib.util;
 
-import me.emafire003.dev.particleanimationlib.EffectV3;
+import me.emafire003.dev.particleanimationlib.Effect;
 
 public interface EffectModifier {
-    void modifyEffect(EffectV3 effect, int current_tick);
+    void modifyEffect(Effect effect, int current_tick);
 }

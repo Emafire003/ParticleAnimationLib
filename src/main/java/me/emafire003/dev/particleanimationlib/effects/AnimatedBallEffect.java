@@ -1,7 +1,7 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
+import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.EffectV3;
 import me.emafire003.dev.particleanimationlib.util.MathUtils;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.particle.ParticleEffect;
@@ -9,13 +9,13 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 /**
- * Creates an animated Sphere.. Thanks to the author for sharing it!
+ * Creates an animated Sphere. Thanks to the author for sharing it!
  * <a href="https://www.youtube.com/watch?feature=player_embedded&v=RUjIw_RprRw">Demo on YouTube</a>
  *
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
 @SuppressWarnings("unused")
-public class AnimatedBallEffect extends EffectV3 {
+public class AnimatedBallEffect extends Effect {
 
     /**
      * Ball particles total (150)

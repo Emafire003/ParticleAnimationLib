@@ -6,7 +6,8 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
-public class AnimatedCircleEffect extends YPREffectV3 {
+@SuppressWarnings("unused")
+public class AnimatedCircleEffect extends YPREffect {
 
     /**
      * Rotation of the torus.

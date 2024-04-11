@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.particleanimationlib.effects.AnimatedCircleEffect;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
@@ -84,7 +85,7 @@ public class PALDebugCommand implements PALCommand {
     }
 
 
-    public LiteralCommandNode<ServerCommandSource> getNode() {
+    public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
                 .literal("debug")
                 .then(

@@ -1,14 +1,14 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
+import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.EffectV3;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("unused")
-public class LineEffect extends YPREffectV3 {
+public class LineEffect extends YPREffect {
 
     /**
      * Should it do a zig zag?
@@ -52,7 +52,7 @@ public class LineEffect extends YPREffectV3 {
      * Sub effect at end.
      * This will play a subeffect at the end origin of the line
      */
-    private EffectV3 subEffectAtEnd = null;
+    private Effect subEffectAtEnd = null;
 
     //Internal stuff
 
@@ -83,7 +83,7 @@ public class LineEffect extends YPREffectV3 {
      * @param zigZagRelativeOffset A relative offsets for the zigzags
      * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, EffectV3 effectAtEnd) {
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, Effect effectAtEnd) {
         super(world, EffectType.REPEATING, particle);
         this.originPos = origin;
         this.particles = particles;
@@ -157,7 +157,7 @@ public class LineEffect extends YPREffectV3 {
      * @param length The length of the line
      * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, EffectV3 effectAtEnd) {
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, Effect effectAtEnd) {
         super(world, EffectType.REPEATING, particle);
         this.originPos = origin;
         this.particles = particles;
@@ -198,7 +198,7 @@ public class LineEffect extends YPREffectV3 {
      * @param zigZagRelativeOffset A relative offsets for the zigzags
      * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, EffectV3 effectAtEnd) {
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, Effect effectAtEnd) {
         super(world, EffectType.REPEATING, particle);
         this.originPos = origin;
         this.targetPos = target;
@@ -248,7 +248,7 @@ public class LineEffect extends YPREffectV3 {
      * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
      * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength,EffectV3 effectAtEnd) {
+    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, Effect effectAtEnd) {
         super(world, EffectType.REPEATING, particle);
         this.originPos = origin;
         this.targetPos = target;
@@ -408,11 +408,11 @@ public class LineEffect extends YPREffectV3 {
         this.maxLength = maxLength;
     }
 
-    public EffectV3 getSubEffectAtEnd() {
+    public Effect getSubEffectAtEnd() {
         return subEffectAtEnd;
     }
 
-    public void setSubEffectAtEnd(EffectV3 subEffectAtEnd) {
+    public void setSubEffectAtEnd(Effect subEffectAtEnd) {
         this.subEffectAtEnd = subEffectAtEnd;
     }
 

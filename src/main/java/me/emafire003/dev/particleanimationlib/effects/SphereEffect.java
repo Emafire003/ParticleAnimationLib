@@ -1,14 +1,14 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
+import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.EffectV3;
 import me.emafire003.dev.particleanimationlib.util.RandomUtils;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("unused")
-public class SphereEffect extends EffectV3 {
+public class SphereEffect extends Effect {
 
     /**
      * Radius of the sphere

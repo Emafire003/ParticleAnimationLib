@@ -1,7 +1,7 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.EffectV3;
+import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class CuboidEffect extends EffectV3 {
+public class CuboidEffect extends Effect {
 
     /**
      * Particles in each row

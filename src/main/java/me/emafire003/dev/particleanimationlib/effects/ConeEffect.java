@@ -9,7 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("unused")
-public class ConeEffect extends YPREffectV3 {
+public class ConeEffect extends YPREffect {
 
     /**
      * Growing per iteration in the length (0.05)

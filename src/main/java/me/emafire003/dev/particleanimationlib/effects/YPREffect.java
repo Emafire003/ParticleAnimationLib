@@ -1,15 +1,17 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.EffectV3;
+import me.emafire003.dev.particleanimationlib.Effect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
-/**Class used for effects that also require yaw pitch roll values*/
+/**Class used for effects that also require yaw pitch roll values
+ *
+ * Note: Roll values are currently unused and won't do anything (version 0.0.1)*/
 @SuppressWarnings("unused")
-public class YPREffectV3 extends EffectV3 {
+public class YPREffect extends Effect {
 
 
     public float yawOffset = 0;
@@ -20,7 +22,7 @@ public class YPREffectV3 extends EffectV3 {
     public float rollOffset = 0;
     public boolean shouldUpdateYPR = false;
 
-    public YPREffectV3(ServerWorld world, EffectType type, ParticleEffect particle) {
+    public YPREffect(ServerWorld world, EffectType type, ParticleEffect particle) {
         super(world, type, particle);
     }
 

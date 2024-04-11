@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class VortexEffect extends YPREffectV3 {
+public class VortexEffect extends YPREffect {
 
     /**
      * Radius of vortex (2)

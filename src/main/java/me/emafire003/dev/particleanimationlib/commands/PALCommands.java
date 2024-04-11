@@ -18,11 +18,12 @@ public class PALCommands {
         dispatcher.getRoot().addChild(pal_commands);
 
         PALCommand[] commands = new PALCommand[] {
-                new PALDebugCommand()
+                new PALDebugCommand(),
+                new AnimatedBallCommand()
         };
 
         for (PALCommand command : commands) {
-            pal_commands.addChild(command.getNode());
+            pal_commands.addChild(command.getNode(registryAccess));
         }
     }
 }
