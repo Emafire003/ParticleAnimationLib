@@ -19,7 +19,10 @@ public class PALCommands {
 
         PALCommand[] commands = new PALCommand[] {
                 new PALDebugCommand(),
-                new AnimatedBallCommand()
+                new AnimatedBallCommand(),
+                new ArcCommand(),
+                new CuboidCommand(),
+                new SphereCommand()
         };
 
         for (PALCommand command : commands) {

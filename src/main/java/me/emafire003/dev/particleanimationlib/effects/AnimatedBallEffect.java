@@ -16,7 +16,6 @@ import net.minecraft.util.math.Vec3d;
  */
 @SuppressWarnings("unused")
 public class AnimatedBallEffect extends Effect {
-
     /**
      * Ball particles total (150)
      */

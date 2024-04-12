@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class Effect {
@@ -222,8 +223,12 @@ public class Effect {
     }
 
     /** Already sums the offsets!*/
+    @Nullable
     public Vec3d getOriginPos() {
-        return originPos.add(originOffset);
+        if(originPos != null){
+            return originPos.add(originOffset);
+        }
+        return null;
     }
 
     public void setOriginPos(Vec3d origin_pos) {
@@ -255,8 +260,12 @@ public class Effect {
     }
 
     /** Already sums the offsets!*/
+    @Nullable
     public Vec3d getTargetPos() {
-        return targetPos.add(targetOffset);
+        if(targetPos != null){
+            targetPos.add(targetOffset);
+        }
+        return null;
     }
 
     public void setTargetPos(Vec3d finish_pos) {
