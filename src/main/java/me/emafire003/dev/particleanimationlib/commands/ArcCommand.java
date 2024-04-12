@@ -38,25 +38,22 @@ public class ArcCommand implements PALCommand {
 
     public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
-                .literal("spawn")
-                .then(CommandManager.literal("arc")
-                        .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
-                                        .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
-                                                .then(CommandManager.argument("targetPos", Vec3ArgumentType.vec3())
-                                                        .then(CommandManager.argument("count", IntegerArgumentType.integer(0))
-                                                                .then(CommandManager.argument("height", IntegerArgumentType.integer())
-                                                                        .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
-                                                                                .executes(this::spawnEffect)
-                                                                        )
-
-                                                                )
+                .literal("arc")
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                        .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
+                                .then(CommandManager.argument("targetPos", Vec3ArgumentType.vec3())
+                                        .then(CommandManager.argument("count", IntegerArgumentType.integer(0))
+                                                .then(CommandManager.argument("height", IntegerArgumentType.integer())
+                                                        .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
+                                                                .executes(this::spawnEffect)
                                                         )
 
                                                 )
-
                                         )
 
                                 )
+
+                        )
 
                 )
                 .build();

@@ -22,7 +22,8 @@ public class PALCommands {
                 new AnimatedBallCommand(),
                 new ArcCommand(),
                 new CuboidCommand(),
-                new SphereCommand()
+                new SphereCommand(),
+                new ConeCommand()
         };
 
         for (PALCommand command : commands) {

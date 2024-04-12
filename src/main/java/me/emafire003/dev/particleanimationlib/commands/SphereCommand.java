@@ -42,26 +42,23 @@ public class SphereCommand implements PALCommand {
 
     public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
-                .literal("spawn")
-                .then(CommandManager.literal("sphere")
-                        .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
-                                        .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
-                                                .then(CommandManager.argument("count", IntegerArgumentType.integer(0))
-                                                        .then(CommandManager.argument("radius", DoubleArgumentType.doubleArg(0))
-                                                                .then(CommandManager.argument("radiusIncrease", DoubleArgumentType.doubleArg(0))
-                                                                        .then(CommandManager.argument("particleIncrease", IntegerArgumentType.integer(0))
-                                                                                .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
-                                                                                        .executes(this::spawnEffect)
-                                                                                )
-                                                                        )
+                .literal("sphere")
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                        .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
+                                .then(CommandManager.argument("count", IntegerArgumentType.integer(0))
+                                        .then(CommandManager.argument("radius", DoubleArgumentType.doubleArg(0))
+                                                .then(CommandManager.argument("radiusIncrease", DoubleArgumentType.doubleArg(0))
+                                                        .then(CommandManager.argument("particleIncrease", IntegerArgumentType.integer(0))
+                                                                .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
+                                                                        .executes(this::spawnEffect)
                                                                 )
                                                         )
-
                                                 )
-
                                         )
 
                                 )
+
+                        )
 
                 )
                 .build();

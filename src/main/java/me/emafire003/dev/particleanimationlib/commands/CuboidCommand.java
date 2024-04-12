@@ -56,28 +56,24 @@ public class CuboidCommand implements PALCommand {
 
     public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
-                .literal("spawn")
-                .then(
-                        CommandManager.literal("cuboid")
-                                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
-                                        .then(CommandManager.argument("origin", Vec3ArgumentType.vec3())
-                                                .then(CommandManager.argument("target", Vec3ArgumentType.vec3())
-                                                        .then(CommandManager.argument("useCorners", BoolArgumentType.bool())
-                                                                .then(CommandManager.argument("particles_per_row", IntegerArgumentType.integer(0))
-                                                                        .then(CommandManager.argument("padding", IntegerArgumentType.integer())
-                                                                                .then(CommandManager.argument("blockSnap", BoolArgumentType.bool())
-                                                                                        .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
-                                                                                                .executes(this::spawnEffect)
-                                                                                        )
-                                                                                )
+                .literal("cuboid")
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                        .then(CommandManager.argument("origin", Vec3ArgumentType.vec3())
+                                .then(CommandManager.argument("target", Vec3ArgumentType.vec3())
+                                        .then(CommandManager.argument("useCorners", BoolArgumentType.bool())
+                                                .then(CommandManager.argument("particles_per_row", IntegerArgumentType.integer(0))
+                                                        .then(CommandManager.argument("padding", IntegerArgumentType.integer())
+                                                                .then(CommandManager.argument("blockSnap", BoolArgumentType.bool())
+                                                                        .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
+                                                                                .executes(this::spawnEffect)
                                                                         )
-
                                                                 )
                                                         )
+
                                                 )
                                         )
-
                                 )
+                        )
 
                 )
                 .build();
