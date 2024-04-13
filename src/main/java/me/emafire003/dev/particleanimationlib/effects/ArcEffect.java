@@ -36,7 +36,7 @@ public class ArcEffect extends Effect {
      * @param count The number of particles to spread between the two points
      * @param height The height (in blocks) of the arc, aka its curvature.
      */
-    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count, int height) {
+    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count, float height) {
         super(world, EffectType.REPEATING, particle);
         this.setOriginPos(origin);
         this.setTargetPos(target);
@@ -74,6 +74,7 @@ public class ArcEffect extends Effect {
         this.particles = count;
     }
 
+
     @Override
     public void onRun() {
         Vec3d origin = this.getOriginPos();
@@ -97,12 +98,17 @@ public class ArcEffect extends Effect {
 
         //TODO make an arc on the other coordinates too
         for (int i = 0; i < particles; i++) {
-            v = new Vec3d(link.getX(), link.getY(), link.getZ()).multiply(length * i / particles);
+
+            //v = link.clone().normalize().multiply(length * i / particles);
+
+
+            step++;
+            v = new Vec3d(link.getX(), link.getY(), link.getZ()).normalize().multiply(length * i / particles);
+            //ParticleAnimationLib.LOGGER.info("The v is: " + v);
             x = ((float) i / particles) * length - length / 2;
             y = (float) (-pitch * Math.pow(x, 2) + height);
 
-            Vec3d pos = origin.add(v).add(0, y, 0);
-            this.displayParticle(particle, pos);
+            this.displayParticle(particle, origin.add(v).add(0, y, 0));
 
             step++;
         }

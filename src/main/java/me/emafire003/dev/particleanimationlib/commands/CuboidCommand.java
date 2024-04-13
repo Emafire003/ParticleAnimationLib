@@ -1,6 +1,7 @@
 package me.emafire003.dev.particleanimationlib.commands;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -32,13 +33,13 @@ public class CuboidCommand implements PALCommand {
             if(BoolArgumentType.getBool(context, "useCorners")){
                 CuboidEffect effect = new CuboidEffect(source.getWorld(), particle, pos, target,
                         IntegerArgumentType.getInteger(context, "particles_per_row"),
-                        IntegerArgumentType.getInteger(context, "padding"),
+                        DoubleArgumentType.getDouble(context, "padding"),
                         BoolArgumentType.getBool(context, "blockSnap"));
                 effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
             }else{
                 CuboidEffect effect = new CuboidEffect(source.getWorld(), particle, pos, IntegerArgumentType.getInteger(context, "particles_per_row"),
                         target.getX(), target.getY(), target.getZ(), // the lengths of the cuboid
-                        IntegerArgumentType.getInteger(context, "padding"),
+                        DoubleArgumentType.getDouble(context, "padding"),
                         BoolArgumentType.getBool(context, "blockSnap"));
                 effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
             }
@@ -60,7 +61,7 @@ public class CuboidCommand implements PALCommand {
                                 .then(CommandManager.argument("target", Vec3ArgumentType.vec3())
                                         .then(CommandManager.argument("useCorners", BoolArgumentType.bool())
                                                 .then(CommandManager.argument("particles_per_row", IntegerArgumentType.integer(0))
-                                                        .then(CommandManager.argument("padding", IntegerArgumentType.integer())
+                                                        .then(CommandManager.argument("padding", DoubleArgumentType.doubleArg())
                                                                 .then(CommandManager.argument("blockSnap", BoolArgumentType.bool())
                                                                         .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
                                                                                 .executes(this::spawnEffect)

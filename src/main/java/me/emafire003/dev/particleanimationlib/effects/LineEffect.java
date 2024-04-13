@@ -2,6 +2,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
+import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
@@ -308,7 +309,11 @@ public class LineEffect extends YPREffect {
             target = this.getTargetPos();
         }
 
-        int amount = particles / zigZags;
+        int amount = particles;
+        if(isZigZag){
+            amount = amount  / zigZags;
+        }
+
         if (target == null) {
             return;
         }
@@ -328,6 +333,7 @@ public class LineEffect extends YPREffect {
 
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
+                ParticleAnimationLib.LOGGER.info("Zigzging anyway");
                 rel = VectorUtils.rotateVector(zigZagRelativeOffset, this.getYaw(), this.getPitch());
                 if (zag) {
                     loc = loc.add(rel);

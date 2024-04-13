@@ -1,5 +1,6 @@
 package me.emafire003.dev.particleanimationlib.commands;
 
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -24,7 +25,7 @@ public class ArcCommand implements PALCommand {
             Vec3d pos = Vec3ArgumentType.getVec3(context, "originPos");
             Vec3d target = Vec3ArgumentType.getVec3(context, "targetPos");
             ParticleEffect particle = ParticleEffectArgumentType.getParticle(context, "particle");
-            ArcEffect effect = new ArcEffect(source.getWorld(), particle, pos, target, IntegerArgumentType.getInteger(context,"count"), IntegerArgumentType.getInteger(context,"height"));
+            ArcEffect effect = new ArcEffect(source.getWorld(), particle, pos, target, IntegerArgumentType.getInteger(context,"count"), FloatArgumentType.getFloat(context,"height"));
             effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
 
             return 1;
@@ -43,7 +44,7 @@ public class ArcCommand implements PALCommand {
                         .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("targetPos", Vec3ArgumentType.vec3())
                                         .then(CommandManager.argument("count", IntegerArgumentType.integer(0))
-                                                .then(CommandManager.argument("height", IntegerArgumentType.integer())
+                                                .then(CommandManager.argument("height", FloatArgumentType.floatArg())
                                                         .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
                                                                 .executes(this::spawnEffect)
                                                         )
