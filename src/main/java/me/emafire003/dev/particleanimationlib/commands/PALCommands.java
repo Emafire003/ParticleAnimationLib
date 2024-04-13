@@ -23,7 +23,9 @@ public class PALCommands {
                 new ArcCommand(),
                 new CuboidCommand(),
                 new SphereCommand(),
-                new ConeCommand()
+                new ConeCommand(),
+                new VortexCommand(),
+                new LineCommand()
         };
 
         for (PALCommand command : commands) {

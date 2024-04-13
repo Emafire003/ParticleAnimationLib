@@ -29,7 +29,7 @@ public class VortexEffect extends YPREffect {
     /**
      * Growing per iteration (0.05)
      */
-    public float grow = 0.05F;
+    public float lengthGrow = 0.05F;
 
     /**
      * Radials per iteration (PI / 16)
@@ -57,7 +57,6 @@ public class VortexEffect extends YPREffect {
 
 
     /** Creates a new Vortex effect
-     * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
@@ -67,13 +66,13 @@ public class VortexEffect extends YPREffect {
      * @param radius The base radius of the vortex
      * @param radiusGrow How much should the radius grow each iteration, aka each tick? TIP: Set it to a fairly low number
      * @param startRange The initial range of the vortex
-     * @param grow The distance the vortex grows each tick
+     * @param lengthGrow The distance the vortex grows each tick
      * @param radials_per_iteration Radials per iteration
      * @param circles The number of circles per iteration
      * @param helixes The number of helixes or helices whatever per iteration
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
-                        float radius, float radiusGrow, float startRange, float grow,
+                        float radius, float radiusGrow, float startRange, float lengthGrow,
                         double radials_per_iteration, int circles, int helixes) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
@@ -87,14 +86,13 @@ public class VortexEffect extends YPREffect {
         this.radius = radius;
         this.radiusGrow = radiusGrow;
         this.startRange = startRange;
-        this.grow = grow;
+        this.lengthGrow = lengthGrow;
         this.radials = radials_per_iteration;
         this.circles = circles;
         this.helixes = helixes;
     }
 
     /** Creates a new Vortex effect
-     * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
@@ -104,12 +102,12 @@ public class VortexEffect extends YPREffect {
      * @param radius The base radius of the vortex
      * @param radiusGrow How much should the radius grow each iteration, aka each tick? TIP: Set it to a fairly low number
      * @param startRange The initial range of the vortex
-     * @param grow The distance the vortex grows each tick
+     * @param lengthGrow The distance the vortex grows each tick
      * @param circles The number of circles per iteration
      * @param helixes The number of helixes or helices whatever per iteration
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
-                        float radius, float radiusGrow, float startRange, float grow, int circles, int helixes) {
+                        float radius, float radiusGrow, float startRange, float lengthGrow, int circles, int helixes) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
         this.world = world;
@@ -122,13 +120,12 @@ public class VortexEffect extends YPREffect {
         this.radius = radius;
         this.radiusGrow = radiusGrow;
         this.startRange = startRange;
-        this.grow = grow;
+        this.lengthGrow = lengthGrow;
         this.circles = circles;
         this.helixes = helixes;
     }
 
     /** Creates a new Vortex effect
-     * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
@@ -136,13 +133,13 @@ public class VortexEffect extends YPREffect {
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param radius The base radius of the vortex
-     * @param grow The distance the vortex grows each tick
+     * @param lengthGrow The distance the vortex grows each tick
      * @param radials_per_iteration Radials per iteration
      * @param circles The number of circles per iteration
      * @param helixes The number of helixes or helices whatever per iteration
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
-                        float radius, float grow,
+                        float radius, float lengthGrow,
                         double radials_per_iteration, int circles, int helixes) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
@@ -154,14 +151,13 @@ public class VortexEffect extends YPREffect {
         this.pitch = pitch;
 
         this.radius = radius;
-        this.grow = grow;
+        this.lengthGrow = lengthGrow;
         this.radials = radials_per_iteration;
         this.circles = circles;
         this.helixes = helixes;
     }
 
     /** Creates a new Vortex effect
-     * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
@@ -169,12 +165,12 @@ public class VortexEffect extends YPREffect {
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param radius The base radius of the vortex
-     * @param grow The distance the vortex grows each tick
+     * @param lengthGrow The distance the vortex grows each tick
      * @param circles The number of circles per iteration
      * @param helixes The number of helixes or helices whatever per iteration
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
-                        float radius, float grow, int circles, int helixes) {
+                        float radius, float lengthGrow, int circles, int helixes) {
         super(world, EffectType.REPEATING, particle);
         this.type = EffectType.REPEATING;
         this.world = world;
@@ -185,13 +181,12 @@ public class VortexEffect extends YPREffect {
         this.pitch = pitch;
 
         this.radius = radius;
-        this.grow = grow;
+        this.lengthGrow = lengthGrow;
         this.circles = circles;
         this.helixes = helixes;
     }
 
     /** Creates a new Vortex effect
-     * Remember to set the number of iterations! {@link #setIterations(int)}
      *
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
@@ -222,7 +217,7 @@ public class VortexEffect extends YPREffect {
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
                 angle = step * radials + (2 * Math.PI * i / helixes);
-                v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * grow, Math.sin(angle) * (radius + step * radiusGrow));
+                v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
                 //The +90 flips the angle to be on the looking plane let's call it
                 v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
@@ -256,12 +251,12 @@ public class VortexEffect extends YPREffect {
         this.startRange = startRange;
     }
 
-    public float getGrow() {
-        return grow;
+    public float getLengthGrow() {
+        return lengthGrow;
     }
 
-    public void setGrow(float grow) {
-        this.grow = grow;
+    public void setLengthGrow(float lengthGrow) {
+        this.lengthGrow = lengthGrow;
     }
 
     public double getRadials() {

@@ -28,7 +28,6 @@ public class CuboidCommand implements PALCommand {
             }
             Vec3d pos = Vec3ArgumentType.getVec3(context, "origin");
             Vec3d target = Vec3ArgumentType.getVec3(context, "target");
-            source.sendMessage(Text.literal("The target is: " + target));
             ParticleEffect particle = ParticleEffectArgumentType.getParticle(context, "particle");
             if(BoolArgumentType.getBool(context, "useCorners")){
                 CuboidEffect effect = new CuboidEffect(source.getWorld(), particle, pos, target,
@@ -41,7 +40,6 @@ public class CuboidCommand implements PALCommand {
                         target.getX(), target.getY(), target.getZ(), // the lengths of the cuboid
                         IntegerArgumentType.getInteger(context, "padding"),
                         BoolArgumentType.getBool(context, "blockSnap"));
-                source.sendMessage(Text.literal("Yes using the correct constructor"));
                 effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
             }
 

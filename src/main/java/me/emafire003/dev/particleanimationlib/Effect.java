@@ -263,7 +263,7 @@ public class Effect {
     @Nullable
     public Vec3d getTargetPos() {
         if(targetPos != null){
-            targetPos.add(targetOffset);
+            return targetPos.add(targetOffset);
         }
         return null;
     }
