@@ -27,7 +27,7 @@ public class PALCommands {
         dispatcher.getRoot().addChild(pal_alias);
 
         PALCommand[] commands = new PALCommand[] {
-                new PALDebugCommand(),
+                //new PALDebugCommand(),
                 new AnimatedBallCommand(),
                 new ArcCommand(),
                 new CuboidCommand(),
