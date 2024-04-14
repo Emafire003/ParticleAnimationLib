@@ -12,10 +12,19 @@ public class PALCommands {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralCommandNode<ServerCommandSource> pal_commands = CommandManager
                 .literal("pal")
+                .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
                 .build();
 
 
         dispatcher.getRoot().addChild(pal_commands);
+
+        LiteralCommandNode<ServerCommandSource> pal_alias = CommandManager
+                .literal("particleanimationlib")
+                .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
+                .build();
+
+
+        dispatcher.getRoot().addChild(pal_alias);
 
         PALCommand[] commands = new PALCommand[] {
                 new PALDebugCommand(),

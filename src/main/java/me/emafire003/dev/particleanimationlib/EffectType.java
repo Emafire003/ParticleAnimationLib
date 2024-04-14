@@ -4,6 +4,7 @@ public enum EffectType {
 
     /**
      * Effect is once played instantly.
+     * Currently unused v 0.0.1
      */
     INSTANT,
     //{@link Effect#period}.
@@ -14,6 +15,7 @@ public enum EffectType {
     //{@link Effect#delay}.
     /**
      * Effect is once delayed played. Set delay with
+     * Currently unused v 0.0.1
      */
     DELAYED
 

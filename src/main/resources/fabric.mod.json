@@ -2,10 +2,10 @@
 	"schemaVersion": 1,
 	"id": "particleanimationlib",
 	"version": "${version}",
-	"name": "Particle Animation Lib",
-	"description": "A particle animation library to create cool effects!",
+	"name": "Particle Animation Library",
+	"description": "A particle animation library to create cool particle effects super easily!",
 	"authors": [
-		"Emafire003, elBukkit (original code)"
+		"Emafire003, elBukkit (original effects)"
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/particleanimationlib",
@@ -25,9 +25,8 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",
-		"minecraft": "~1.20.4",
-		"java": ">=17",
-		"fabric-api": "*"
+		"minecraft": ">=1.17-",
+		"java": ">=16"
 	},
 	"suggests": {
 		"another-mod": "*"
