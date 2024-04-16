@@ -1,5 +1,7 @@
 # Particle Animation Library
-![particle_animation_library_header](https://github.com/Emafire003/ParticleAnimationLib/assets/29462910/bc962eb1-bea8-4abf-9e29-bf7ea43db5fb)
+![particle_animation_library_header](https://github.com/Emafire003/ParticleAnimationLib/assets/29462910/3b1316c8-96c3-4450-abf8-241ce05eaf2e)
+
+
 Do you want to create cool particle effects such as cones cubues spheres and vortices but don't know how? Well then this mod is for you! 
 It is mainly a developer utility, but as a player you can play around with the commands, especially to try out the effects before implementing them with code. It is also fully serverside, meaning you won't need it on the client. It is inspirerd by the [EffectLib](https://github.com/elBukkit/EffectLib) plugin as you may have guessed.
 
