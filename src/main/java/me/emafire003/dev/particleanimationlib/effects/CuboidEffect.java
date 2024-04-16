@@ -76,9 +76,7 @@ public class CuboidEffect extends Effect {
      * */
     @Deprecated
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles_per_row;
         this.xLength = x_length;
@@ -100,9 +98,7 @@ public class CuboidEffect extends Effect {
      * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double padding, boolean blockSnap) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles_per_row;
         this.padding = padding;
@@ -123,9 +119,7 @@ public class CuboidEffect extends Effect {
      * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles_per_row;
         this.xLength = x_length;
         this.yLength = y_length;
@@ -146,9 +140,7 @@ public class CuboidEffect extends Effect {
      * @param z_length The length of the z component of the cuboid. The minimum is 1 block
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles_per_row;
         this.xLength = x_length;
         this.yLength = y_length;
@@ -165,9 +157,7 @@ public class CuboidEffect extends Effect {
      * @param particles_per_row How many particles should each side/row have
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles_per_row;
     }
@@ -183,9 +173,7 @@ public class CuboidEffect extends Effect {
      * @param z_length The length of the z component of the cuboid. The minimum is 1 block
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, double x_length, double y_length, double z_length) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.xLength = x_length;
         this.yLength = y_length;
         this.zLength = z_length;
@@ -201,9 +189,7 @@ public class CuboidEffect extends Effect {
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target) {
-        super(world, EffectType.REPEATING, particle);
-        this.type = EffectType.REPEATING;
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
     }
 

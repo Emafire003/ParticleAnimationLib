@@ -3,7 +3,7 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.effects.AnimatedCircleEffect;
+import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
@@ -11,7 +11,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
 
 import java.util.Collection;
 
@@ -31,6 +30,15 @@ public class PALDebugCommand implements PALCommand {
                 if(target.getWorld().isClient()){
                     return 0;
                 }
+
+
+                ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos().add(0,-1,0), target.getYaw(), target.getPitch());
+                coneEffect.setDrawCenterAxis(true);
+                coneEffect.setStrands(2);
+                coneEffect.setInverted(true);
+                coneEffect.setSecondaryParticle(ParticleTypes.CLOUD);
+                coneEffect.runFor(10);
+
                 /*LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.CRIT, target.getPos(),
                         target.getPos().add(5,0,0),
                         150, 1, true, 3,
@@ -42,14 +50,14 @@ public class PALDebugCommand implements PALCommand {
                 lineEffect.runFor(5);*/
 
                 //AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getEyePos(), target.getYaw(), target.getPitch());
-                AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getPos().add(0,0.7,0),
+                /*AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getPos().add(0,0.7,0),
                         target.getYaw(), target.getPitch(), 40, 1.2f, 0, Math.PI*2,
                         false, false, true,
                         new Vec3d(Math.PI, Math.PI, Math.PI/2).multiply(1),
                         new Vec3d(0,0,0), new Vec3d(0,0,0));
                 //effect.setEntityOrigin(target);
                 //effect.setUpdatePositions(true);
-                effect.runFor(5);
+                effect.runFor(5);*/
 
 
                 /*ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.FLAME, target.getEyePos(),

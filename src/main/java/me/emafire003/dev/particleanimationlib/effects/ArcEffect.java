@@ -37,8 +37,7 @@ public class ArcEffect extends Effect {
      * @param height The height (in blocks) of the arc, aka its curvature.
      */
     public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count, float height) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.setTargetPos(target);
         this.particles = count;
         this.height = height;
@@ -53,8 +52,7 @@ public class ArcEffect extends Effect {
      * @param target The target position of the effect, aka the finial point of the arc
      */
     public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.setTargetPos(target);
     }
 
@@ -68,8 +66,7 @@ public class ArcEffect extends Effect {
      * @param count The number of particles to spread between the two points
      */
     public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.setTargetPos(target);
         this.particles = count;
     }

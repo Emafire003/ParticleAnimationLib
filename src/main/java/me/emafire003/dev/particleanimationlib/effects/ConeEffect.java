@@ -56,11 +56,26 @@ public class ConeEffect extends YPREffect {
      */
     public int strands = 1;
 
+    //Added by Emafire003
+
+    /** Should the cone start from the max position and go to the origin position?*/
+    boolean inverted = false;
+
+    /** Do you want to draw the center axis as well?*/
+    boolean drawCenterAxis = false;
+
+    /** Draws a point (one particle) where the effect ends*/
+    boolean drawFinishPoint = false;
+    /** The particles to use for displaying the center axis/finish point
+     * Falls back to the particle of this effect*/
+    ParticleEffect secondaryParticle = particle;
+
 
     /**
      * Current step. Works as counter
      */
     protected int step = 0;
+    private boolean lineCreated = false;
 
     /**
      * Creates a new cone effect
@@ -81,8 +96,7 @@ public class ConeEffect extends YPREffect {
      * @param random Makes the initial rotation of the cone random
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation, boolean solid, boolean random) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particlesPerIteration;
@@ -107,8 +121,7 @@ public class ConeEffect extends YPREffect {
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.setShouldUpdateYPR(true);
@@ -122,8 +135,7 @@ public class ConeEffect extends YPREffect {
      * @param origin The origin position of the effect, aka the starting point of the cone
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
     }
 
     /**
@@ -138,8 +150,7 @@ public class ConeEffect extends YPREffect {
      * @param particlesPerIteration How many particles to display per iteration
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particlesPerIteration;
@@ -162,8 +173,7 @@ public class ConeEffect extends YPREffect {
      * @param radiusGrow Radius growth amount per each iteration
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particlesPerIteration;
@@ -191,8 +201,7 @@ public class ConeEffect extends YPREffect {
      * @param startRotation The starting rotation angle of the cone
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particlesPerIteration;
@@ -223,8 +232,7 @@ public class ConeEffect extends YPREffect {
      * @param solid Should the cone be solid?
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation, boolean solid) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particlesPerIteration;
@@ -239,17 +247,16 @@ public class ConeEffect extends YPREffect {
     }
 
     /** Returns the position of the center of the cone at it maximum point*/
-    public Vec3d predictedMaxCenterPosition(){
+    public Vec3d getPredictedMaxCenterPosition(){
         float total_length = this.getIterations() * lengthGrow;
 
-        Vec3d v = new Vec3d(0, total_length*2, 0);
+        Vec3d v = new Vec3d(0, total_length, 0);
 
         v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
         return originPos.add(v);
     }
 
-    //TODO try to get an inverted cone, get the predicted max growth too.
     @Override
     protected void onRun() {
         Vec3d originPos = this.getOriginPos();
@@ -283,9 +290,27 @@ public class ConeEffect extends YPREffect {
 
                 v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
-                this.displayParticle(particle, originPos.add(v));
+                if(inverted){
+                    v = v.multiply(-1);
+                    this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
+                }else{
+                    this.displayParticle(particle, originPos.add(v));
+                }
+
             }
-            //this.displayParticle(ParticleTypes.EGG_CRACK, predictedMaxCenterPosition()); would have displayed a particle at the center of the max length of the cone
+            if(drawCenterAxis && !lineCreated){
+                LineEffect line = new LineEffect(this.world, this.secondaryParticle, this.getOriginPos(), this.getPredictedMaxCenterPosition(), this.particles);
+                line.setIterations(this.iterations);
+                line.run();
+                lineCreated = true;
+            }
+            if(drawFinishPoint){
+                if(inverted){
+                    this.displayParticle(secondaryParticle, originPos);
+                }else{
+                    this.displayParticle(secondaryParticle, getPredictedMaxCenterPosition());
+                }
+            }
             step++;
         }
     }
@@ -360,6 +385,38 @@ public class ConeEffect extends YPREffect {
 
     public void setStrands(int strands) {
         this.strands = strands;
+    }
+
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
+    }
+
+    public boolean isDrawCenterAxis() {
+        return drawCenterAxis;
+    }
+
+    public void setDrawCenterAxis(boolean drawCenterAxis) {
+        this.drawCenterAxis = drawCenterAxis;
+    }
+
+    public ParticleEffect getSecondaryParticle() {
+        return secondaryParticle;
+    }
+
+    public void setSecondaryParticle(ParticleEffect secondaryParticle) {
+        this.secondaryParticle = secondaryParticle;
+    }
+
+    public boolean isDrawFinishPoint() {
+        return drawFinishPoint;
+    }
+
+    public void setDrawFinishPoint(boolean drawFinishPoint) {
+        this.drawFinishPoint = drawFinishPoint;
     }
 
 }

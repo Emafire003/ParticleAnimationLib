@@ -4,6 +4,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ public class VortexEffect extends YPREffect {
 
     /**
      * Helix-circles per iteration (3)
+     * (Also impacts on the length of the effect)
      */
     public int circles = 3;
 
@@ -46,6 +48,11 @@ public class VortexEffect extends YPREffect {
      * Yay for the typo
      */
     public int helixes = 4;
+
+    //Added by Emafire003
+
+    /**Inverts the staring and ending position of the vortex*/
+    public boolean inverted;
 
     // Stuff used for calculations
 
@@ -74,11 +81,10 @@ public class VortexEffect extends YPREffect {
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
                         float radius, float radiusGrow, float startRange, float lengthGrow,
                         double radials_per_iteration, int circles, int helixes) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -108,11 +114,10 @@ public class VortexEffect extends YPREffect {
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
                         float radius, float radiusGrow, float startRange, float lengthGrow, int circles, int helixes) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -141,11 +146,10 @@ public class VortexEffect extends YPREffect {
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
                         float radius, float lengthGrow,
                         double radials_per_iteration, int circles, int helixes) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -171,11 +175,10 @@ public class VortexEffect extends YPREffect {
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
                         float radius, float lengthGrow, int circles, int helixes) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.originPos = originPos;
 
         this.yaw = yaw;
         this.pitch = pitch;
@@ -195,13 +198,24 @@ public class VortexEffect extends YPREffect {
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * */
     public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
         this.world = world;
         this.particle = particle;
-        this.originPos = originPos;
         this.yaw = yaw;
         this.pitch = pitch;
+    }
+
+    /**  Returns the predicted finish center position of the vortex, can be used to invert the vortex
+     * */
+    public Vec3d getPredictedMaxCenterPosition(){
+        float total_length = this.getIterations() * lengthGrow * circles;
+
+        Vec3d v = new Vec3d(0, total_length, 0);
+
+        v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+
+        return originPos.add(v);
     }
 
     @Override
@@ -221,10 +235,17 @@ public class VortexEffect extends YPREffect {
                 //The +90 flips the angle to be on the looking plane let's call it
                 v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
-                this.displayParticle(particle, origin.add(v));
+                if(inverted){
+                    v = v.multiply(-1);
+                    this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
+                }else{
+                    this.displayParticle(particle, origin.add(v));
+                }
+
             }
             step++;
         }
+        this.displayParticle(ParticleTypes.CLOUD, this.getPredictedMaxCenterPosition());
     }
 
     public float getRadius() {
@@ -281,6 +302,14 @@ public class VortexEffect extends YPREffect {
 
     public void setHelixes(int helixes) {
         this.helixes = helixes;
+    }
+
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
     }
 
 }

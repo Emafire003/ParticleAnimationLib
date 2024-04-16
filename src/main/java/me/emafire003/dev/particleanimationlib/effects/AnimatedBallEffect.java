@@ -62,12 +62,11 @@ public class AnimatedBallEffect extends Effect {
      * @param rotation A {@link Vec3d} of xyz rotations (in radians) for the ball effect.
      * */
     public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size, Vec3d factors, Vec3d rotation) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
         this.particles = count;
         this.size = size;
-        this.setOriginPos(origin);
         this.particlesPerIteration = particles_per_iteration;
         this.xFactor = (float) factors.getX();
         this.yFactor = (float) factors.getY();
@@ -85,7 +84,7 @@ public class AnimatedBallEffect extends Effect {
      * @param origin The origin position of the effect
       */
     public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
         this.originPos = origin;
@@ -102,12 +101,11 @@ public class AnimatedBallEffect extends Effect {
      * @param size The size of the ball effect
      */
     public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
         this.particles = count;
         this.size = size;
-        this.setOriginPos(origin);
         this.particlesPerIteration = particles_per_iteration;
     }
 
@@ -123,12 +121,11 @@ public class AnimatedBallEffect extends Effect {
      * @param factors A {@link Vec3d} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
      */
     public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size, Vec3d factors) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
         this.particles = count;
         this.size = size;
-        this.setOriginPos(origin);
         this.particlesPerIteration = particles_per_iteration;
         this.xFactor = (float) factors.getX();
         this.yFactor = (float) factors.getY();

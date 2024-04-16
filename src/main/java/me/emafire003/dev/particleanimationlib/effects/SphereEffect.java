@@ -41,9 +41,8 @@ public class SphereEffect extends Effect {
      * @param particleIncrease The amount to increase the particles per iteration/tick
      * */
     public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int particles, double radius, double radiusIncrease, int particleIncrease) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
-        this.originPos = origin;
         this.radius = radius;
         this.radiusIncrease = radiusIncrease;
         this.particleIncrease = particleIncrease;
@@ -58,8 +57,7 @@ public class SphereEffect extends Effect {
      * @param origin The origin position of the effect. Aka the center of the sphere
      * */
     public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
-        super(world, EffectType.REPEATING, particle);
-        this.originPos = origin;
+        super(world, EffectType.REPEATING, particle, origin);
     }
 
     /**
@@ -72,9 +70,8 @@ public class SphereEffect extends Effect {
      * @param radius The radius of the sphere
      * */
     public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int particles, double radius) {
-        super(world, EffectType.REPEATING, particle);
+        super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
-        this.originPos = origin;
         this.radius = radius;
     }
 

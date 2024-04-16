@@ -100,8 +100,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param subtractFromOrigin A {@link Vec3d} of values that will be subtracted from the origin is needed
      * */
     public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle, boolean enableRotation, Vec3d angularVelocity, Vec3d rotations, Vec3d subtractFromOrigin) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particles_per_circle;
@@ -132,8 +131,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * */
     public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
     }
@@ -146,8 +144,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param origin The origin position of the effect, aka the center point of the circle
      * */
     public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
     }
 
     /**
@@ -163,8 +160,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param radiusGrow Radius growth amount per each iteration. Setting to 0 won't make the radius grow
      * */
     public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particles_per_circle;
@@ -188,8 +184,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param resetCircle Start at the same origin each step, use this along with maxAngle and wholeCircle to form persistent semicircles
      * */
     public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle) {
-        super(world, EffectType.REPEATING, particle);
-        this.setOriginPos(origin);
+        super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.particles = particles_per_circle;

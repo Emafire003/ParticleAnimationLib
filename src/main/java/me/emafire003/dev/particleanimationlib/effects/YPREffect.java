@@ -8,7 +8,6 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 /**Class used for effects that also require yaw pitch roll values
- *
  * Note: Roll values are currently unused and won't do anything (version 0.0.1)*/
 @SuppressWarnings("unused")
 public class YPREffect extends Effect {
@@ -22,8 +21,8 @@ public class YPREffect extends Effect {
     public float rollOffset = 0;
     public boolean shouldUpdateYPR = false;
 
-    public YPREffect(ServerWorld world, EffectType type, ParticleEffect particle) {
-        super(world, type, particle);
+    public YPREffect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos) {
+        super(world, type, particle, originPos);
     }
 
     @Override

@@ -31,10 +31,11 @@ public class Effect {
     protected boolean done = false;
     protected int ticks = 0;
 
-    public Effect(ServerWorld world, EffectType type, ParticleEffect particle){
+    public Effect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos){
         this.world = world;
         this.type = type;
         this.particle = particle;
+        this.originPos = originPos;
     }
 
 
@@ -226,6 +227,9 @@ public class Effect {
     @Nullable
     public Vec3d getOriginPos() {
         if(originPos != null){
+            if(originOffset == null){
+                return originPos;
+            }
             return originPos.add(originOffset);
         }
         return null;
@@ -263,6 +267,9 @@ public class Effect {
     @Nullable
     public Vec3d getTargetPos() {
         if(targetPos != null){
+            if(targetOffset == null){
+                return targetPos;
+            }
             return targetPos.add(targetOffset);
         }
         return null;
