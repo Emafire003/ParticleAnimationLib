@@ -166,7 +166,7 @@ public class AnimatedBallEffect extends Effect {
     }
 
 
-    @Override
+    /*@Override
     @Deprecated
     protected boolean checkCut(Vec3d pos){
         //Applicare la box alla orgin pos centrata
@@ -200,8 +200,8 @@ public class AnimatedBallEffect extends Effect {
         /*Box box = new Box(centerPos.getX()+cutAboveRightForward.getX(), centerPos.getY()+cutAboveRightForward.getY(), centerPos.getZ()+cutAboveRightForward.getZ(),
                 centerPos.getX()-cutBelowLeftBackward.getX(), centerPos.getY()-cutBelowLeftBackward.getY(), centerPos.getZ()-cutBelowLeftBackward.getZ());
 
-        return !box.contains(pos);*/
-    }
+        return !box.contains(pos);* /
+    }*/
 
     public int getParticles() {
         return particles;

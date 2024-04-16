@@ -2,6 +2,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 
 import me.emafire003.dev.particleanimationlib.EffectType;
+import me.emafire003.dev.particleanimationlib.effects.base.TargetedYPREffect;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -10,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class VortexEffect extends YPREffect {
+public class VortexEffect extends TargetedYPREffect {
 
     /**
      * Radius of vortex (2)

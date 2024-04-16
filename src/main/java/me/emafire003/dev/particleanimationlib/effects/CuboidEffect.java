@@ -1,8 +1,8 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import me.emafire003.dev.particleanimationlib.effects.base.TargetedEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class CuboidEffect extends Effect {
+public class CuboidEffect extends TargetedEffect {
 
     /**
      * Particles in each row
@@ -350,7 +350,7 @@ public class CuboidEffect extends Effect {
     }
 
     //TODO implement better
-    @Override
+    /*@Override
     @Deprecated
     protected boolean checkCut(Vec3d pos){
         //Applicare la box alla orgin pos centrata
@@ -361,7 +361,7 @@ public class CuboidEffect extends Effect {
         /*Box box = new Box(centerPos.getX()+cutAboveRightForward.getX(), centerPos.getY()+cutAboveRightForward.getY(), centerPos.getZ()+cutAboveRightForward.getZ(),
                 centerPos.getX()-cutBelowLeftBackward.getX(), centerPos.getY()-cutBelowLeftBackward.getY(), centerPos.getZ()-cutBelowLeftBackward.getZ());
         return !box.contains(pos);
-         */
+
         //ParticleAnimationLib.LOGGER.info("The cutAbove: " + this.cutAboveRightForward);
         //ParticleAnimationLib.LOGGER.info("The cutBelow: " + this.cutBelowLeftBackward);
         if(cutAboveRightForward.getX() != 0 && pos.getX() > centerPos.getX()+cutAboveRightForward.getX()){
@@ -385,6 +385,6 @@ public class CuboidEffect extends Effect {
         //ParticleAnimationLib.LOGGER.info("Center pos: "+ centerPos.getY() + " The curBoveWhaterver" + cutAboveRightForward.getY());
         //ParticleAnimationLib.LOGGER.info("The pos: "+ pos.getY() + " The cut+center" + (centerPos.getY()+cutAboveRightForward.getY()));
         return false;
-    }
+    }*/
 
 }

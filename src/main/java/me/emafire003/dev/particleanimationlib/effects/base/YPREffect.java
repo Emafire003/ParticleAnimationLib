@@ -1,4 +1,4 @@
-package me.emafire003.dev.particleanimationlib.effects;
+package me.emafire003.dev.particleanimationlib.effects.base;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.Effect;

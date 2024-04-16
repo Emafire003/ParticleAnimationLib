@@ -3,13 +3,14 @@ package me.emafire003.dev.particleanimationlib.effects;
 import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import me.emafire003.dev.particleanimationlib.effects.base.TargetedYPREffect;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("unused")
-public class LineEffect extends YPREffect {
+public class LineEffect extends TargetedYPREffect {
 
     /**
      * Should it do a zig zag?

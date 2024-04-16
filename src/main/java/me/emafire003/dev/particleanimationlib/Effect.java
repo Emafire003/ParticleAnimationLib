@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public class Effect {
     protected int iterations;
-    protected int delay;
     protected Vec3d originPos;
 
     //If an effect like an arc has a beginning and end pos, this is the one.
@@ -19,14 +18,13 @@ public class Effect {
     protected boolean updatePositions;
     protected Entity entityOrigin;
     protected Vec3d originOffset = Vec3d.ZERO;
-    protected Entity entityTarget;
-    protected Vec3d targetOffset = Vec3d.ZERO;
-    public Vec3d cutAboveRightForward = Vec3d.ZERO;
+    /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
-    public boolean shouldCut = false;
+    public boolean shouldCut = false;*/
     protected ServerWorld world;
     public EffectType type;
     protected ParticleEffect particle;
+    protected int delay;
 
     protected boolean done = false;
     protected int ticks = 0;
@@ -53,9 +51,6 @@ public class Effect {
         if(entityOrigin != null){
             this.originPos = entityOrigin.getPos().add(originOffset);
         }
-        if(entityTarget != null){
-            this.targetPos = entityTarget.getPos().add(targetOffset);
-        }
     }
 
     /**Runs the effect for the specified amount of seconds
@@ -73,15 +68,15 @@ public class Effect {
     }
 
     /**Runs the effect for the specified amount of seconds
-     *
+     * <p>
      * You can also provide a custom
      * lambda function to modify the effect while it runs.
      * You have access to the effect instance and the current tick
-     *
+     *<p>
      * You can do the same thing by setting the number of iterations
      * manually using {@link #setIterations(int)}. Each iteration is
      * one tick, and 20 ticks are one second.
-     *
+     *<p>
      * Does not work with instant effects (wow eh?)
      *
      * @param seconds The number of seconds to run the effect for.
@@ -157,35 +152,35 @@ public class Effect {
      * @param cutAboveLeftForward A Vec3d which cuts from the top to the bottom (Y), from the left to the right (X), from the front to the back (Z)
      * @param cutBelowRightBackward A Vec3d that cuts the other way around
      * Not yet ready, may be scrapped*/
-    @Deprecated
+    /*@Deprecated
     public void setCutShape(Vec3d cutAboveLeftForward, Vec3d cutBelowRightBackward){
         this.cutAboveRightForward = cutAboveLeftForward;
         this.cutBelowLeftBackward = cutBelowRightBackward;
         this.setShouldCut(true);
-    }
+    }*/
 
     /**Enable or disable particle effect cutting
      *
      * Not yet ready, may be scrapped*/
-    @Deprecated
+    /*@Deprecated
     public void setShouldCut(boolean shouldCut){
         this.shouldCut = shouldCut;
     }
-
+*/
     /** Not yet ready, may be scrapped*/
-    @Deprecated
+ /*   @Deprecated
     public boolean getShouldCut(){
         return this.shouldCut;
     }
-
+*/
     /**Needs to be overridden by the other classes
      * Not yet ready, may be scrapped*/
-    @Deprecated
+/*    @Deprecated
     protected boolean checkCut(Vec3d pos){
         //TODO figure out how to implement :( :/
         return false;
     }
-
+*/
     public void displayParticle(ParticleEffect effect, Vec3d pos){
         //TODO make the count and speed configurable?
         this.displayParticle(effect, pos, Vec3d.ZERO);
@@ -193,19 +188,11 @@ public class Effect {
 
 
     public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel){
-        if(shouldCut && checkCut(pos)){
+        /*if(shouldCut && checkCut(pos)){
             return;
-        }
+        }*/
         world.spawnParticles(effect, pos.getX(), pos.getY(), pos.getZ(), 1,vel.getX(), vel.getY(), vel.getZ() , 0);
     }
-
-    /*public void displayParticle(ParticleEffect effect, Vec3d pos, boolean alwaysSpawn){
-        world.addParticle(effect, alwaysSpawn, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0);
-    }
-
-    public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel, boolean alwaysSpawn){
-        world.addParticle(effect, alwaysSpawn, pos.getX(), pos.getY(), pos.getZ(), vel.getX(), vel.getY(), vel.getZ());
-    }*/
 
     public int getIterations() {
         return iterations;
@@ -263,35 +250,4 @@ public class Effect {
         this.originOffset = originOffset;
     }
 
-    /** Already sums the offsets!*/
-    @Nullable
-    public Vec3d getTargetPos() {
-        if(targetPos != null){
-            if(targetOffset == null){
-                return targetPos;
-            }
-            return targetPos.add(targetOffset);
-        }
-        return null;
-    }
-
-    public void setTargetPos(Vec3d finish_pos) {
-        this.targetPos = finish_pos;
-    }
-
-    public Entity getEntityTarget() {
-        return entityTarget;
-    }
-
-    public void setEntityTarget(Entity entityTarget) {
-        this.entityTarget = entityTarget;
-    }
-
-    public Vec3d getTargetOffset() {
-        return targetOffset;
-    }
-
-    public void setTargetOffset(Vec3d targetOffset) {
-        this.targetOffset = targetOffset;
-    }
 }
