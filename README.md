@@ -20,13 +20,14 @@ All of the effects are in the `effects` package and you can create a new effect 
 
 Then you can use your preferred flavour of `#run()` method to activate the effect:
 ```java
-//Constructor pseudocode
+//Constructor pseudocode with runFor example
 Effect effect = new Effect(ServerWorld world, ParticleEffect effect, Vec3d originPos, int particles, Other stuff...)
 effect.runFor(5);
 
-//Builder pseudocode
+//Builder pseudocode with run and setIterations example (20 ticks = 1 second)
 Effect effect = Effect.builder(ServerWorld world, ParticleEffect effect, Vec3d originPos).particles(10).anotherOption(true).build;
-effect.runFor(5);
+effect.setIterations(5*20);
+effect.run();
 ```
 
 **Note:** when using the builder you will need to alwasy supply the world particle effect and origin pos to the method, beacuse every animation effect uses them and it is assumed they are not null. You can change them later if you need to. 
