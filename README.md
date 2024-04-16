@@ -34,8 +34,10 @@ effect.run();
 **TLDR;** you are forced to supply them in order to make the effect work instead of crashing!
 
 <center>
-
+  
+<p align="center">
   <img src="https://github.com/Emafire003/ParticleAnimationLib/assets/29462910/f3614984-c6c8-4fd1-ac5b-0ed9adef732a" alt="Demo of some of the effects from version 0.0.1" />
+</p>
 
 </center>
 
