@@ -31,8 +31,17 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
+                ConeEffect effect = ConeEffect.builder(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos().add(0,-1,0))
+                        .yaw(target.getYaw()).pitch(target.getPitch())
+                        //.lengthGrow(0.001f).radiusGrow(0.03f)
+                        .inverted(true)
+                        .drawCenterAxis(true)
+                        .strands(2)
+                        .secondaryParticle(ParticleTypes.BUBBLE).build();
+                effect.runFor(15);
 
-                ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos().add(0,-1,0), target.getYaw(), target.getPitch());
+                ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos().add(0,-1,0),
+                        target.getYaw(), target.getPitch());
                 coneEffect.setDrawCenterAxis(true);
                 coneEffect.setStrands(2);
                 coneEffect.setInverted(true);

@@ -4,7 +4,9 @@ import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.util.MathUtils;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
@@ -53,7 +55,7 @@ public class AnimatedBallEffect extends Effect {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
@@ -80,7 +82,7 @@ public class AnimatedBallEffect extends Effect {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect
       */
     public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
@@ -94,7 +96,7 @@ public class AnimatedBallEffect extends Effect {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
@@ -113,7 +115,7 @@ public class AnimatedBallEffect extends Effect {
      * Creates a new animated "ball" effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
@@ -130,6 +132,39 @@ public class AnimatedBallEffect extends Effect {
         this.xFactor = (float) factors.getX();
         this.yFactor = (float) factors.getY();
         this.zFactor = (float) factors.getZ();
+    }
+
+    private AnimatedBallEffect(Builder builder) {
+        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
+        setIterations(builder.iterations);
+        setOriginPos(builder.originPos);
+        setUpdatePositions(builder.updatePositions);
+        setEntityOrigin(builder.entityOrigin);
+        setOriginOffset(builder.originOffset);
+        world = builder.world;
+        particle = builder.particle;
+        setParticles(builder.particles);
+        setParticlesPerIteration(builder.particlesPerIteration);
+        setSize(builder.size);
+        setxFactor(builder.xFactor);
+        setyFactor(builder.yFactor);
+        setzFactor(builder.zFactor);
+        setxRotation(builder.xRotation);
+        setyRotation(builder.yRotation);
+        setzRotation(builder.zRotation);
+    }
+
+    /** Returns a builder for the effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
+     * @param originPos The origin position of the effect
+     *
+     * @apiNote Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
+     * If this is an effect that uses Yaw and Pitch, remember to set those as well!
+     * */
+    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+        return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
 
@@ -275,4 +310,189 @@ public class AnimatedBallEffect extends Effect {
         this.zRotation = zRotation;
     }
 
+    /**
+     * {@code AnimatedBallEffect} builder static inner class.
+     */
+    public static final class Builder {
+        private int iterations;
+        private Vec3d originPos;
+        private boolean updatePositions;
+        private Entity entityOrigin;
+        private Vec3d originOffset;
+        private ServerWorld world;
+        private ParticleEffect particle;
+        /**
+         * Ball particles total (150)
+         */
+        private int particles = 150;
+
+        /**
+         * The amount of particles, displayed in one iteration (10)
+         */
+        private int particlesPerIteration = 10;
+
+        /**
+         * Size of this ball (1)
+         */
+        private float size = 1F;
+
+        /**
+         * Factors (1, 1, 1)
+         * Aka dimensions of the ball, like the "diameters"
+         */
+        private float xFactor = 1F, yFactor = 1F, zFactor = 1F;
+
+        /**
+         * Rotation of the ball.
+         */
+        private double xRotation, yRotation, zRotation = 0;
+
+        private Builder() {
+        }
+
+        /**
+         * Sets the {@code iterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param iterations the {@code iterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder iterations(int iterations) {
+            this.iterations = iterations;
+            return this;
+        }
+
+        /**
+         * Sets the {@code originPos} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param originPos the {@code originPos} to set
+         * @return a reference to this Builder
+         */
+        public Builder originPos(Vec3d originPos) {
+            this.originPos = originPos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code updatePositions} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param updatePositions the {@code updatePositions} to set
+         * @return a reference to this Builder
+         */
+        public Builder updatePositions(boolean updatePositions) {
+            this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code entityOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param entityOrigin the {@code entityOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder entityOrigin(Entity entityOrigin) {
+            this.entityOrigin = entityOrigin;
+            return this;
+        }
+
+        /**
+         * Sets the {@code originOffset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param originOffset the {@code originOffset} to set
+         * @return a reference to this Builder
+         */
+        public Builder originOffset(Vec3d originOffset) {
+            this.originOffset = originOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code world} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param world the {@code world} to set
+         * @return a reference to this Builder
+         */
+        public Builder world(ServerWorld world) {
+            this.world = world;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particle} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particle the {@code particle} to set
+         * @return a reference to this Builder
+         */
+        public Builder particle(ParticleEffect particle) {
+            this.particle = particle;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particles} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particles the {@code particles} to set
+         * @return a reference to this Builder
+         */
+        public Builder particles(int particles) {
+            this.particles = particles;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particlesPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particlesPerIteration the {@code particlesPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder particlesPerIteration(int particlesPerIteration) {
+            this.particlesPerIteration = particlesPerIteration;
+            return this;
+        }
+
+        /**
+         * Sets the {@code size} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param size the {@code size} to set
+         * @return a reference to this Builder
+         */
+        public Builder size(float size) {
+            this.size = size;
+            return this;
+        }
+
+        /**
+         * Sets the {@code factor} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param factor A Vec3d representing the xyz factors (aka xyz "strech" values) of the effect
+         * @return a reference to this Builder
+         */
+        public Builder factor(Vec3d factor) {
+            this.xFactor = (float) factor.getX();
+            this.yFactor = (float) factor.getY();
+            this.zFactor = (float) factor.getZ();
+            return this;
+        }
+
+        /**
+         * Sets the {@code rotation} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param rotation A Vec3d representing the xyz rotations to set to the effect
+         * @return a reference to this Builder
+         */
+        public Builder rotation(Vec3d rotation) {
+            this.xRotation = rotation.getX();
+            this.yRotation = rotation.getY();
+            this.zRotation = rotation.getZ();
+            return this;
+        }
+
+        /**
+         * Returns a {@code AnimatedBallEffect} built from the parameters previously set.
+         *
+         * @return a {@code AnimatedBallEffect} built with parameters of this {@code AnimatedBallEffect.Builder}
+         */
+        public AnimatedBallEffect build() {
+            return new AnimatedBallEffect(this);
+        }
+    }
 }

@@ -5,7 +5,9 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.RandomUtils;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
@@ -60,16 +62,16 @@ public class ConeEffect extends YPREffect {
     //Added by Emafire003
 
     /** Should the cone start from the max position and go to the origin position?*/
-    boolean inverted = false;
+    public boolean inverted = false;
 
     /** Do you want to draw the center axis as well?*/
-    boolean drawCenterAxis = false;
+    public boolean drawCenterAxis = false;
 
     /** Draws a point (one particle) where the effect ends*/
-    boolean drawFinishPoint = false;
+    public boolean drawFinishPoint = false;
     /** The particles to use for displaying the center axis/finish point
      * Falls back to the particle of this effect*/
-    ParticleEffect secondaryParticle = particle;
+    public ParticleEffect secondaryParticle = particle;
 
 
     /**
@@ -82,7 +84,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -116,7 +118,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -132,7 +134,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * */
     public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
@@ -143,7 +145,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -163,7 +165,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -189,7 +191,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -219,7 +221,7 @@ public class ConeEffect extends YPREffect {
      * Creates a new cone effect
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -247,7 +249,52 @@ public class ConeEffect extends YPREffect {
         this.setShouldUpdateYPR(true);
     }
 
-    /** Returns the position of the center of the cone at it maximum point*/
+    private ConeEffect(Builder builder) {
+        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
+        setIterations(builder.iterations);
+        setOriginPos(builder.originPos);
+        setUpdatePositions(builder.updatePositions);
+        setEntityOrigin(builder.entityOrigin);
+        setOriginOffset(builder.originOffset);
+        world = builder.world;
+        particle = builder.particle;
+        setLengthGrow(builder.lengthGrow);
+        setAngularVelocity(builder.angularVelocity);
+        setParticles(builder.particles);
+        setRadiusGrow(builder.radiusGrow);
+        setParticlesCone(builder.particlesCone);
+        setRotation(builder.rotation);
+        setRandomize(builder.randomize);
+        setSolid(builder.solid);
+        setStrands(builder.strands);
+        setInverted(builder.inverted);
+        setDrawCenterAxis(builder.drawCenterAxis);
+        setDrawFinishPoint(builder.drawFinishPoint);
+        setSecondaryParticle(builder.secondaryParticle);
+        setYawOffset(builder.yawOffset);
+        setPitchOffset(builder.pitchOffset);
+        setYaw(builder.yaw);
+        setPitch(builder.pitch);
+        setShouldUpdateYPR(builder.shouldUpdateYPR);
+    }
+
+    /** Returns a builder for the effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
+     * @param originPos The origin position of the effect
+     *
+     * @apiNote Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
+     * If this is an effect that uses Yaw and Pitch, remember to set those as well!
+     * */
+    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+        return new Builder().world(world).particle(particle).originPos(originPos);
+    }
+
+    /** Returns the position of the center of the cone at it maximum point
+     *
+     * @apiNote Experimental! May not work as intended if run for more or less than 10 seconds!*/
+    //TODO figure out what's wrong :/
     public Vec3d getPredictedMaxCenterPosition(){
         float total_length = this.getIterations() * lengthGrow;
 
@@ -420,4 +467,366 @@ public class ConeEffect extends YPREffect {
         this.drawFinishPoint = drawFinishPoint;
     }
 
+    /**
+     * {@code ConeEffect} builder static inner class.
+     */
+    public static final class Builder {
+        private int iterations;
+        private Vec3d originPos;
+        private boolean updatePositions;
+        private Entity entityOrigin;
+        private Vec3d originOffset;
+        private ServerWorld world;
+        private ParticleEffect particle = ParticleTypes.DRAGON_BREATH;
+        /**
+         * Growing per iteration in the length (0.05)
+         */
+        private float lengthGrow = 0.05F;
+
+        /**
+         * Radials per iteration to spawn the next particle (PI / 16)
+         */
+        private double angularVelocity = Math.PI / 16;
+
+        /**
+         * Cone-particles per interation (10)
+         */
+        private int particles = 10;
+
+        /**
+         * Growth in blocks per iteration on the radius (0.006)
+         */
+        private float radiusGrow = 0.006F;
+
+        /**
+         * Conesize in particles per cone
+         */
+        private int particlesCone = 180;
+
+        /**
+         * Start-angle or rotation of the cone
+         */
+        private double rotation = 0;
+
+        /**
+         * Randomize every cone on creation (false)
+         */
+        private boolean randomize = false;
+
+        /**
+         * Solid cone
+         */
+        private boolean solid = false;
+
+        /**
+         * Amount of strands
+         */
+        private int strands = 1;
+
+        //Added by Emafire003
+
+        /** Should the cone start from the max position and go to the origin position?*/
+        private boolean inverted = false;
+
+        /** Do you want to draw the center axis as well?*/
+        private boolean drawCenterAxis = false;
+
+        /** Draws a point (one particle) where the effect ends*/
+        private boolean drawFinishPoint = false;
+        /** The particles to use for displaying the center axis/finish point
+         * Falls back to the particle of this effect*/
+        private ParticleEffect secondaryParticle = particle;
+        private float yawOffset;
+        private float pitchOffset;
+        private float yaw;
+        private float pitch;
+        private boolean shouldUpdateYPR;
+
+        private Builder() {
+        }
+
+        /**
+         * Sets the {@code iterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param iterations the {@code iterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder iterations(int iterations) {
+            this.iterations = iterations;
+            return this;
+        }
+
+        /**
+         * Sets the {@code originPos} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param originPos the {@code originPos} to set
+         * @return a reference to this Builder
+         */
+        public Builder originPos(Vec3d originPos) {
+            this.originPos = originPos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code updatePositions} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param updatePositions the {@code updatePositions} to set
+         * @return a reference to this Builder
+         */
+        public Builder updatePositions(boolean updatePositions) {
+            this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code entityOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param entityOrigin the {@code entityOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder entityOrigin(Entity entityOrigin) {
+            this.entityOrigin = entityOrigin;
+            return this;
+        }
+
+        /**
+         * Sets the {@code originOffset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param originOffset the {@code originOffset} to set
+         * @return a reference to this Builder
+         */
+        public Builder originOffset(Vec3d originOffset) {
+            this.originOffset = originOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code world} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param world the {@code world} to set
+         * @return a reference to this Builder
+         */
+        public Builder world(ServerWorld world) {
+            this.world = world;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particle} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particle the {@code particle} to set
+         * @return a reference to this Builder
+         */
+        public Builder particle(ParticleEffect particle) {
+            this.particle = particle;
+            return this;
+        }
+
+        /**
+         * Sets the {@code lengthGrow} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param lengthGrow the {@code lengthGrow} to set
+         * @return a reference to this Builder
+         */
+        public Builder lengthGrow(float lengthGrow) {
+            this.lengthGrow = lengthGrow;
+            return this;
+        }
+
+        /**
+         * Sets the {@code angularVelocity} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param angularVelocity the {@code angularVelocity} to set
+         * @return a reference to this Builder
+         */
+        public Builder angularVelocity(double angularVelocity) {
+            this.angularVelocity = angularVelocity;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particles} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particles the {@code particles} to set
+         * @return a reference to this Builder
+         */
+        public Builder particles(int particles) {
+            this.particles = particles;
+            return this;
+        }
+
+        /**
+         * Sets the {@code radiusGrow} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param radiusGrow the {@code radiusGrow} to set
+         * @return a reference to this Builder
+         */
+        public Builder radiusGrow(float radiusGrow) {
+            this.radiusGrow = radiusGrow;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particlesCone} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particlesCone the {@code particlesCone} to set
+         * @return a reference to this Builder
+         */
+        public Builder particlesCone(int particlesCone) {
+            this.particlesCone = particlesCone;
+            return this;
+        }
+
+        /**
+         * Sets the {@code rotation} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param rotation the {@code rotation} to set
+         * @return a reference to this Builder
+         */
+        public Builder rotation(double rotation) {
+            this.rotation = rotation;
+            return this;
+        }
+
+        /**
+         * Sets the {@code randomize} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param randomize the {@code randomize} to set
+         * @return a reference to this Builder
+         */
+        public Builder randomize(boolean randomize) {
+            this.randomize = randomize;
+            return this;
+        }
+
+        /**
+         * Sets the {@code solid} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param solid the {@code solid} to set
+         * @return a reference to this Builder
+         */
+        public Builder solid(boolean solid) {
+            this.solid = solid;
+            return this;
+        }
+
+        /**
+         * Sets the {@code strands} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param strands the {@code strands} to set
+         * @return a reference to this Builder
+         */
+        public Builder strands(int strands) {
+            this.strands = strands;
+            return this;
+        }
+
+        /**
+         * Sets the {@code inverted} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param inverted the {@code inverted} to set
+         * @return a reference to this Builder
+         */
+        public Builder inverted(boolean inverted) {
+            this.inverted = inverted;
+            return this;
+        }
+
+        /**
+         * Sets the {@code drawCenterAxis} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param drawCenterAxis the {@code drawCenterAxis} to set
+         * @return a reference to this Builder
+         */
+        public Builder drawCenterAxis(boolean drawCenterAxis) {
+            this.drawCenterAxis = drawCenterAxis;
+            return this;
+        }
+
+        /**
+         * Sets the {@code drawFinishPoint} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param drawFinishPoint the {@code drawFinishPoint} to set
+         * @return a reference to this Builder
+         */
+        public Builder drawFinishPoint(boolean drawFinishPoint) {
+            this.drawFinishPoint = drawFinishPoint;
+            return this;
+        }
+
+        /**
+         * Sets the {@code secondaryParticle} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param secondaryParticle the {@code secondaryParticle} to set
+         * @return a reference to this Builder
+         */
+        public Builder secondaryParticle(ParticleEffect secondaryParticle) {
+            this.secondaryParticle = secondaryParticle;
+            return this;
+        }
+
+        /**
+         * Sets the {@code yawOffset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param yawOffset the {@code yawOffset} to set
+         * @return a reference to this Builder
+         */
+        public Builder yawOffset(float yawOffset) {
+            this.yawOffset = yawOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code pitchOffset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param pitchOffset the {@code pitchOffset} to set
+         * @return a reference to this Builder
+         */
+        public Builder pitchOffset(float pitchOffset) {
+            this.pitchOffset = pitchOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code yaw} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param yaw the {@code yaw} to set
+         * @return a reference to this Builder
+         */
+        public Builder yaw(float yaw) {
+            this.yaw = yaw;
+            return this;
+        }
+
+        /**
+         * Sets the {@code pitch} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param pitch the {@code pitch} to set
+         * @return a reference to this Builder
+         */
+        public Builder pitch(float pitch) {
+            this.pitch = pitch;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldUpdateYPR} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param shouldUpdateYPR the {@code shouldUpdateYPR} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldUpdateYPR(boolean shouldUpdateYPR) {
+            this.shouldUpdateYPR = shouldUpdateYPR;
+            return this;
+        }
+
+        /**
+         * Returns a {@code ConeEffect} built from the parameters previously set.
+         *
+         * @return a {@code ConeEffect} built with parameters of this {@code ConeEffect.Builder}
+         */
+        public ConeEffect build() {
+            return new ConeEffect(this);
+        }
+    }
 }

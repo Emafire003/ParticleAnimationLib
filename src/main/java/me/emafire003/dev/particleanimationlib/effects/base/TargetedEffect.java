@@ -29,6 +29,10 @@ public class TargetedEffect extends Effect {
             return;
         }
         if(entityTarget != null){
+            if(targetOffset == null){
+                this.targetPos = entityTarget.getPos();
+                return;
+            }
             this.targetPos = entityTarget.getPos().add(targetOffset);
         }
     }

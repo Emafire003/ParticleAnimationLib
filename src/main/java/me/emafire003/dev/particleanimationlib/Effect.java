@@ -12,9 +12,6 @@ import org.jetbrains.annotations.Nullable;
 public class Effect {
     protected int iterations;
     protected Vec3d originPos;
-
-    //If an effect like an arc has a beginning and end pos, this is the one.
-    protected Vec3d targetPos;
     protected boolean updatePositions;
     protected Entity entityOrigin;
     protected Vec3d originOffset = Vec3d.ZERO;
@@ -22,8 +19,9 @@ public class Effect {
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
     public boolean shouldCut = false;*/
     protected ServerWorld world;
-    public EffectType type;
     protected ParticleEffect particle;
+    public EffectType type;
+
     protected int delay;
 
     protected boolean done = false;
@@ -49,6 +47,10 @@ public class Effect {
 
     public void updatePos(){
         if(entityOrigin != null){
+            if(originOffset == null){
+                this.originPos = entityOrigin.getPos();
+                return;
+            }
             this.originPos = entityOrigin.getPos().add(originOffset);
         }
     }

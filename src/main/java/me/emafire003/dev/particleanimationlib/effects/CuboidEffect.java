@@ -3,7 +3,9 @@ package me.emafire003.dev.particleanimationlib.effects;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedEffect;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -64,7 +66,7 @@ public class CuboidEffect extends TargetedEffect {
      * Don't use this constructor, since xyz lengths and origin-target exclude each other
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
@@ -90,7 +92,7 @@ public class CuboidEffect extends TargetedEffect {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
@@ -109,7 +111,7 @@ public class CuboidEffect extends TargetedEffect {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
      * @param x_length The length of the x component of the cuboid. The minimum is 1 block.
@@ -132,7 +134,7 @@ public class CuboidEffect extends TargetedEffect {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
      * @param x_length The length of the x component of the cuboid. The minimum is 1 block
@@ -151,7 +153,7 @@ public class CuboidEffect extends TargetedEffect {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
@@ -166,7 +168,7 @@ public class CuboidEffect extends TargetedEffect {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param x_length The length of the x component of the cuboid. The minimum is 1 block
      * @param y_length The length of the y component of the cuboid. The minimum is 1 block
@@ -184,13 +186,47 @@ public class CuboidEffect extends TargetedEffect {
      * Creates a new cuboid effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link net.minecraft.particle.ParticleTypes}
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the first corner of the cuboid
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * */
     public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target) {
         super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
+    }
+
+    private CuboidEffect(Builder builder) {
+        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
+        setIterations(builder.iterations);
+        setOriginPos(builder.originPos);
+        setUpdatePositions(builder.updatePositions);
+        setEntityOrigin(builder.entityOrigin);
+        setOriginOffset(builder.originOffset);
+        world = builder.world;
+        particle = builder.particle;
+        particles = builder.particles;
+        xLength = builder.xLength;
+        yLength = builder.yLength;
+        zLength = builder.zLength;
+        setPadding(builder.padding);
+        setBlockSnap(builder.blockSnap);
+        setTargetPos(builder.targetPos);
+        setUpdateTargetPositions(builder.updateTargetPositions);
+        setEntityTarget(builder.entityTarget);
+        setTargetOffset(builder.targetOffset);
+    }
+
+    /** Returns a builder for the effect.
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
+     * @param originPos The origin position of the effect
+     *
+     * @apiNote Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
+     * If this is an effect that uses Yaw and Pitch, remember to set those as well!
+     * */
+    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+        return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
 
@@ -349,6 +385,264 @@ public class CuboidEffect extends TargetedEffect {
         this.blockSnap = blockSnap;
     }
 
+    /**
+     * {@code CuboidEffect} builder static inner class.
+     */
+    public static final class Builder {
+        private int iterations;
+        private Vec3d originPos;
+        private boolean updatePositions;
+        private Entity entityOrigin;
+        private Vec3d originOffset;
+        private ServerWorld world;
+        private ParticleEffect particle;
+        /**
+         * Particles in each row
+         */
+        private int particles = 8;
+
+        /**
+         * Length of x component of cuboid
+         */
+        private double xLength = 0;
+
+        /**
+         * Length of y component of cuboid
+         */
+        private double yLength = 0;
+
+        /**
+         * Length of z component of cuboid
+         */
+        private double zLength = 0;
+
+        /**
+         * Amount of padding to add around the cube
+         */
+        private double padding = 0;
+
+        /**
+         * Use corners of blocks
+         */
+        private boolean blockSnap = false;
+        private Vec3d targetPos;
+        private boolean updateTargetPositions = true;
+        private Entity entityTarget;
+        private Vec3d targetOffset;
+
+        private Builder() {
+        }
+
+        /**
+         * Sets the {@code iterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param iterations the {@code iterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder iterations(int iterations) {
+            this.iterations = iterations;
+            return this;
+        }
+
+        /**
+         * Sets the {@code originPos} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param originPos the {@code originPos} to set
+         * @return a reference to this Builder
+         */
+        public Builder originPos(Vec3d originPos) {
+            this.originPos = originPos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code updatePositions} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param updatePositions the {@code updatePositions} to set
+         * @return a reference to this Builder
+         */
+        public Builder updatePositions(boolean updatePositions) {
+            this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code entityOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param entityOrigin the {@code entityOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder entityOrigin(Entity entityOrigin) {
+            this.entityOrigin = entityOrigin;
+            return this;
+        }
+
+        /**
+         * Sets the {@code originOffset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param originOffset the {@code originOffset} to set
+         * @return a reference to this Builder
+         */
+        public Builder originOffset(Vec3d originOffset) {
+            this.originOffset = originOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code world} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param world the {@code world} to set
+         * @return a reference to this Builder
+         */
+        public Builder world(ServerWorld world) {
+            this.world = world;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particle} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particle the {@code particle} to set
+         * @return a reference to this Builder
+         */
+        public Builder particle(ParticleEffect particle) {
+            this.particle = particle;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particles} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param particles the {@code particles} to set
+         * @return a reference to this Builder
+         */
+        public Builder particles(int particles) {
+            this.particles = particles;
+            return this;
+        }
+
+        /**
+         * Sets the {@code xLength} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param length the {@code xLength} to set
+         * @return a reference to this Builder
+         */
+        public Builder xLength(double length) {
+            this.xLength = length;
+            return this;
+        }
+
+        /**
+         * Sets the {@code yLength} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param length the {@code yLength} to set
+         * @return a reference to this Builder
+         */
+        public Builder yLength(double length) {
+            this.yLength = length;
+            return this;
+        }
+
+        /**
+         * Sets the {@code zLength} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param length the {@code zLength} to set
+         * @return a reference to this Builder
+         */
+        public Builder zLength(double length) {
+            this.zLength = length;
+            return this;
+        }
+
+        /**
+         * Sets the lenghts and returns a reference to this Builder enabling method chaining.
+         *
+         * @param lengths A Vec3d of the xyz lengths to set
+         * @return a reference to this Builder
+         */
+        public Builder xLength(Vec3d lengths) {
+            this.xLength = lengths.x;
+            this.yLength = lengths.y;
+            this.zLength = lengths.z;
+            return this;
+        }
+
+        /**
+         * Sets the {@code padding} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param padding the {@code padding} to set
+         * @return a reference to this Builder
+         */
+        public Builder padding(double padding) {
+            this.padding = padding;
+            return this;
+        }
+
+        /**
+         * Sets the {@code blockSnap} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param blockSnap the {@code blockSnap} to set
+         * @return a reference to this Builder
+         */
+        public Builder blockSnap(boolean blockSnap) {
+            this.blockSnap = blockSnap;
+            return this;
+        }
+
+        /**
+         * Sets the {@code targetPos} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param targetPos the {@code targetPos} to set
+         * @return a reference to this Builder
+         */
+        public Builder targetPos(Vec3d targetPos) {
+            this.targetPos = targetPos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code updateTargetPositions} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param updateTargetPositions the {@code updateTargetPositions} to set
+         * @return a reference to this Builder
+         */
+        public Builder updateTargetPositions(boolean updateTargetPositions) {
+            this.updateTargetPositions = updateTargetPositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code entityTarget} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param entityTarget the {@code entityTarget} to set
+         * @return a reference to this Builder
+         */
+        public Builder entityTarget(Entity entityTarget) {
+            this.entityTarget = entityTarget;
+            return this;
+        }
+
+        /**
+         * Sets the {@code targetOffset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param targetOffset the {@code targetOffset} to set
+         * @return a reference to this Builder
+         */
+        public Builder targetOffset(Vec3d targetOffset) {
+            this.targetOffset = targetOffset;
+            return this;
+        }
+
+        /**
+         * Returns a {@code CuboidEffect} built from the parameters previously set.
+         *
+         * @return a {@code CuboidEffect} built with parameters of this {@code CuboidEffect.Builder}
+         */
+        public CuboidEffect build() {
+            return new CuboidEffect(this);
+        }
+    }
+
     //TODO implement better
     /*@Override
     @Deprecated
@@ -361,7 +655,7 @@ public class CuboidEffect extends TargetedEffect {
         /*Box box = new Box(centerPos.getX()+cutAboveRightForward.getX(), centerPos.getY()+cutAboveRightForward.getY(), centerPos.getZ()+cutAboveRightForward.getZ(),
                 centerPos.getX()-cutBelowLeftBackward.getX(), centerPos.getY()-cutBelowLeftBackward.getY(), centerPos.getZ()-cutBelowLeftBackward.getZ());
         return !box.contains(pos);
-
+         
         //ParticleAnimationLib.LOGGER.info("The cutAbove: " + this.cutAboveRightForward);
         //ParticleAnimationLib.LOGGER.info("The cutBelow: " + this.cutBelowLeftBackward);
         if(cutAboveRightForward.getX() != 0 && pos.getX() > centerPos.getX()+cutAboveRightForward.getX()){
