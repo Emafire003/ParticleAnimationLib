@@ -141,114 +141,6 @@ public class ConeEffect extends YPREffect {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
-    /**
-     * Creates a new cone effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the starting point of the cone
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particleConeSize By how many particles should the cone be made of
-     * @param particlesPerIteration How many particles to display per iteration
-     * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.particles = particlesPerIteration;
-        this.particlesCone = particleConeSize;
-        this.setShouldUpdateYPR(true);
-    }
-
-    /**
-     * Creates a new cone effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the starting point of the cone
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particleConeSize By how many particles should the cone be made of
-     * @param particlesPerIteration How many particles to display per iteration
-     * @param strands_number The number of the strands
-     * @param lengthGrow Length growth amount per each iteration
-     * @param radiusGrow Radius growth amount per each iteration
-     * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.particles = particlesPerIteration;
-        this.particlesCone = particleConeSize;
-        this.strands = strands_number;
-        this.lengthGrow = lengthGrow;
-        this.radiusGrow = radiusGrow;
-        this.setShouldUpdateYPR(true);
-    }
-
-    /**
-     * Creates a new cone effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the starting point of the cone
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particleConeSize By how many particles should the cone be made of
-     * @param particlesPerIteration How many particles to display per iteration
-     * @param strands_number The number of the strands
-     * @param lengthGrow Length growth amount per each iteration
-     * @param radiusGrow Radius growth amount per each iteration
-     * @param angularVel The angular velocity of the effect expressed in radials per iteration, to spawn the next particle
-     * @param startRotation The starting rotation angle of the cone
-     * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.particles = particlesPerIteration;
-        this.particlesCone = particleConeSize;
-        this.strands = strands_number;
-        this.lengthGrow = lengthGrow;
-        this.radiusGrow = radiusGrow;
-        this.angularVelocity = angularVel;
-        this.rotation = startRotation;
-        this.setShouldUpdateYPR(true);
-    }
-
-    /**
-     * Creates a new cone effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the starting point of the cone
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particleConeSize By how many particles should the cone be made of
-     * @param particlesPerIteration How many particles to display per iteration
-     * @param strands_number The number of the strands
-     * @param lengthGrow Length growth amount per each iteration
-     * @param radiusGrow Radius growth amount per each iteration
-     * @param angularVel The angular velocity of the effect expressed in radials per iteration, to spawn the next particle
-     * @param startRotation The starting rotation angle of the cone
-     * @param solid Should the cone be solid?
-     * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation, boolean solid) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.particles = particlesPerIteration;
-        this.particlesCone = particleConeSize;
-        this.strands = strands_number;
-        this.lengthGrow = lengthGrow;
-        this.radiusGrow = radiusGrow;
-        this.angularVelocity = angularVel;
-        this.rotation = startRotation;
-        this.solid = solid;
-        this.setShouldUpdateYPR(true);
-    }
-
     private ConeEffect(Builder builder) {
         super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
         setIterations(builder.iterations);
@@ -540,7 +432,7 @@ public class ConeEffect extends YPREffect {
         private float pitchOffset;
         private float yaw;
         private float pitch;
-        private boolean shouldUpdateYPR;
+        private boolean shouldUpdateYPR = true;
 
         private Builder() {
         }

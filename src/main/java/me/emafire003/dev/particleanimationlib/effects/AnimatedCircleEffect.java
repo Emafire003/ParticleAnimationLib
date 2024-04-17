@@ -150,53 +150,6 @@ public class AnimatedCircleEffect extends YPREffect {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
-    /**
-     * Creates a new circle effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the center point of the circle
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particles_per_circle Number of particles that make up each circle
-     * @param radius The radius of the circle
-     * @param radiusGrow Radius growth amount per each iteration. Setting to 0 won't make the radius grow
-     * */
-    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.particles = particles_per_circle;
-        this.radius = radius;
-        this.radiusGrow = radiusGrow;
-    }
-
-    /**
-     * Creates a new circle effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the center point of the circle
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particles_per_circle Number of particles that make up each circle
-     * @param radius The radius of the circle
-     * @param radiusGrow Radius growth amount per each iteration. Setting to 0 won't make the radius grow
-     * @param maxAngle Used to make a partial circle. Expressed in radians
-     * @param wholeCircle Makes a whole circle every iteration
-     * @param resetCircle Start at the same origin each step, use this along with maxAngle and wholeCircle to form persistent semicircles
-     * */
-    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.particles = particles_per_circle;
-        this.radius = radius;
-        this.radiusGrow = radiusGrow;
-        this.maxAngle = maxAngle;
-        this.wholeCircle = wholeCircle;
-        this.resetCircle = resetCircle;
-    }
 
     private AnimatedCircleEffect(Builder builder) {
         super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
@@ -437,7 +390,7 @@ public class AnimatedCircleEffect extends YPREffect {
         private float pitchOffset;
         private float yaw;
         private float pitch;
-        private boolean shouldUpdateYPR;
+        private boolean shouldUpdateYPR = true;
 
         private Builder() {
         }

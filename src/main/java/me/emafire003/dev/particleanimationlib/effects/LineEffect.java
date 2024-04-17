@@ -146,68 +146,6 @@ public class LineEffect extends TargetedYPREffect {
         this.pitch = pitch;
     }
 
-    /**
-     * Creates a new line effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the line
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param particles The number of particles that make up the line
-     * @param length The length of the line
-     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
-     * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, Effect effectAtEnd) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.particles = particles;
-        this.length = length;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.subEffectAtEnd = effectAtEnd;
-    }
-
-    /**
-     * Creates a new line effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the line
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-      */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.yaw = yaw;
-        this.pitch = pitch;
-    }
-
-    /**
-     * Creates a new line effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the line
-     * @param target The ending position of the line
-     * @param particles The number of particles that make up the line
-     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
-     * @param isZigZag Should the line ZigZag
-     * @param numberOfZigZags The number of zig zags that the line will do
-     * @param zigZagOffset An offset for the zigZag
-     * @param zigZagRelativeOffset A relative offsets for the zigzags
-     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
-     * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, Effect effectAtEnd) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.targetPos = target;
-        this.particles = particles;
-        this.isZigZag = isZigZag;
-        this.maxLength = maxLength;
-        this.zigZags = numberOfZigZags;
-        this.zigZagOffset = zigZagOffset;
-        this.zigZagRelativeOffset = zigZagRelativeOffset;
-        this.subEffectAtEnd = effectAtEnd;
-    }
 
     /**
      * Creates a new line effect.
@@ -234,41 +172,6 @@ public class LineEffect extends TargetedYPREffect {
         this.zigZagRelativeOffset = zigZagRelativeOffset;
     }
 
-    /**
-     * Creates a new line effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the line
-     * @param target The ending position of the line
-     * @param particles The number of particles that make up the line
-     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
-     * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
-     * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, Effect effectAtEnd) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.targetPos = target;
-        this.particles = particles;
-        this.maxLength = maxLength;
-        this.subEffectAtEnd = effectAtEnd;
-    }
-
-    /**
-     * Creates a new line effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the line
-     * @param target The ending position of the line
-     * @param particles The number of particles that make up the line
-     * @param maxLength The Max length of the line arcs. Setting to 0 will remove the limit
-     * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.targetPos = target;
-        this.particles = particles;
-        this.maxLength = maxLength;
-    }
 
     /**
      * Creates a new line effect.
@@ -518,7 +421,7 @@ public class LineEffect extends TargetedYPREffect {
         private float pitchOffset;
         private float yaw;
         private float pitch;
-        private boolean shouldUpdateYPR;
+        private boolean shouldUpdateYPR = true;
 
         private Builder() {
         }

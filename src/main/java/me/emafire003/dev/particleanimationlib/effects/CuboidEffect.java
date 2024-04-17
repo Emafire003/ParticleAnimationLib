@@ -164,37 +164,6 @@ public class CuboidEffect extends TargetedEffect {
         this.particles = particles_per_row;
     }
 
-    /**
-     * Creates a new cuboid effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the first corner of the cuboid
-     * @param x_length The length of the x component of the cuboid. The minimum is 1 block
-     * @param y_length The length of the y component of the cuboid. The minimum is 1 block
-     * @param z_length The length of the z component of the cuboid. The minimum is 1 block
-     * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, double x_length, double y_length, double z_length) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.xLength = x_length;
-        this.yLength = y_length;
-        this.zLength = z_length;
-    }
-
-
-    /**
-     * Creates a new cuboid effect.
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param origin The origin position of the effect, aka the first corner of the cuboid
-     * @param target The target position of the effect, aka the opposite corner of the cuboid
-     * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target) {
-        super(world, EffectType.REPEATING, particle, origin);
-        this.targetPos = target;
-    }
-
     private CuboidEffect(Builder builder) {
         super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
         setIterations(builder.iterations);

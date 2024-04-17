@@ -100,68 +100,7 @@ public class VortexEffect extends YPREffect {
         this.helixes = helixes;
     }
 
-    /** Creates a new Vortex effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param originPos The origin position of the effect
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param radius The base radius of the vortex
-     * @param radiusGrow How much should the radius grow each iteration, aka each tick? TIP: Set it to a fairly low number
-     * @param startRange The initial range of the vortex
-     * @param lengthGrow The distance the vortex grows each tick
-     * @param circles The number of circles per iteration
-     * @param helixes The number of helixes or helices whatever per iteration
-     * */
-    public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
-                        float radius, float radiusGrow, float startRange, float lengthGrow, int circles, int helixes) {
-        super(world, EffectType.REPEATING, particle, originPos);
-        this.type = EffectType.REPEATING;
-        this.world = world;
-        this.particle = particle;
 
-        this.yaw = yaw;
-        this.pitch = pitch;
-
-        this.radius = radius;
-        this.radiusGrow = radiusGrow;
-        this.startRange = startRange;
-        this.lengthGrow = lengthGrow;
-        this.circles = circles;
-        this.helixes = helixes;
-    }
-
-    /** Creates a new Vortex effect
-     *
-     * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
-     * @param originPos The origin position of the effect
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
-     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
-     * @param radius The base radius of the vortex
-     * @param lengthGrow The distance the vortex grows each tick
-     * @param radials_per_iteration Radials per iteration
-     * @param circles The number of circles per iteration
-     * @param helixes The number of helixes or helices whatever per iteration
-     * */
-    public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
-                        float radius, float lengthGrow,
-                        double radials_per_iteration, int circles, int helixes) {
-        super(world, EffectType.REPEATING, particle, originPos);
-        this.type = EffectType.REPEATING;
-        this.world = world;
-        this.particle = particle;
-
-        this.yaw = yaw;
-        this.pitch = pitch;
-
-        this.radius = radius;
-        this.lengthGrow = lengthGrow;
-        this.radials = radials_per_iteration;
-        this.circles = circles;
-        this.helixes = helixes;
-    }
 
     /** Creates a new Vortex effect
      *
@@ -407,7 +346,7 @@ public class VortexEffect extends YPREffect {
         private float pitchOffset;
         private float yaw;
         private float pitch;
-        private boolean shouldUpdateYPR;
+        private boolean shouldUpdateYPR = true;
 
         private Builder() {
         }
