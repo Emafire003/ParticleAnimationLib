@@ -283,8 +283,8 @@ public class ConeEffect extends YPREffect {
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param originPos The origin position of the effect
-     *
-     * @apiNote Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
+     *<p>
+     * Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
     public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
@@ -292,8 +292,8 @@ public class ConeEffect extends YPREffect {
     }
 
     /** Returns the position of the center of the cone at it maximum point
-     *
-     * @apiNote Experimental! May not work as intended if run for more or less than 10 seconds!*/
+     *<p>
+     * Experimental! May not work as intended if run for more or less than 10 seconds!*/
     //TODO figure out what's wrong :/
     public Vec3d getPredictedMaxCenterPosition(){
         float total_length = this.getIterations() * lengthGrow;
