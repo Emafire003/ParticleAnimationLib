@@ -17,7 +17,7 @@ public class CuboidEffect extends TargetedEffect {
     /**
      * Particles in each row
      */
-    public int particles = 8;
+    public int particles;
 
     /**
      * Length of x component of cuboid
@@ -57,8 +57,6 @@ public class CuboidEffect extends TargetedEffect {
      * State variables
      */
     protected Vec3d minCorner;
-    //TODO removed
-    protected boolean initialized;
 
 
     /**

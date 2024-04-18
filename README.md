@@ -49,6 +49,8 @@ Every effect has its own getters and setters, so you can use those to change the
 ## How do I use the commands?
 You can use either `pal` or `particleanimationlib` and then use tab-completition to create your effects. They kinda lack documentation except from the names of the arguments, so I suggest to look in the corresponding classes of the effect and see from the javadoc what each thing does. Sorry :P
 
+*Note*: The commands that take in stuff like rotations and such, change the integer values to "x.5", since the game thinks they are positions. You can get around that by inputting a double instead of an integer like so "x.0" (for example 2.0 or 0.0)
+
 ## Credit
 This mod is based on the bukkit plugin [EffectLib](https://github.com/elBukkit/EffectLib) by elBukkit team, check it out too! The effects are taken from there and tweaked to be made compatible with modding, occasionally adding extra functionality.
 

@@ -125,11 +125,7 @@ public class ArcEffect extends TargetedEffect {
         float x;
         float y;
 
-        //TODO make an arc on the other coordinates too
         for (int i = 0; i < particles; i++) {
-
-            //v = link.clone().normalize().multiply(length * i / particles);
-
 
             step++;
             v = new Vec3d(link.getX(), link.getY(), link.getZ()).normalize().multiply(length * i / particles);

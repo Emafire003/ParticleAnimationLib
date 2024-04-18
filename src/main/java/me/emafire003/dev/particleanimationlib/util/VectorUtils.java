@@ -5,19 +5,6 @@ import net.minecraft.util.math.Vec3d;
 public final class VectorUtils {
 
     public static Vec3d rotateVector(Vec3d vector, float angleX, float angleY, float angleZ) {
-        // double x = vector.getX(), y = vector.getY(), z = vector.getZ();
-        // double cosX = Math.cos(angleX), sinX = Math.sin(angleX), cosY =
-        // Math.cos(angleY), sinY = Math.sin(angleY), cosZ = Math.cos(angleZ),
-        // sinZ = Math.sin(angleZ);
-        // double nx, ny, nz;
-        // nx = (x * cosY + z * sinY) * (x * cosZ - y * sinZ);
-        // ny = (y * cosX - z * sinX) * (x * sinZ + y * cosZ);
-        // nz = (y * sinX + z * cosX) * (-x * sinY + z * cosY);
-        // return vector.setX(nx).setY(ny).setZ(nz);
-        // Having some strange behavior up there.. Have to look in it later. TODO
-        /*rotateAroundAxisX(vector, angleX);
-        rotateAroundAxisY(vector, angleY);
-        rotateAroundAxisZ(vector, angleZ);*/
         vector = vector.rotateX(angleX);
         vector = vector.rotateY(angleY);
         vector = vector.rotateZ(angleZ);
@@ -26,7 +13,7 @@ public final class VectorUtils {
 
     /**
      * This handles non-unit vectors, with yaw and pitch instead of X,Y,Z angles.
-     *
+     * <p>
      * Thanks to SexyToad!
      *
      * @param vector vector to rotate
@@ -61,7 +48,7 @@ public final class VectorUtils {
         return new Vec3d(x, y, z);
     }
 
-    public static Vec3d rotateAroundAxisX(Vec3d vector, double angle) {
+    /*public static Vec3d rotateAroundAxisX(Vec3d vector, double angle) {
         double y, z, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
@@ -91,5 +78,5 @@ public final class VectorUtils {
     public static double angleToXAxis(Vec3d vector) {
         return Math.atan2(vector.getX(), vector.getY());
     }
-
+*/
 }

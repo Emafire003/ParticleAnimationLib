@@ -22,7 +22,7 @@ public class LineCommand implements PALCommand {
         ServerCommandSource source = context.getSource();
 
         try{
-            //TODO write in the wiki tp use values of 0.0 instead of 0 beacuse of a minecraft bug, otherwise the game will set them to 0.5 for some reason
+            //(already written but still) write in the wiki tp use values of 0.0 instead of 0 beacuse of a minecraft bug, otherwise the game will set them to 0.5 for some reason
 
             if(source.getWorld().isClient()){
                 return 0;

@@ -2,7 +2,6 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.util.MathUtils;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
@@ -183,14 +182,15 @@ public class AnimatedBallEffect extends Effect {
         for (int i = 0; i < particlesPerIteration; i++) {
             step++;
 
-            t = (MathUtils.PI / particles) * step;
-            r = MathUtils.sin(t) * size;
-            s = 2 * MathUtils.PI * t;
+            t = (float) ((Math.PI / particles) * step);
+            r = (float) (Math.sin(t) * size);
+            //r = MathUtils.sin(t) * size;
+            s = (float) (2 * Math.PI * t);
             //Need the offsets here because it's not using the originPos directly
             //TODO i think I should add the size in the x and z too
-            double x = (xFactor * r * MathUtils.cos(s) + this.originOffset.getX());
-            double y = (yFactor * size * MathUtils.cos(t) + this.originOffset.getY());
-            double z = (zFactor * r * MathUtils.sin(s) + this.originOffset.getZ());
+            double x = (xFactor * r * Math.cos(s) + this.originOffset.getX());
+            double y = (yFactor * size * Math.cos(t) + this.originOffset.getY());
+            double z = (zFactor * r * Math.sin(s) + this.originOffset.getZ());
 
 
             Vec3d vector = new Vec3d(x,y,z);
