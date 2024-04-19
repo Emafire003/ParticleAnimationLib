@@ -267,12 +267,7 @@ public class ConeEffect extends YPREffect {
 
                     v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
-                    if(flipped){
-                        v = v.multiply(-1);
-                        this.positions.add(getPredictedMaxCenterPosition().add(v));
-                    }else{
-                        this.positions.add(originPos.add(v));
-                    }
+                    this.positions.add(originPos.add(v));
 
                 }
                 step++;
@@ -313,7 +308,11 @@ public class ConeEffect extends YPREffect {
                     if(counter < 0){
                         return;
                     }
-                    this.displayParticle(particle, positions.get(counter));
+                    if(flipped){
+                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(positions.get(counter).multiply(-1)));
+                    }else{
+                        this.displayParticle(particle, originPos.add(positions.get(counter)));
+                    }
 
                 }else {
                     angle = step * angularVelocity + rotation + (2 * Math.PI * y / strands);

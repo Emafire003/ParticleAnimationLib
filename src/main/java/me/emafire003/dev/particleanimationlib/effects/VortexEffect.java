@@ -226,12 +226,7 @@ public class VortexEffect extends YPREffect {
                     //The +90 flips the angle to be on the looking plane let's call it
                     v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
-                    if(flipped){
-                        v = v.multiply(-1);
-                        positions.add(getPredictedMaxCenterPosition().add(v));
-                    }else{
-                        positions.add(origin.add(v));
-                    }
+                    positions.add(v);
 
                 }
                 step++;
@@ -265,7 +260,12 @@ public class VortexEffect extends YPREffect {
                     if(counter < 0){
                         return;
                     }
-                    this.displayParticle(particle, positions.get(counter));
+                    if(flipped){
+                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(positions.get(counter).multiply(-1)));
+                    }else{
+                        this.displayParticle(particle, origin.add(positions.get(counter)));
+                    }
+
 
                 }else{
                     angle = step * radials + (2 * Math.PI * i / helixes);
