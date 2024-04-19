@@ -25,6 +25,17 @@ public class YPREffect extends Effect {
         super(world, type, particle, originPos);
     }
 
+    protected static void copy(YPREffect original, YPREffect copy) {
+        Effect.copy(original, copy);
+        copy.setYawOffset(original.getYawOffset());
+        copy.setPitchOffset(original.getPitchOffset());
+        copy.setYaw(original.getYaw());
+        copy.setPitch(original.getPitch());
+        copy.setRoll(original.getRoll());
+        copy.setRollOffset(original.getRollOffset());
+        copy.setShouldUpdateYPR(original.getShouldUpdateYPR());
+    }
+
     @Override
     public void updatePos(){
         super.updatePos();

@@ -127,6 +127,20 @@ public class LineEffect extends TargetedYPREffect {
         this.zigZagRelativeOffset = zigZagRelativeOffset;
     }
 
+    public static void copy(LineEffect original, LineEffect copy) {
+        TargetedYPREffect.copy(original, copy);
+        copy.setZigZag(original.isZigZag());
+        copy.setZigZags(original.getZigZags());
+        copy.setZigZagOffset(original.getZigZagOffset());
+        copy.setZigZagRelativeOffset(original.getZigZagRelativeOffset());
+        copy.setParticles(original.getParticles());
+        copy.setLength(original.getLength());
+        copy.setMaxLength(original.getMaxLength());
+        copy.setSubEffectAtEnd(original.getSubEffectAtEnd());
+        copy.zag = original.zag;
+        copy.step = original.step;
+    }
+
     /**
      * Creates a new line effect.
      *
@@ -214,6 +228,8 @@ public class LineEffect extends TargetedYPREffect {
         setYaw(builder.yaw);
         setPitch(builder.pitch);
         setShouldUpdateYPR(builder.shouldUpdateYPR);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setUseEyePosAsTarget(builder.useEyePosAsTarget);
     }
 
     /** Returns a builder for the effect.
@@ -422,6 +438,8 @@ public class LineEffect extends TargetedYPREffect {
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR = true;
+        private boolean useEyePosAsOrigin;
+        private boolean useEyePosAsTarget;
 
         private Builder() {
         }
@@ -467,6 +485,28 @@ public class LineEffect extends TargetedYPREffect {
          */
         public Builder entityOrigin(Entity entityOrigin) {
             this.entityOrigin = entityOrigin;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsTarget} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsTarget} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsTarget(boolean useEyePos) {
+            this.useEyePosAsTarget= useEyePos;
             return this;
         }
 

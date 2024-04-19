@@ -33,7 +33,7 @@ public class VortexCommand implements PALCommand {
                         DoubleArgumentType.getDouble(context, "radialsPerIteration"),IntegerArgumentType.getInteger(context, "circles"),
                         IntegerArgumentType.getInteger(context, "helixes")
                 );
-                effect.setInverted(BoolArgumentType.getBool(context, "inverted"));
+                effect.setFlipped(BoolArgumentType.getBool(context, "flipped"));
                 effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
 
             }else{
@@ -63,7 +63,7 @@ public class VortexCommand implements PALCommand {
                     IntegerArgumentType.getInteger(context, "helixes")
 
             );
-            effect.setInverted(BoolArgumentType.getBool(context, "inverted"));
+            effect.setFlipped(BoolArgumentType.getBool(context, "flipped"));
             effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
 
             return 1;
@@ -85,7 +85,7 @@ public class VortexCommand implements PALCommand {
                                                                 .then(CommandManager.argument("radialsPerIteration", DoubleArgumentType.doubleArg())
                                                                         .then(CommandManager.argument("circles", IntegerArgumentType.integer(0))
                                                                                 .then(CommandManager.argument("helixes", IntegerArgumentType.integer(0))
-                                                                                        .then(CommandManager.argument("inverted", BoolArgumentType.bool())
+                                                                                        .then(CommandManager.argument("flipped", BoolArgumentType.bool())
                                                                                                 .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
                                                                                                         .executes(this::spawnEffectNoYP)
                                                                                                 )
@@ -116,7 +116,7 @@ public class VortexCommand implements PALCommand {
                                                                                 .then(CommandManager.argument("radialsPerIteration", DoubleArgumentType.doubleArg())
                                                                                         .then(CommandManager.argument("circles", IntegerArgumentType.integer(0))
                                                                                                 .then(CommandManager.argument("helixes", IntegerArgumentType.integer(0))
-                                                                                                        .then(CommandManager.argument("inverted", BoolArgumentType.bool())
+                                                                                                        .then(CommandManager.argument("flipped", BoolArgumentType.bool())
                                                                                                                 .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
                                                                                                                         .executes(this::spawnEffect)
                                                                                                                 )

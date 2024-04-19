@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class CuboidEffect extends TargetedEffect {
 
+
     /**
      * Particles in each row
      */
@@ -181,6 +182,22 @@ public class CuboidEffect extends TargetedEffect {
         setUpdateTargetPositions(builder.updateTargetPositions);
         setEntityTarget(builder.entityTarget);
         setTargetOffset(builder.targetOffset);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setUseEyePosAsTarget(builder.useEyePosAsTarget);
+    }
+
+    public static void copy(CuboidEffect original, CuboidEffect copy) {
+        TargetedEffect.copy(original, copy);
+        copy.setPadding(original.getPadding());
+        copy.setBlockSnap(original.isBlockSnap());
+        copy.setXLength(original.getXLength());
+        copy.setYLength(original.getYLength());
+        copy.setZLength(original.getZLength());
+        copy.setParticles(original.getParticles());
+        copy.useXLength = original.useXLength;
+        copy.useYLength = original.useYLength;
+        copy.useZLength = original.useZLength;
+        copy.minCorner = original.minCorner;
     }
 
     /** Returns a builder for the effect.
@@ -351,6 +368,13 @@ public class CuboidEffect extends TargetedEffect {
     public void setBlockSnap(boolean blockSnap) {
         this.blockSnap = blockSnap;
     }
+    public int getParticles() {
+        return particles;
+    }
+
+    public void setParticles(int particles) {
+        this.particles = particles;
+    }
 
     /**
      * {@code CuboidEffect} builder static inner class.
@@ -359,6 +383,8 @@ public class CuboidEffect extends TargetedEffect {
         private int iterations;
         private Vec3d originPos;
         private boolean updatePositions;
+        private boolean useEyePosAsOrigin;
+        private boolean useEyePosAsTarget;
         private Entity entityOrigin;
         private Vec3d originOffset;
         private ServerWorld world;
@@ -452,6 +478,28 @@ public class CuboidEffect extends TargetedEffect {
          */
         public Builder originOffset(Vec3d originOffset) {
             this.originOffset = originOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsTarget} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsTarget} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsTarget(boolean useEyePos) {
+            this.useEyePosAsTarget = useEyePos;
             return this;
         }
 

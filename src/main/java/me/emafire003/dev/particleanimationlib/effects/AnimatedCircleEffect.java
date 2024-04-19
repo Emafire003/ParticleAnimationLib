@@ -181,6 +181,7 @@ public class AnimatedCircleEffect extends YPREffect {
         setYaw(builder.yaw);
         setPitch(builder.pitch);
         setShouldUpdateYPR(builder.shouldUpdateYPR);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
     }
 
     /** Returns a builder for the effect.
@@ -194,6 +195,20 @@ public class AnimatedCircleEffect extends YPREffect {
      * */
     public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
+    }
+
+    public static void copy(AnimatedCircleEffect original, AnimatedCircleEffect copy) {
+        YPREffect.copy(original, copy);
+        copy.setRadius(original.getRadius());
+        copy.setMaxAngle(original.getMaxAngle());
+        copy.setResetCircle(original.isResetCircle());
+        copy.setEnableRotation(original.isEnableRotation());
+        copy.setParticles(original.getParticles());
+        copy.setWholeCircle(original.isWholeCircle());
+        copy.setRadiusGrow(original.getRadiusGrow());
+        copy.setRotations(new Vec3d(original.xRotation, original.yRotation, original.zRotation));
+        copy.setSubtracts(new Vec3d(original.xSubtract, original.ySubtract, original.zSubtract));
+        copy.setAngularVelocity(new Vec3d(original.angularVelocityX, original.angularVelocityY, original.angularVelocityZ));
     }
 
     @Override
@@ -313,6 +328,12 @@ public class AnimatedCircleEffect extends YPREffect {
         this.zSubtract = subtracts.getZ();
     }
 
+    public void setAngularVelocity(Vec3d angularVelocity) {
+        this.angularVelocityX = angularVelocity.getX();
+        this.angularVelocityY = angularVelocity.getY();
+        this.angularVelocityZ = angularVelocity.getZ();
+    }
+
     /**
      * {@code AnimatedCircleEffect} builder static inner class.
      */
@@ -320,6 +341,7 @@ public class AnimatedCircleEffect extends YPREffect {
         private int iterations;
         private Vec3d originPos;
         private boolean updatePositions;
+        private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
         private Vec3d originOffset;
         private ServerWorld world;
@@ -436,6 +458,17 @@ public class AnimatedCircleEffect extends YPREffect {
          */
         public Builder entityOrigin(Entity entityOrigin) {
             this.entityOrigin = entityOrigin;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
             return this;
         }
 

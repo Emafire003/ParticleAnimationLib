@@ -1,4 +1,4 @@
 The code used for the effects is based on the effects added by the EffectLib Bukkit plugin, made by elMakers and Slikey.
-It has however been changed both to be compatible with the mod loader and to add funcnoalities.
+It has however been changed both to be compatible with the mod loader and to add functionalities.
 You can find a copy of the LICENSE for EffectLib in the el_LICENSE file.
 You can find the source code of the EffectLib project on https://github.com/elBukkit/EffectLib

@@ -11,6 +11,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class VortexEffect extends YPREffect {
 
@@ -53,8 +56,14 @@ public class VortexEffect extends YPREffect {
 
     //Added by Emafire003
 
-    /**Inverts the staring and ending position of the vortex*/
-    public boolean inverted;
+    /**Flips the staring and ending position of the vortex*/
+    public boolean flipped;
+
+    /** Inverts the direction of the effect, making the particles appear from the max radius
+     * and end at the origin
+     */
+    public boolean inverted = false;
+
 
     // Stuff used for calculations
 
@@ -62,7 +71,9 @@ public class VortexEffect extends YPREffect {
      * Current step. Works as counter
      */
     protected int step = 0;
-
+    private boolean inversionCalculated = false;
+    private List<Vec3d> positions = new ArrayList<>();
+    private int counter;
 
 
     /** Creates a new Vortex effect
@@ -163,12 +174,14 @@ public class VortexEffect extends YPREffect {
         setRadials(builder.radials);
         setCircles(builder.circles);
         setHelixes(builder.helixes);
-        setInverted(builder.inverted);
+        setFlipped(builder.flipped);
         setYawOffset(builder.yawOffset);
         setPitchOffset(builder.pitchOffset);
         setYaw(builder.yaw);
         setPitch(builder.pitch);
         setShouldUpdateYPR(builder.shouldUpdateYPR);
+        setInverted(builder.inverted);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
     }
 
     /** Returns a builder for the effect.
@@ -196,6 +209,39 @@ public class VortexEffect extends YPREffect {
         return originPos.add(v);
     }
 
+    public void calculateAllPositions(){
+        Vec3d origin = this.getOriginPos();
+        double angle;
+        Vec3d v;
+
+        if(origin == null){
+            return;
+        }
+
+        for(int j = 0; j < this.iterations; j++){
+            for (int x = 0; x < circles; x++) {
+                for (int i = 0; i < helixes; i++) {
+                    angle = step * radials + (2 * Math.PI * i / helixes);
+                    v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
+                    //The +90 flips the angle to be on the looking plane let's call it
+                    v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+
+                    if(flipped){
+                        v = v.multiply(-1);
+                        positions.add(getPredictedMaxCenterPosition().add(v));
+                    }else{
+                        positions.add(origin.add(v));
+                    }
+
+                }
+                step++;
+            }
+        }
+        this.counter = positions.size();//-1;
+        step = 0;
+    }
+
+
     @Override
     protected void onRun() {
         Vec3d origin = this.getOriginPos();
@@ -206,24 +252,39 @@ public class VortexEffect extends YPREffect {
             return;
         }
 
+        if(inverted && !inversionCalculated){
+            calculateAllPositions();
+            inversionCalculated = true;
+        }
+
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
-                angle = step * radials + (2 * Math.PI * i / helixes);
-                v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
-                //The +90 flips the angle to be on the looking plane let's call it
-                v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
                 if(inverted){
-                    v = v.multiply(-1);
-                    this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
+                    counter--;
+                    if(counter < 0){
+                        return;
+                    }
+                    this.displayParticle(particle, positions.get(counter));
+
                 }else{
-                    this.displayParticle(particle, origin.add(v));
+                    angle = step * radials + (2 * Math.PI * i / helixes);
+                    v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
+                    //The +90 flips the angle to be on the looking plane let's call it
+                    v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+
+                    if(flipped){
+                        v = v.multiply(-1);
+                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
+                    }else{
+                        this.displayParticle(particle, origin.add(v));
+                    }
                 }
+
 
             }
             step++;
         }
-        this.displayParticle(ParticleTypes.CLOUD, this.getPredictedMaxCenterPosition());
     }
 
     public float getRadius() {
@@ -236,6 +297,23 @@ public class VortexEffect extends YPREffect {
 
     public float getRadiusGrow() {
         return radiusGrow;
+    }
+
+    public static void copy(VortexEffect original, VortexEffect copy) {
+        YPREffect.copy(original, copy);
+        copy.setRadius(original.getRadius());
+        copy.setRadiusGrow(original.getRadiusGrow());
+        copy.setStartRange(original.getStartRange());
+        copy.setLengthGrow(original.getLengthGrow());
+        copy.setRadials(original.getRadials());
+        copy.setCircles(original.getCircles());
+        copy.setHelixes(original.getHelixes());
+        copy.setFlipped(original.isFlipped());
+        copy.setInverted(original.isInverted());
+        copy.step = original.step;
+        copy.inversionCalculated = original.inversionCalculated;
+        copy.positions = original.positions;
+        copy.counter = original.counter;
     }
 
     public void setRadiusGrow(float radiusGrow) {
@@ -280,6 +358,14 @@ public class VortexEffect extends YPREffect {
 
     public void setHelixes(int helixes) {
         this.helixes = helixes;
+    }
+
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
     }
 
     public boolean isInverted() {
@@ -340,13 +426,18 @@ public class VortexEffect extends YPREffect {
 
         //Added by Emafire003
 
-        /**Inverts the staring and ending position of the vortex*/
-        private boolean inverted;
+        /**Flips the staring and ending position of the vortex*/
+        private boolean flipped = false;
+        /** Inverts the direction of the effect, making the particles appear from the max radius
+         * and end at the origin
+         */
+        public boolean inverted = false;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR = true;
+        private boolean useEyePosAsOrigin = false;
 
         private Builder() {
         }
@@ -403,6 +494,17 @@ public class VortexEffect extends YPREffect {
          */
         public Builder originOffset(Vec3d originOffset) {
             this.originOffset = originOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
             return this;
         }
 
@@ -502,6 +604,17 @@ public class VortexEffect extends YPREffect {
          */
         public Builder helixes(int helixes) {
             this.helixes = helixes;
+            return this;
+        }
+
+        /**
+         * Sets the {@code flipped} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param flipped the {@code inverted} to set
+         * @return a reference to this Builder
+         */
+        public Builder flipped(boolean flipped) {
+            this.flipped = flipped;
             return this;
         }
 

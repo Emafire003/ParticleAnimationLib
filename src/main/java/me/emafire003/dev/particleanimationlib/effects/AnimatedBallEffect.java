@@ -151,6 +151,7 @@ public class AnimatedBallEffect extends Effect {
         setxRotation(builder.xRotation);
         setyRotation(builder.yRotation);
         setzRotation(builder.zRotation);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
     }
 
     /** Returns a builder for the effect.
@@ -164,6 +165,19 @@ public class AnimatedBallEffect extends Effect {
      * */
     public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
+    }
+
+    public static void copy(AnimatedBallEffect original, AnimatedBallEffect copy) {
+        Effect.copy(original, copy);
+        copy.setParticles(original.getParticles());
+        copy.setParticlesPerIteration(original.getParticlesPerIteration());
+        copy.setSize(original.getSize());
+        copy.setxFactor(original.getxFactor());
+        copy.setyFactor(original.getyFactor());
+        copy.setzFactor(original.getzFactor());
+        copy.setxRotation(original.getxRotation());
+        copy.setyRotation(original.getyRotation());
+        copy.setzRotation(original.getzRotation());
     }
 
 
@@ -321,6 +335,7 @@ public class AnimatedBallEffect extends Effect {
         private Vec3d originOffset;
         private ServerWorld world;
         private ParticleEffect particle;
+        private boolean useEyePosAsOrigin = false;
         /**
          * Ball particles total (150)
          */
@@ -380,6 +395,17 @@ public class AnimatedBallEffect extends Effect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
             return this;
         }
 

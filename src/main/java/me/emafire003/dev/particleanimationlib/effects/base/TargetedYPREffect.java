@@ -23,6 +23,21 @@ public class TargetedYPREffect extends TargetedEffect {
         super(world, type, particle, originPos);
     }
 
+    protected static void copy(TargetedYPREffect original, TargetedYPREffect copy) {
+        TargetedEffect.copy(original, copy);
+        copy.setYawOffset(original.getYawOffset());
+        copy.setPitchOffset(original.getPitchOffset());
+        copy.setYaw(original.getYaw());
+        copy.setPitch(original.getPitch());
+        copy.setRoll(original.getRoll());
+        copy.setRollOffset(original.getRollOffset());
+        copy.setShouldUpdateYPR(original.getShouldUpdateYPR());
+        copy.type = original.type;
+        copy.done = original.done;
+        copy.ticks = original.ticks;
+        copy.updateTargetPositions = original.updateTargetPositions;
+    }
+
     @Override
     public void updatePos(){
         super.updatePos();

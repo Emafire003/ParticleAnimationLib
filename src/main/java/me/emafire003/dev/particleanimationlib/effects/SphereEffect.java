@@ -17,7 +17,6 @@ public class SphereEffect extends Effect {
      */
     public double radius = 0.6;
 
-
     /**
      * Particles to display
      */
@@ -50,6 +49,14 @@ public class SphereEffect extends Effect {
         this.particleIncrease = particleIncrease;
     }
 
+
+    public static void copy(SphereEffect original, SphereEffect copy) {
+        Effect.copy(original, copy);
+        copy.setRadius(original.getRadius());
+        copy.setRadiusIncrease(original.getRadiusIncrease());
+        copy.setParticleIncrease(original.getParticleIncrease());
+        copy.setParticles(original.getParticles());
+    }
 
     /**
      * Creates a new sphere effect.
@@ -90,6 +97,7 @@ public class SphereEffect extends Effect {
         particles = builder.particles;
         setRadiusIncrease(builder.radiusIncrease);
         setParticleIncrease(builder.particleIncrease);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
     }
 
     
@@ -150,6 +158,13 @@ public class SphereEffect extends Effect {
     public void setParticleIncrease(int particleIncrease) {
         this.particleIncrease = particleIncrease;
     }
+    public int getParticles() {
+        return particles;
+    }
+
+    public void setParticles(int particles) {
+        this.particles = particles;
+    }
 
     /**
      * {@code SphereEffect} builder static inner class.
@@ -162,6 +177,7 @@ public class SphereEffect extends Effect {
         private Vec3d originOffset;
         private ServerWorld world;
         private ParticleEffect particle;
+        private boolean useEyePosAsOrigin;
         /**
          * Radius of the sphere
          */
@@ -215,6 +231,17 @@ public class SphereEffect extends Effect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
             return this;
         }
 

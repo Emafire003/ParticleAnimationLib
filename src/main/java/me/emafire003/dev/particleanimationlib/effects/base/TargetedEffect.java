@@ -14,11 +14,24 @@ public class TargetedEffect extends Effect {
     //If an effect like an arc has a beginning and end pos, this is the one.
     protected Vec3d targetPos;
     protected boolean updateTargetPositions = true;
+    protected boolean useEyePosAsTarget = false;
     protected Entity entityTarget;
     protected Vec3d targetOffset = Vec3d.ZERO;
 
     public TargetedEffect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos) {
         super(world, type, particle, originPos);
+    }
+
+    protected static void copy(TargetedEffect original, TargetedEffect copy) {
+        Effect.copy(original, copy);
+        copy.setTargetPos(original.getTargetPos());
+        copy.setEntityTarget(original.getEntityTarget());
+        copy.setTargetOffset(original.getTargetOffset());
+        copy.type = original.type;
+        copy.done = original.done;
+        copy.ticks = original.ticks;
+        copy.updateTargetPositions = original.updateTargetPositions;
+        copy.setUseEyePosAsTarget(original.isUseEyePosAsTarget());
     }
 
 
@@ -30,7 +43,15 @@ public class TargetedEffect extends Effect {
         }
         if(entityTarget != null){
             if(targetOffset == null){
+                if(useEyePosAsTarget){
+                    this.targetPos = entityTarget.getEyePos();
+                    return;
+                }
                 this.targetPos = entityTarget.getPos();
+                return;
+            }
+            if(useEyePosAsTarget){
+                this.targetPos = entityTarget.getEyePos().add(targetOffset);
                 return;
             }
             this.targetPos = entityTarget.getPos().add(targetOffset);
@@ -75,5 +96,17 @@ public class TargetedEffect extends Effect {
 
     public void setTargetOffset(Vec3d targetOffset) {
         this.targetOffset = targetOffset;
+    }
+
+    public boolean isUpdateTargetPositions() {
+        return updateTargetPositions;
+    }
+
+    public boolean isUseEyePosAsTarget() {
+        return useEyePosAsTarget;
+    }
+
+    public void setUseEyePosAsTarget(boolean useEyePosAsTarget) {
+        this.useEyePosAsTarget = useEyePosAsTarget;
     }
 }

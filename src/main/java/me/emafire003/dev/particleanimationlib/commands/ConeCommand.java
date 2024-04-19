@@ -33,7 +33,7 @@ public class ConeCommand implements PALCommand {
                         DoubleArgumentType.getDouble(context, "angularVelocity"), DoubleArgumentType.getDouble(context, "startingRotation"),
                         BoolArgumentType.getBool(context, "solid"), BoolArgumentType.getBool(context, "randomStart")
                 );
-                effect.setInverted(BoolArgumentType.getBool(context, "inverted"));
+                effect.setFlipped(BoolArgumentType.getBool(context, "inverted"));
                 effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
 
             }else{
@@ -62,7 +62,7 @@ public class ConeCommand implements PALCommand {
                     DoubleArgumentType.getDouble(context, "angularVelocity"), DoubleArgumentType.getDouble(context, "startingRotation"),
                     BoolArgumentType.getBool(context, "solid"), BoolArgumentType.getBool(context, "randomStart")
             );
-            effect.setInverted(BoolArgumentType.getBool(context, "inverted"));
+            effect.setFlipped(BoolArgumentType.getBool(context, "inverted"));
             effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
 
             return 1;

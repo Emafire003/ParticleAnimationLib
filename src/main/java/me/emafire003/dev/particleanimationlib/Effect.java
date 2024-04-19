@@ -9,16 +9,20 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public class Effect {
+public abstract class Effect {
     protected int iterations;
     protected Vec3d originPos;
     protected boolean updatePositions;
+
+    /**If true and an entity is the origin it will use their head position if possibile*/
+    protected boolean useEyePosAsOrigin;
     protected Entity entityOrigin;
     protected Vec3d originOffset = Vec3d.ZERO;
     /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
     public boolean shouldCut = false;*/
     protected ServerWorld world;
+
     protected ParticleEffect particle;
     public EffectType type;
 
@@ -34,6 +38,29 @@ public class Effect {
         this.originPos = originPos;
     }
 
+    //Used by the copy method only!
+    private Effect(){
+
+    }
+
+    protected static void copy(Effect original, Effect copy) {
+        if (original == null) {
+            return;
+        }
+        copy.setIterations(original.getIterations());
+        copy.setOriginPos(original.getOriginPos());
+        copy.setUpdatePositions(original.isUpdatePositions());
+        copy.setEntityOrigin(original.getEntityOrigin());
+        copy.setOriginOffset(original.getOriginOffset());
+        copy.setWorld(original.getWorld());
+        copy.setParticle(original.getParticle());
+        copy.setDelay(original.getDelay());
+        copy.setUseEyePosAsOrigin(original.isUseEyePosAsOrigin());
+
+        copy.type = original.type;
+        copy.done = original.done;
+        copy.ticks = original.ticks;
+    }
 
 
     /**Main method to extend, here the animation code is run EACH tick*/
@@ -48,7 +75,15 @@ public class Effect {
     public void updatePos(){
         if(entityOrigin != null){
             if(originOffset == null){
+                if(useEyePosAsOrigin){
+                    this.originPos = entityOrigin.getEyePos();
+                    return;
+                }
                 this.originPos = entityOrigin.getPos();
+                return;
+            }
+            if(useEyePosAsOrigin){
+                this.originPos = entityOrigin.getEyePos().add(originOffset);
                 return;
             }
             this.originPos = entityOrigin.getPos().add(originOffset);
@@ -250,6 +285,28 @@ public class Effect {
 
     public void setOriginOffset(Vec3d originOffset) {
         this.originOffset = originOffset;
+    }
+    public boolean isUseEyePosAsOrigin() {
+        return useEyePosAsOrigin;
+    }
+
+    public void setUseEyePosAsOrigin(boolean useEyePosAsOrigin) {
+        this.useEyePosAsOrigin = useEyePosAsOrigin;
+    }
+    public ServerWorld getWorld() {
+        return world;
+    }
+
+    public void setWorld(ServerWorld world) {
+        this.world = world;
+    }
+
+    public ParticleEffect getParticle() {
+        return particle;
+    }
+
+    public void setParticle(ParticleEffect particle) {
+        this.particle = particle;
     }
 
 }

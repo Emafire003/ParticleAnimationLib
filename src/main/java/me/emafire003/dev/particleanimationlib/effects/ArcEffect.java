@@ -58,6 +58,13 @@ public class ArcEffect extends TargetedEffect {
         this.setTargetPos(target);
     }
 
+    public static void copy(ArcEffect original, ArcEffect copy) {
+        TargetedEffect.copy(original, copy);
+        copy.setHeight(original.getHeight());
+        copy.setParticles(original.getParticles());
+        copy.step = original.step;
+    }
+
     /**
      * Creates a new arc effect between two points
      *
@@ -88,6 +95,8 @@ public class ArcEffect extends TargetedEffect {
         setUpdateTargetPositions(builder.updateTargetPositions);
         setEntityTarget(builder.entityTarget);
         setTargetOffset(builder.targetOffset);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setUseEyePosAsTarget(builder.useEyePosAsTarget);
     }
 
     /** Returns a builder for the effect.
@@ -179,6 +188,8 @@ public class ArcEffect extends TargetedEffect {
         private boolean updateTargetPositions = true;
         private Entity entityTarget;
         private Vec3d targetOffset;
+        private boolean useEyePosAsOrigin;
+        private boolean useEyePosAsTarget;
 
         private Builder() {
         }
@@ -213,6 +224,28 @@ public class ArcEffect extends TargetedEffect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsTarget} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsTarget} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsTarget(boolean useEyePos) {
+            this.useEyePosAsTarget = useEyePos;
             return this;
         }
 

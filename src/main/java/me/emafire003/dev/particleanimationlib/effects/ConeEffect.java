@@ -11,6 +11,9 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class ConeEffect extends YPREffect {
 
@@ -61,7 +64,13 @@ public class ConeEffect extends YPREffect {
 
     //Added by Emafire003
 
-    /** Should the cone start from the max position and go to the origin position?*/
+
+    /** Flips the cone from the origin to the center of the predicted ending position
+     * <p>
+     * Experimental! May not work as intended*/
+    public boolean flipped = false;
+
+    /**Inverts the cone making it start from the last position and go all the way to the origin. Not to be cofused with flipped*/
     public boolean inverted = false;
 
     /** Do you want to draw the center axis as well?*/
@@ -79,6 +88,9 @@ public class ConeEffect extends YPREffect {
      */
     protected int step = 0;
     private boolean lineCreated = false;
+    private List<Vec3d> positions = new ArrayList<>();
+    private int counter;
+    boolean inversionCalculated = false;
 
     /**
      * Creates a new cone effect
@@ -130,6 +142,29 @@ public class ConeEffect extends YPREffect {
         this.setShouldUpdateYPR(true);
     }
 
+    public static void copy(ConeEffect original, ConeEffect copy) {
+        YPREffect.copy(original, copy);
+        copy.setLengthGrow(original.getLengthGrow());
+        copy.setAngularVelocity(original.getAngularVelocity());
+        copy.setParticles(original.getParticles());
+        copy.setRadiusGrow(original.getRadiusGrow());
+        copy.setParticlesCone(original.getParticlesCone());
+        copy.setRotation(original.getRotation());
+        copy.setRandomize(original.isRandomize());
+        copy.setSolid(original.isSolid());
+        copy.setStrands(original.getStrands());
+        copy.setFlipped(original.isFlipped());
+        copy.setInverted(original.isInverted());
+        copy.setDrawCenterAxis(original.isDrawCenterAxis());
+        copy.setDrawFinishPoint(original.isDrawFinishPoint());
+        copy.setSecondaryParticle(original.getSecondaryParticle());
+        copy.step = original.step;
+        copy.lineCreated = original.lineCreated;
+        copy.positions = original.positions;
+        copy.counter = original.counter;
+        copy.inverted = original.inverted;
+    }
+
     /**
      * Creates a new cone effect
      *
@@ -159,7 +194,7 @@ public class ConeEffect extends YPREffect {
         setRandomize(builder.randomize);
         setSolid(builder.solid);
         setStrands(builder.strands);
-        setInverted(builder.inverted);
+        setFlipped(builder.flipped);
         setDrawCenterAxis(builder.drawCenterAxis);
         setDrawFinishPoint(builder.drawFinishPoint);
         setSecondaryParticle(builder.secondaryParticle);
@@ -168,6 +203,8 @@ public class ConeEffect extends YPREffect {
         setYaw(builder.yaw);
         setPitch(builder.pitch);
         setShouldUpdateYPR(builder.shouldUpdateYPR);
+        setInverted(builder.inverted);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
     }
 
     /** Returns a builder for the effect.
@@ -197,12 +234,66 @@ public class ConeEffect extends YPREffect {
         return originPos.add(v);
     }
 
+    public void calculateAllPositions(){
+        Vec3d originPos = this.getOriginPos();
+
+        if (originPos == null) {
+            return;
+        }
+
+        double angle;
+        float radius;
+        float length;
+
+        Vec3d v;
+
+        for(int i = 0; i < this.getIterations(); i++){
+            for (int x = 0; x < particles; x++) {
+
+                if (step > particlesCone) step = 0;
+                if (randomize && step == 0) rotation = RandomUtils.getRandomAngle();
+                for (int y = 0; y < strands; y++) {
+                    angle = step * angularVelocity + rotation + (2 * Math.PI * y / strands);
+                    radius = step * radiusGrow;
+
+                    if (solid) {
+                        //what the heck is this?
+                        radius *= RandomUtils.random.nextFloat();
+                    }
+
+                    length = step * lengthGrow;
+
+                    v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
+
+                    v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+
+                    if(flipped){
+                        v = v.multiply(-1);
+                        this.positions.add(getPredictedMaxCenterPosition().add(v));
+                    }else{
+                        this.positions.add(originPos.add(v));
+                    }
+
+                }
+                step++;
+            }
+        }
+        step = 0;
+        counter = this.positions.size();
+
+    }
+
     @Override
     protected void onRun() {
         Vec3d originPos = this.getOriginPos();
 
         if (originPos == null) {
             return;
+        }
+
+        if(inverted && !inversionCalculated){
+            calculateAllPositions();
+            inversionCalculated = true;
         }
 
         double angle;
@@ -216,25 +307,35 @@ public class ConeEffect extends YPREffect {
             if (step > particlesCone) step = 0;
             if (randomize && step == 0) rotation = RandomUtils.getRandomAngle();
             for (int y = 0; y < strands; y++) {
-                angle = step * angularVelocity + rotation + (2 * Math.PI * y / strands);
-                radius = step * radiusGrow;
-
-                if (solid) {
-                    //what the heck is this?
-                    radius *= RandomUtils.random.nextFloat();
-                }
-
-                length = step * lengthGrow;
-
-                v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
-
-                v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
                 if(inverted){
-                    v = v.multiply(-1);
-                    this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
-                }else{
-                    this.displayParticle(particle, originPos.add(v));
+                    counter--;
+                    if(counter < 0){
+                        return;
+                    }
+                    this.displayParticle(particle, positions.get(counter));
+
+                }else {
+                    angle = step * angularVelocity + rotation + (2 * Math.PI * y / strands);
+                    radius = step * radiusGrow;
+
+                    if (solid) {
+                        //what the heck is this?
+                        radius *= RandomUtils.random.nextFloat();
+                    }
+
+                    length = step * lengthGrow;
+
+                    v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
+
+                    v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+
+                    if(flipped){
+                        v = v.multiply(-1);
+                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
+                    }else{
+                        this.displayParticle(particle, originPos.add(v));
+                    }
                 }
 
             }
@@ -245,7 +346,7 @@ public class ConeEffect extends YPREffect {
                 lineCreated = true;
             }
             if(drawFinishPoint){
-                if(inverted){
+                if(flipped){
                     this.displayParticle(secondaryParticle, originPos);
                 }else{
                     this.displayParticle(secondaryParticle, getPredictedMaxCenterPosition());
@@ -327,6 +428,14 @@ public class ConeEffect extends YPREffect {
         this.strands = strands;
     }
 
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
+    }
+
     public boolean isInverted() {
         return inverted;
     }
@@ -366,6 +475,7 @@ public class ConeEffect extends YPREffect {
         private int iterations;
         private Vec3d originPos;
         private boolean updatePositions;
+        private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
         private Vec3d originOffset;
         private ServerWorld world;
@@ -417,7 +527,7 @@ public class ConeEffect extends YPREffect {
 
         //Added by Emafire003
 
-        /** Should the cone start from the max position and go to the origin position?*/
+        private boolean flipped = false;
         private boolean inverted = false;
 
         /** Do you want to draw the center axis as well?*/
@@ -610,6 +720,28 @@ public class ConeEffect extends YPREffect {
          */
         public Builder strands(int strands) {
             this.strands = strands;
+            return this;
+        }
+
+        /**
+         * Sets the {@code flipped} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param flipped the {@code inverted} to set
+         * @return a reference to this Builder
+         */
+        public Builder flipped(boolean flipped) {
+            this.flipped = flipped;
+            return this;
+        }
+
+        /**
+         * Sets the {@code useEyePosAsOrigin} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param useEyePos the {@code useEyePosAsOrigin} to set
+         * @return a reference to this Builder
+         */
+        public Builder useEyePosAsOrigin(boolean useEyePos) {
+            this.useEyePosAsOrigin = useEyePos;
             return this;
         }
 

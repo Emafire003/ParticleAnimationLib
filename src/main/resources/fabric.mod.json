@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "particleanimationlib",
 	"version": "${version}",
-	"name": "Particle Animation Library",
+	"name": "Particle Animation Library (PAL)",
 	"description": "A particle animation library to create cool particle effects super easily!",
 	"authors": [
 		"Emafire003, elBukkit (original effects)"

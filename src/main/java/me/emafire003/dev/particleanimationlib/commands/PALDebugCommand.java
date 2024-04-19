@@ -3,7 +3,9 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
 import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
+import me.emafire003.dev.particleanimationlib.effects.VortexEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
@@ -31,22 +33,44 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
-                ConeEffect effect = ConeEffect.builder(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos().add(0,-1,0))
+                //VortexEffect effect = new VortexEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos(), 90, -90);
+
+
+                VortexEffect effect = new VortexEffect(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos(), 90, -90,
+                        0.3f, 0.008f, 0.0f, 0.02f,
+                        Math.PI / 16, 3,2
+                );
+                effect.setInverted(true);
+                //effect.setFlipped(true);
+                //effect.runFor(4);
+
+                VortexEffect effect1 = new VortexEffect(source.getWorld(), ParticleTypes.ANGRY_VILLAGER, target.getPos(), 90, -90,
+                        0.3f, 0.008f, 0.0f, 0.02f,
+                        Math.PI / 16, 3,2
+                );
+                //effect1.runFor(4);
+
+                ConeEffect coneEffect1 = ConeEffect.builder(source.getWorld(), ParticleTypes.SCULK_CHARGE_POP, target.getPos().add(0,-1,0))
                         .yaw(target.getYaw()).pitch(target.getPitch())
                         //.lengthGrow(0.001f).radiusGrow(0.03f)
                         .inverted(true)
                         .drawCenterAxis(true)
                         .strands(2)
                         .secondaryParticle(ParticleTypes.BUBBLE).build();
-                effect.runFor(15);
+                //effect.runFor(15);
+                coneEffect1.setFlipped(true);
+                coneEffect1.runFor(10);
 
                 ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos().add(0,-1,0),
                         target.getYaw(), target.getPitch());
                 coneEffect.setDrawCenterAxis(true);
                 coneEffect.setStrands(2);
-                coneEffect.setInverted(true);
+                coneEffect.setFlipped(true);
                 coneEffect.setSecondaryParticle(ParticleTypes.CLOUD);
-                coneEffect.runFor(10);
+                //coneEffect.runFor(10);
+
+                AnimatedBallEffect ballEffect = AnimatedBallEffect.builder(source.getWorld(), ParticleTypes.EFFECT, target.getEyePos()).build();
+                AnimatedBallEffect copy;
 
                 /*LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.CRIT, target.getPos(),
                         target.getPos().add(5,0,0),
