@@ -209,7 +209,7 @@ public class VortexEffect extends YPREffect {
         return originPos.add(v);
     }
 
-    public void calculateAllPositions(){
+    private void calculateAllPositions(){
         Vec3d origin = this.getOriginPos();
         double angle;
         Vec3d v;
@@ -265,7 +265,6 @@ public class VortexEffect extends YPREffect {
                     }else{
                         this.displayParticle(particle, origin.add(positions.get(counter)));
                     }
-
 
                 }else{
                     angle = step * radials + (2 * Math.PI * i / helixes);

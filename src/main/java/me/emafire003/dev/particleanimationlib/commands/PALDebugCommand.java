@@ -3,13 +3,9 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
-import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
-import me.emafire003.dev.particleanimationlib.effects.VortexEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -35,43 +31,6 @@ public class PALDebugCommand implements PALCommand {
 
                 //VortexEffect effect = new VortexEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos(), 90, -90);
 
-
-                VortexEffect effect = new VortexEffect(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos(), 90, -90,
-                        0.3f, 0.008f, 0.0f, 0.02f,
-                        Math.PI / 16, 3,2
-                );
-                effect.setInverted(true);
-                //effect.setFlipped(true);
-                //effect.runFor(4);
-
-                VortexEffect effect1 = new VortexEffect(source.getWorld(), ParticleTypes.ANGRY_VILLAGER, target.getPos(), 90, -90,
-                        0.3f, 0.008f, 0.0f, 0.02f,
-                        Math.PI / 16, 3,2
-                );
-                //effect1.runFor(4);
-
-                ConeEffect coneEffect1 = ConeEffect.builder(source.getWorld(), ParticleTypes.SCULK_CHARGE_POP, target.getPos().add(0,-1,0))
-                        .yaw(target.getYaw()).pitch(target.getPitch())
-                        //.lengthGrow(0.001f).radiusGrow(0.03f)
-                        .inverted(true)
-                        .drawCenterAxis(true)
-                        .strands(2)
-                        .secondaryParticle(ParticleTypes.BUBBLE).build();
-                //effect.runFor(15);
-                coneEffect1.setFlipped(true);
-                coneEffect1.runFor(10);
-
-                ConeEffect coneEffect = new ConeEffect(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos().add(0,-1,0),
-                        target.getYaw(), target.getPitch());
-                coneEffect.setDrawCenterAxis(true);
-                coneEffect.setStrands(2);
-                coneEffect.setFlipped(true);
-                coneEffect.setSecondaryParticle(ParticleTypes.CLOUD);
-                //coneEffect.runFor(10);
-
-                AnimatedBallEffect ballEffect = AnimatedBallEffect.builder(source.getWorld(), ParticleTypes.EFFECT, target.getEyePos()).build();
-                AnimatedBallEffect copy;
-
                 /*LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.CRIT, target.getPos(),
                         target.getPos().add(5,0,0),
                         150, 1, true, 3,
@@ -84,8 +43,8 @@ public class PALDebugCommand implements PALCommand {
 
                 //AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getEyePos(), target.getYaw(), target.getPitch());
                 /*AnimatedCircleEffect effect = new AnimatedCircleEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getPos().add(0,0.7,0),
-                        target.getYaw(), target.getPitch(), 40, 1.2f, 0, Math.PI*2,
-                        false, false, true,
+                        target.getYaw(), target.getPitch(), 100, 1.2f, 0, Math.PI*2,
+                        true, false, true,
                         new Vec3d(Math.PI, Math.PI, Math.PI/2).multiply(1),
                         new Vec3d(0,0,0), new Vec3d(0,0,0));
                 //effect.setEntityOrigin(target);
@@ -130,10 +89,8 @@ public class PALDebugCommand implements PALCommand {
         return CommandManager
                 .literal("debug")
                 .then(
-                        CommandManager.literal("particle_effect").then(
-                                CommandManager.argument("target", EntityArgumentType.entities())
-                                        .executes(this::particleEffect)
-                        )
+                        CommandManager.argument("target", EntityArgumentType.entities())
+                                .executes(this::particleEffect)
 
                 )
                 .build();

@@ -234,7 +234,7 @@ public class ConeEffect extends YPREffect {
         return originPos.add(v);
     }
 
-    public void calculateAllPositions(){
+    private void calculateAllPositions(){
         Vec3d originPos = this.getOriginPos();
 
         if (originPos == null) {
