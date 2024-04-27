@@ -51,6 +51,25 @@ You can use either `pal` or `particleanimationlib` and then use tab-completition
 
 *Note*: The commands that take in stuff like rotations and such, change the integer values to "x.5", since the game thinks they are positions. You can get around that by inputting a double instead of an integer like so "x.0" (for example 2.0 or 0.0)
 
+### For developers:
+Add this library into your `build.gradle` as a dependency
+```gradle
+repositories {
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
+dependencies {
+    modImplementation "maven.modrinth:particleanimationlib:<version>"
+}
+```
+You can get the version number from the modrinth versions page.
+
 ## Credit
 This mod is based on the bukkit plugin [EffectLib](https://github.com/elBukkit/EffectLib) by elBukkit team, check it out too! The effects are taken from there and tweaked to be made compatible with modding, occasionally adding extra functionality.
 
