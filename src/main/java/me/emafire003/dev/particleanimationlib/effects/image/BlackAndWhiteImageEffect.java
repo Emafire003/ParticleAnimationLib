@@ -10,15 +10,25 @@ import net.minecraft.util.math.Vec3d;
 
 import java.awt.image.BufferedImage;
 
-/**Draw an image or animated gif using colored particles*/
-@SuppressWarnings("unused")
-public class ColoredImageEffect extends BaseImageEffect {
+/**Render a monochrome image from an image file or animated gif.
+ Black pixels will be skipped, all other pixels display as the selected particle type.
 
-    public ColoredImageEffect(ServerWorld world, Vec3d originPos, String image_fileName) {
+ Meaning the source image must be black and white. (I don't get it, can't you use a normal ColoredImage?)
+ <a href="https://reference.elmakers.com/#effectlib.image">...</a>
+ */
+@SuppressWarnings("unused")
+public class BlackAndWhiteImageEffect extends BaseImageEffect {
+
+    /**
+     * Invert the image
+     */
+    public boolean invert = false;
+
+    public BlackAndWhiteImageEffect(ServerWorld world, Vec3d originPos, String image_fileName) {
         super(world, originPos, image_fileName);
     }
 
-    public ColoredImageEffect(ServerWorld world, Vec3d originPos, Identifier image) {
+    public BlackAndWhiteImageEffect(ServerWorld world, Vec3d originPos, Identifier image) {
         super(world, originPos, image.getPath());
     }
 
@@ -44,8 +54,9 @@ public class ColoredImageEffect extends BaseImageEffect {
      * @param angularVelocityX Turns the image by this angle each iteration around the x-axis (radians)
      * @param angularVelocityY Turns the image by this angle each iteration around the y-axis (radians)
      * @param angularVelocityZ Turns the image by this angle each iteration around the z-axis (radians)
+     * @param invert Inverts the image color
      * */
-    public ColoredImageEffect(ServerWorld world, Vec3d origin, float yaw, float pitch, String fileName, boolean transparency, int frameDelay, int stepX, int stepY, float scale, float particleSize, Vec3d rotation, boolean orient, boolean enableRotation, Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ) {
+    public BlackAndWhiteImageEffect(ServerWorld world, Vec3d origin, float yaw, float pitch, String fileName, boolean transparency, int frameDelay, int stepX, int stepY, float scale, float particleSize, Vec3d rotation, boolean orient, boolean enableRotation, Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ, boolean invert) {
         super(world, origin, fileName);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -69,9 +80,10 @@ public class ColoredImageEffect extends BaseImageEffect {
         this.angularVelocityX = angularVelocityX;
         this.angularVelocityY = angularVelocityY;
         this.angularVelocityZ = angularVelocityZ;
+        this.invert = true;
     }
 
-    private ColoredImageEffect(Builder builder) {
+    private BlackAndWhiteImageEffect(Builder builder) {
         super(builder.world, builder.originPos, builder.fileName);
         setIterations(builder.iterations);
         setOriginPos(builder.originPos);
@@ -100,6 +112,12 @@ public class ColoredImageEffect extends BaseImageEffect {
         setAngularVelocityX(builder.angularVelocityX);
         setAngularVelocityY(builder.angularVelocityY);
         setAngularVelocityZ(builder.angularVelocityZ);
+        setInvert(builder.invert);
+    }
+
+    public static void copy(BlackAndWhiteImageEffect original, BlackAndWhiteImageEffect copy) {
+        BaseImageEffect.copy(original, copy);
+        copy.setInvert(original.isInvert());
     }
 
     /** Returns a builder for the effect.
@@ -129,13 +147,29 @@ public class ColoredImageEffect extends BaseImageEffect {
         return new Builder().world(world).fileName(image.getPath()).originPos(originPos);
     }
 
+    @Override
     protected void display(BufferedImage image, Vec3d v, Vec3d pos, int pixel_color) {
-        this.displayParticle(pos.add(v), pixel_color, particleSize);
+        //This is the decimal color value for black btw
+        int black = 0;
+
+        if (!invert && black != pixel_color){
+            return;
+        } else if (invert && black == pixel_color){
+            return;
+        }
+        this.displayParticle(pos.add(v), pixel_color,  particleSize);
     }
 
+    public boolean isInvert() {
+        return invert;
+    }
+
+    public void setInvert(boolean invert) {
+        this.invert = invert;
+    }
 
     /**
-     * {@code ColoredImageEffect} builder static inner class.
+     * {@code BlackAndWhiteImageEffect} builder static inner class.
      */
     public static final class Builder {
         private int iterations;
@@ -151,71 +185,21 @@ public class ColoredImageEffect extends BaseImageEffect {
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR;
-        /**
-         * For configuration-driven files
-         */
         private String fileName;
-
-        /**
-         * Whether or not to check for transparent pixels
-         */
-        private boolean transparency = false;
-
-        /**
-         * How many ticks to show each frame
-         */
-        private int frameDelay = 5;
-
-        /**
-         * Each stepX pixel will be shown. Saves packets for high resolutions.
-         */
-        private int stepX = 10;
-
-        /**
-         * Each stepY pixel will be shown. Saves packets for high resolutions.
-         */
-        private int stepY = 10;
-
-        /**
-         * Scale the image down
-         */
-        private float scale = (float) 1 / 40;
-
-        /**How big should the dust particles be?*/
-        private float particleSize = 1f;
-
-        /**
-         * Should it rotate?
-         */
-        private boolean enableRotation = true;
-
-        /**
-         * Apply a fixed rotation
-         */
-        private Vec3d rotation = null;
-
-        /**Orients the image to the specified Yaw Pitch, for example facing a player*/
-        private boolean orient = false;
-
-        /**
-         * What plane should it rotate?
-         */
-        private Plane plane = Plane.XYZ;
-
-        /**
-         * Turns the image by this angle each iteration around the x-axis
-         */
-        private double angularVelocityX = Math.PI / 200;
-
-        /**
-         * Turns the image by this angle each iteration around the y-axis
-         */
-        private double angularVelocityY = Math.PI / 170;
-
-        /**
-         * Turns the image by this angle each iteration around the z-axis
-         */
-        private double angularVelocityZ = Math.PI / 155;
+        private boolean transparency;
+        private int frameDelay;
+        private int stepX;
+        private int stepY;
+        private float scale;
+        private float particleSize;
+        private boolean enableRotation;
+        private Vec3d rotation;
+        private boolean orient;
+        private Plane plane;
+        private double angularVelocityX;
+        private double angularVelocityY;
+        private double angularVelocityZ;
+        private boolean invert;
 
         private Builder() {
         }
@@ -307,7 +291,6 @@ public class ColoredImageEffect extends BaseImageEffect {
             this.world = world;
             return this;
         }
-
 
         /**
          * Sets the {@code yawOffset} and returns a reference to this Builder enabling method chaining.
@@ -519,12 +502,23 @@ public class ColoredImageEffect extends BaseImageEffect {
         }
 
         /**
-         * Returns a {@code ColoredImageEffect} built from the parameters previously set.
+         * Sets the {@code invert} and returns a reference to this Builder enabling method chaining.
          *
-         * @return a {@code ColoredImageEffect} built with parameters of this {@code ColoredImageEffect.Builder}
+         * @param invert the {@code invert} to set
+         * @return a reference to this Builder
          */
-        public ColoredImageEffect build() {
-            return new ColoredImageEffect(this);
+        public Builder invert(boolean invert) {
+            this.invert = invert;
+            return this;
+        }
+
+        /**
+         * Returns a {@code BlackAndWhiteImageEffect} built from the parameters previously set.
+         *
+         * @return a {@code BlackAndWhiteImageEffect} built with parameters of this {@code BlackAndWhiteImageEffect.Builder}
+         */
+        public BlackAndWhiteImageEffect build() {
+            return new BlackAndWhiteImageEffect(this);
         }
     }
 }

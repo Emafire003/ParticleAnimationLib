@@ -5,8 +5,6 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -112,10 +110,9 @@ public abstract class BaseImageEffect extends YPREffect {
     public static final Identifier ERROR_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "textures/error_particle_image.png");
 
     /**
-     * Creates a new base image effect. It won't do much on its own. Use {@link ColoredImageEffect} or {@link ImageEffect}
+     * Creates a new base image effect. It won't do much on its own. Use {@link ColoredImageEffect} or {@link BlackAndWhiteImageEffect}
      *
      * @param world The world the particles are going to spawn in
-     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
@@ -135,8 +132,8 @@ public abstract class BaseImageEffect extends YPREffect {
      * @param angularVelocityY Turns the image by this angle each iteration around the y-axis (radians)
      * @param angularVelocityZ Turns the image by this angle each iteration around the z-axis (radians)
      * */
-    public BaseImageEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, String fileName, boolean transparency, int frameDelay, int stepX, int stepY, float scale, float particleSize, Vec3d rotation, boolean orient, boolean enableRotation, Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ) {
-        super(world, EffectType.REPEATING, particle, origin);
+    public BaseImageEffect(ServerWorld world, Vec3d origin, float yaw, float pitch, String fileName, boolean transparency, int frameDelay, int stepX, int stepY, float scale, float particleSize, Vec3d rotation, boolean orient, boolean enableRotation, Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ) {
+        super(world, EffectType.REPEATING, null, origin);
         this.yaw = yaw;
         this.pitch = pitch;
         this.fileName = fileName;
