@@ -2,6 +2,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedEffect;
+import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -97,6 +98,7 @@ public class ArcEffect extends TargetedEffect {
         setTargetOffset(builder.targetOffset);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
         setUseEyePosAsTarget(builder.useEyePosAsTarget);
+        setExecuteOnStop(builder.executeOnStop);
     }
 
     /** Returns a builder for the effect.
@@ -190,6 +192,7 @@ public class ArcEffect extends TargetedEffect {
         private Vec3d targetOffset;
         private boolean useEyePosAsOrigin;
         private boolean useEyePosAsTarget;
+        private EffectModifier executeOnStop;
 
         private Builder() {
         }
@@ -224,6 +227,18 @@ public class ArcEffect extends TargetedEffect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+
+        /**
+         * Sets the {@code executeOnStop} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param executeOnStop the {@code executeOnStop} to set
+         * @return a reference to this Builder
+         */
+        public Builder executeOnStop(EffectModifier executeOnStop) {
+            this.executeOnStop = executeOnStop;
             return this;
         }
 

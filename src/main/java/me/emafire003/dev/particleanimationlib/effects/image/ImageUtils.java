@@ -33,7 +33,6 @@ public class ImageUtils {
     }
     public static void loadImage(final String fileName, final ImageLoadCallback callback) {
         if(imageCache == null){
-            //TODO move to a function
             imageCache = new HashMap<>();
             startTask(fileName, callback);
         }

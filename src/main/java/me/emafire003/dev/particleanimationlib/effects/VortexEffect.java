@@ -3,6 +3,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
+import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
@@ -182,6 +183,7 @@ public class VortexEffect extends YPREffect {
         setShouldUpdateYPR(builder.shouldUpdateYPR);
         setInverted(builder.inverted);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setExecuteOnStop(builder.executeOnStop);
     }
 
     /** Returns a builder for the effect.
@@ -386,6 +388,7 @@ public class VortexEffect extends YPREffect {
         private Vec3d originOffset;
         private ServerWorld world;
         private ParticleEffect particle;
+        private EffectModifier executeOnStop;
         /**
          * Radius of vortex (2)
          */
@@ -493,6 +496,17 @@ public class VortexEffect extends YPREffect {
          */
         public Builder originOffset(Vec3d originOffset) {
             this.originOffset = originOffset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code executeOnStop} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param executeOnStop the {@code executeOnStop} to set
+         * @return a reference to this Builder
+         */
+        public Builder executeOnStop(EffectModifier executeOnStop) {
+            this.executeOnStop = executeOnStop;
             return this;
         }
 

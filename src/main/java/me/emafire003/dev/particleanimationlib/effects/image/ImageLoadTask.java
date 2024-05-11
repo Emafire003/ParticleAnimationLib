@@ -1,6 +1,7 @@
 package me.emafire003.dev.particleanimationlib.effects.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import net.minecraft.util.Identifier;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -28,10 +29,14 @@ public class ImageLoadTask{
 
     //TODO add support for identifiers?
 
-    public ImageLoadTask(String fileName, ImageLoadCallback callback) {
-        this.fileName = fileName;
+    public ImageLoadTask(String filePath, ImageLoadCallback callback) {
+        this.fileName = filePath;
         this.callback = callback;
-        LOGGER.info("TASKED TASK");
+    }
+
+    public ImageLoadTask(Identifier fileId, ImageLoadCallback callback) {
+        this.fileName = fileId.getPath();
+        this.callback = callback;
     }
 
     public void run() {
@@ -102,7 +107,6 @@ public class ImageLoadTask{
                 reader.setInput(in);
                 int numImages = reader.getNumImages(true);
                 images = new BufferedImage[numImages];
-                //TODO may need to add a -1
                 for (int i = 0; i < numImages-1; i++) {
                     images[i] = reader.read(i);
                 }

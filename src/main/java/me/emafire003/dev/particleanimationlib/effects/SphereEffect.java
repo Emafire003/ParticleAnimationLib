@@ -2,6 +2,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
+import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.RandomUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
@@ -98,6 +99,7 @@ public class SphereEffect extends Effect {
         setRadiusIncrease(builder.radiusIncrease);
         setParticleIncrease(builder.particleIncrease);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setExecuteOnStop(builder.executeOnStop);
     }
 
     
@@ -178,6 +180,7 @@ public class SphereEffect extends Effect {
         private ServerWorld world;
         private ParticleEffect particle;
         private boolean useEyePosAsOrigin;
+        private EffectModifier executeOnStop;
         /**
          * Radius of the sphere
          */
@@ -231,6 +234,17 @@ public class SphereEffect extends Effect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code executeOnStop} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param executeOnStop the {@code executeOnStop} to set
+         * @return a reference to this Builder
+         */
+        public Builder executeOnStop(EffectModifier executeOnStop) {
+            this.executeOnStop = executeOnStop;
             return this;
         }
 

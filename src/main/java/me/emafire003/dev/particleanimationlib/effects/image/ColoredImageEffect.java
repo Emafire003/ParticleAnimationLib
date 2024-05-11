@@ -16,7 +16,7 @@ public class ColoredImageEffect extends BaseImageEffect {
         //TODO this is the effect's display. Also, i can only use dust particles right?
 
         //TODO make size configurable
-        this.displayParticle(pos.add(v), pixel_color, 1f);
+        this.displayParticle(pos.add(v), pixel_color, particleSize);
     }
 
 

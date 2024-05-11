@@ -3,6 +3,7 @@ package me.emafire003.dev.particleanimationlib.effects;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedEffect;
+import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -184,6 +185,7 @@ public class CuboidEffect extends TargetedEffect {
         setTargetOffset(builder.targetOffset);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
         setUseEyePosAsTarget(builder.useEyePosAsTarget);
+        setExecuteOnStop(builder.executeOnStop);
     }
 
     public static void copy(CuboidEffect original, CuboidEffect copy) {
@@ -389,6 +391,7 @@ public class CuboidEffect extends TargetedEffect {
         private Vec3d originOffset;
         private ServerWorld world;
         private ParticleEffect particle;
+        private EffectModifier executeOnStop;
         /**
          * Particles in each row
          */
@@ -456,6 +459,17 @@ public class CuboidEffect extends TargetedEffect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code executeOnStop} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param executeOnStop the {@code executeOnStop} to set
+         * @return a reference to this Builder
+         */
+        public Builder executeOnStop(EffectModifier executeOnStop) {
+            this.executeOnStop = executeOnStop;
             return this;
         }
 

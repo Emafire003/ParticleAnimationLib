@@ -2,8 +2,11 @@ package me.emafire003.dev.particleanimationlib.effects.image;
 
 
 import me.emafire003.dev.particleanimationlib.EffectType;
+import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -18,7 +21,7 @@ public abstract class BaseImageEffect extends YPREffect {
     /**
      * For configuration-driven files
      */
-    public String fileName = null;
+    public String fileName;
 
     /**
      * Whether or not to check for transparent pixels
@@ -43,7 +46,10 @@ public abstract class BaseImageEffect extends YPREffect {
     /**
      * Scale the image down
      */
-    public float size = (float) 1 / 40;
+    public float scale = (float) 1 / 40;
+
+    /**How big should the dust particles be?*/
+    public float particleSize = 1f;
 
     /**
      * Should it rotate?
@@ -55,37 +61,31 @@ public abstract class BaseImageEffect extends YPREffect {
      */
     public Vec3d rotation = null;
 
-    /**
-     * Should it orient to face the player's direction?
-     */
-    public boolean orientYaw = true;
-    
-    /**
-     * Should it face in the same direction as the location. Obeying yaw and pitch?
-     */
-    public boolean orientPitch = false;
-
+    /**Orients the image to the specified Yaw Pitch, for example facing a player*/
     public boolean orient = false;
 
     /**
      * What plane should it rotate?
      */
-    public ColoredImageEffect.Plane plane = ColoredImageEffect.Plane.XYZ;
+    public Plane plane = Plane.XYZ;
 
     /**
-     * Turns the cube by this angle each iteration around the x-axis
+     * Turns the image by this angle each iteration around the x-axis
      */
     public double angularVelocityX = Math.PI / 200;
 
     /**
-     * Turns the cube by this angle each iteration around the y-axis
+     * Turns the image by this angle each iteration around the y-axis
      */
     public double angularVelocityY = Math.PI / 170;
 
     /**
-     * Turns the cube by this angle each iteration around the z-axis
+     * Turns the image by this angle each iteration around the z-axis
      */
     public double angularVelocityZ = Math.PI / 155;
+
+
+    //========= Calculations stuff ==========
 
     /**
      * Image as BufferedImage
@@ -100,7 +100,7 @@ public abstract class BaseImageEffect extends YPREffect {
     /**
      * Rotation step counter
      */
-    protected int rotationStep = 0;
+    protected int rotationStepCounter = 0;
 
     /**
      * Delay between steps
@@ -109,32 +109,106 @@ public abstract class BaseImageEffect extends YPREffect {
 
     protected ImageLoadCallback imageLoadCallback;
 
+    public static final Identifier ERROR_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "textures/error_particle_image.png");
+
+    /**
+     * Creates a new base image effect. It won't do much on its own. Use {@link ColoredImageEffect} or {@link ImageEffect}
+     *
+     * @param world The world the particles are going to spawn in
+     * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
+     * @param origin The origin position of the effect, aka the starting point of the cone
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
+     * @param fileName The path and the name of the file that you want to display. It can also be an URL.
+     *                 You can also use {@code new Identifier(modid, resource).getPath()}. Supported formats include jpg, png, gif
+     * @param transparency If true transparent pixels will be transparent, otherwise they will be black.
+     * @param frameDelay How many ticks to show each frame for
+     * @param stepX How many pixel should be skipped on the X? Aka show only one pixel every *n* on the X plane
+     * @param stepY How many pixel should be skipped on the Y? Aka show only one pixel every *n* on the Y plane
+     * @param scale Scale factor for the image
+     * @param particleSize How big should each individual Dust particle be? See also {@link net.minecraft.particle.DustParticleEffect}
+     * @param rotation Apply a fixed rotation (independent of enableRotation)
+     * @param orient Should the image orient towards yaw and pitch? For example orient to the player's facing direction
+     * @param enableRotation Should it rotate?
+     * @param plane What plane should it rotate?
+     * @param angularVelocityX Turns the image by this angle each iteration around the x-axis (radians)
+     * @param angularVelocityY Turns the image by this angle each iteration around the y-axis (radians)
+     * @param angularVelocityZ Turns the image by this angle each iteration around the z-axis (radians)
+     * */
+    public BaseImageEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, String fileName, boolean transparency, int frameDelay, int stepX, int stepY, float scale, float particleSize, Vec3d rotation, boolean orient, boolean enableRotation, Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ) {
+        super(world, EffectType.REPEATING, particle, origin);
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.fileName = fileName;
+        if(fileName != null && !fileName.isBlank()){
+            load(fileName);
+        }else{
+            ParticleAnimationLib.LOGGER.error("The file you have specified is invalid! The file path you have specified is: " + fileName);
+            load(ERROR_IMAGE.getPath());
+        }
+        this.transparency = transparency;
+        this.frameDelay = frameDelay;
+        this.stepX = stepX;
+        this.stepY = stepY;
+        this.scale = scale;
+        this.particleSize = particleSize;
+        this.enableRotation = enableRotation;
+        this.rotation = rotation;
+        this.orient = orient;
+        this.plane = plane;
+        this.angularVelocityX = angularVelocityX;
+        this.angularVelocityY = angularVelocityY;
+        this.angularVelocityZ = angularVelocityZ;
+    }
+
+
+    public static void copy(BaseImageEffect original, BaseImageEffect copy) {
+        YPREffect.copy(original, copy);
+        copy.setFileName(original.getFileName());
+        copy.setTransparency(original.isTransparency());
+        copy.setFrameDelay(original.getFrameDelay());
+        copy.setStepX(original.getStepX());
+        copy.setStepY(original.getStepY());
+        copy.setScale(original.getScale());
+        copy.setParticleSize(original.getParticleSize());
+        copy.setEnableRotation(original.isEnableRotation());
+        copy.setRotation(original.getRotation());
+        copy.setOrient(original.isOrient());
+        copy.setPlane(original.getPlane());
+        copy.setAngularVelocityX(original.getAngularVelocityX());
+        copy.setAngularVelocityY(original.getAngularVelocityY());
+        copy.setAngularVelocityZ(original.getAngularVelocityZ());
+        copy.images = original.images;
+        copy.step = original.step;
+        copy.rotationStepCounter = original.rotationStepCounter;
+        copy.stepDelay = original.stepDelay;
+        copy.imageLoadCallback = original.imageLoadCallback;
+    }
+
+
     public BaseImageEffect(ServerWorld world, Vec3d originPos, String image_fileName) {
         super(world, EffectType.REPEATING, null, originPos);
         this.fileName = image_fileName;
-        if(fileName != null || fileName.isBlank()){
+        if(fileName != null && !fileName.isBlank()){
             load(fileName);
         }else{
-            //Default to error image
+            ParticleAnimationLib.LOGGER.error("The file you have specified is invalid! The file path you have specified is: " + fileName);
+            load(ERROR_IMAGE.getPath());
         }
     }
 
-    public BaseImageEffect(ServerWorld world, Vec3d originPos, Identifier image_fileName) {
+    public BaseImageEffect(ServerWorld world, Vec3d originPos, Identifier image) {
         super(world, EffectType.REPEATING, null, originPos);
-        this.fileName = image_fileName.getPath();
-        if(fileName != null || fileName.isEmpty() || fileName.isBlank()){
+        this.fileName = image.getPath();
+        if(fileName != null && !fileName.isBlank()){
             load(fileName);
         }else{
-            //Default to error image
+            ParticleAnimationLib.LOGGER.error("The file you have specified is invalid! The file path you have specified is: " + fileName);
+            load(ERROR_IMAGE.getPath());
         }
     }
 
-    /*@Override
-    public void reset() {
-        step = 0;
-        rotationStep = 0;
-    }*/
-
+    /**Updates the image that is displayed. WARNING! Maye cause issues*/
     public void load(String fileName) {
         imageLoadCallback = i -> {
             images = i;
@@ -189,7 +263,7 @@ public abstract class BaseImageEffect extends YPREffect {
 
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
-                v = new Vec3d((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
+                v = new Vec3d((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(scale);
 
                 if (rotation != null) {
                     v = VectorUtils.rotateVector(v, (float) rotation.getX(), (float) rotation.getY(), (float) rotation.getZ());
@@ -197,15 +271,10 @@ public abstract class BaseImageEffect extends YPREffect {
                 }
 
                 if (origin != null) {
-                    /*if (orientPitch){
-                        VectorUtils.rotateVector()
-                        Vec3dUtils.rotateAroundAxisX(v, Math.toRadians(origin.getPitch()));
-                    }
-                    if (orientYaw) {
-                        Vec3dUtils.rotateAroundAxisY(v, -origin.getYaw() * MathUtils.degreesToRadians);
-                    }*/
                     if(orient){
-                        v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch());
+                        v = v.rotateX((float) Math.toRadians(this.getPitch()));
+                        v = v.rotateY((float) Math.toRadians(this.getYaw()));
+                        //v = VectorUtils.rotateVector(v, this.getYaw()+90, this.getPitch());
                     }
                 }
 
@@ -216,29 +285,29 @@ public abstract class BaseImageEffect extends YPREffect {
 
                     switch (plane) {
                         case X:
-                            rotX = angularVelocityX * rotationStep;
+                            rotX = angularVelocityX * rotationStepCounter;
                             break;
                         case Y:
-                            rotY = angularVelocityY * rotationStep;
+                            rotY = angularVelocityY * rotationStepCounter;
                             break;
                         case Z:
-                            rotZ = angularVelocityZ * rotationStep;
+                            rotZ = angularVelocityZ * rotationStepCounter;
                             break;
                         case XY:
-                            rotX = angularVelocityX * rotationStep;
-                            rotY = angularVelocityY * rotationStep;
+                            rotX = angularVelocityX * rotationStepCounter;
+                            rotY = angularVelocityY * rotationStepCounter;
                             break;
                         case XZ:
-                            rotX = angularVelocityX * rotationStep;
-                            rotZ = angularVelocityZ * rotationStep;
+                            rotX = angularVelocityX * rotationStepCounter;
+                            rotZ = angularVelocityZ * rotationStepCounter;
                             break;
                         case XYZ:
-                            rotX = angularVelocityX * rotationStep;
-                            rotY = angularVelocityY * rotationStep;
-                            rotZ = angularVelocityZ * rotationStep;
+                            rotX = angularVelocityX * rotationStepCounter;
+                            rotY = angularVelocityY * rotationStepCounter;
+                            rotZ = angularVelocityZ * rotationStepCounter;
                             break;
                         case YZ:
-                            rotY = angularVelocityY * rotationStep;
+                            rotY = angularVelocityY * rotationStepCounter;
                             rotZ = angularVelocityZ * step;
                             break;
                     }
@@ -252,8 +321,124 @@ public abstract class BaseImageEffect extends YPREffect {
                 display(image, v, origin, pixel);
             }
         }
-        rotationStep++;
+        rotationStepCounter++;
     }
+
+
+
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public boolean isTransparency() {
+        return transparency;
+    }
+
+    public void setTransparency(boolean transparency) {
+        this.transparency = transparency;
+    }
+
+    public int getFrameDelay() {
+        return frameDelay;
+    }
+
+    public void setFrameDelay(int frameDelay) {
+        this.frameDelay = frameDelay;
+    }
+
+    public int getStepX() {
+        return stepX;
+    }
+
+    public void setStepX(int stepX) {
+        this.stepX = stepX;
+    }
+
+    public int getStepY() {
+        return stepY;
+    }
+
+    public void setStepY(int stepY) {
+        this.stepY = stepY;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public float getParticleSize() {
+        return particleSize;
+    }
+
+    public void setParticleSize(float particleSize) {
+        this.particleSize = particleSize;
+    }
+
+    public boolean isEnableRotation() {
+        return enableRotation;
+    }
+
+    public void setEnableRotation(boolean enableRotation) {
+        this.enableRotation = enableRotation;
+    }
+
+    public Vec3d getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(Vec3d rotation) {
+        this.rotation = rotation;
+    }
+
+    public boolean isOrient() {
+        return orient;
+    }
+
+    public void setOrient(boolean orient) {
+        this.orient = orient;
+    }
+
+    public Plane getPlane() {
+        return plane;
+    }
+
+    public void setPlane(Plane plane) {
+        this.plane = plane;
+    }
+
+    public double getAngularVelocityX() {
+        return angularVelocityX;
+    }
+
+    public void setAngularVelocityX(double angularVelocityX) {
+        this.angularVelocityX = angularVelocityX;
+    }
+
+    public double getAngularVelocityY() {
+        return angularVelocityY;
+    }
+
+    public void setAngularVelocityY(double angularVelocityY) {
+        this.angularVelocityY = angularVelocityY;
+    }
+
+    public double getAngularVelocityZ() {
+        return angularVelocityZ;
+    }
+
+    public void setAngularVelocityZ(double angularVelocityZ) {
+        this.angularVelocityZ = angularVelocityZ;
+    }
+
 
     public enum Plane {
         X, Y, Z, XY, XZ, XYZ, YZ

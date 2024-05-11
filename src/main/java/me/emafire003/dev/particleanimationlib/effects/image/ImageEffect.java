@@ -35,6 +35,6 @@ public class ImageEffect extends BaseImageEffect {
 
         //TODO make size configurable
         //TODO allow usage of other types of particles
-        this.displayParticle(pos.add(v), pixel_color, 1f);
+        this.displayParticle(pos.add(v), pixel_color,  particleSize);
     }
 }

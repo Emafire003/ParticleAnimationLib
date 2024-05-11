@@ -2,8 +2,8 @@ package me.emafire003.dev.particleanimationlib.effects;
 
 import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
-import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedYPREffect;
+import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
@@ -230,6 +230,7 @@ public class LineEffect extends TargetedYPREffect {
         setShouldUpdateYPR(builder.shouldUpdateYPR);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
         setUseEyePosAsTarget(builder.useEyePosAsTarget);
+        setExecuteOnStop(builder.executeOnStop);
     }
 
     /** Returns a builder for the effect.
@@ -286,7 +287,6 @@ public class LineEffect extends TargetedYPREffect {
 
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
-                ParticleAnimationLib.LOGGER.info("Zigzging anyway");
                 rel = VectorUtils.rotateVector(zigZagRelativeOffset, this.getYaw(), this.getPitch());
                 if (zag) {
                     loc = loc.add(rel);
@@ -386,6 +386,7 @@ public class LineEffect extends TargetedYPREffect {
         private Vec3d originOffset;
         private ServerWorld world;
         private ParticleEffect particle;
+        private EffectModifier executeOnStop;
         /**
          * Should it do a zig zag?
          */
@@ -474,6 +475,17 @@ public class LineEffect extends TargetedYPREffect {
          */
         public Builder updatePositions(boolean updatePositions) {
             this.updatePositions = updatePositions;
+            return this;
+        }
+
+        /**
+         * Sets the {@code executeOnStop} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param executeOnStop the {@code executeOnStop} to set
+         * @return a reference to this Builder
+         */
+        public Builder executeOnStop(EffectModifier executeOnStop) {
+            this.executeOnStop = executeOnStop;
             return this;
         }
 

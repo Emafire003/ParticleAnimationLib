@@ -3,10 +3,12 @@ package me.emafire003.dev.particleanimationlib;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public abstract class Effect {
@@ -18,12 +20,17 @@ public abstract class Effect {
     protected boolean useEyePosAsOrigin;
     protected Entity entityOrigin;
     protected Vec3d originOffset = Vec3d.ZERO;
+    /** A function that executes when the effect stops. For example you could use it to chain effects one after the other*/
+
+    public EffectModifier executeOnStop;
+
     /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
     public boolean shouldCut = false;*/
     protected ServerWorld world;
 
     protected ParticleEffect particle;
+//TODO maybe add a completition effect like in tot time the particles appear and complete the thing? Maybe.
     public EffectType type;
 
     protected int delay;
@@ -56,6 +63,7 @@ public abstract class Effect {
         copy.setParticle(original.getParticle());
         copy.setDelay(original.getDelay());
         copy.setUseEyePosAsOrigin(original.isUseEyePosAsOrigin());
+        copy.setExecuteOnStop(original.getExecuteOnStop());
 
         copy.type = original.type;
         copy.done = original.done;
@@ -69,8 +77,24 @@ public abstract class Effect {
 
     /**Can be override to add a finishing effect i guess*/
     protected void onStop(){
+        if(this.executeOnStop != null){
+            this.executeOnStop.modifyEffect(this, ticks);
+        }
 
     }
+
+    /** A function that executes when the effect stops. For example you could use it to chain effects one after the other*/
+
+    public EffectModifier getExecuteOnStop() {
+        return executeOnStop;
+    }
+
+    /** Execute a function when the effect stops. For example you could use it to chain effects one after the other*/
+    public void setExecuteOnStop(EffectModifier executeOnStop) {
+        this.executeOnStop = executeOnStop;
+    }
+
+
 
     public void updatePos(){
         if(entityOrigin != null){
@@ -153,7 +177,6 @@ public abstract class Effect {
             }
 
 
-            //TODO updating position like this kind of breaks the animation, but there isn't really another way i think.
             if(updatePositions){
                 updatePos();
             }
@@ -223,6 +246,11 @@ public abstract class Effect {
         this.displayParticle(effect, pos, Vec3d.ZERO);
     }
 
+    public void displayParticle(Vec3d pos, int color, float size){
+        Vector3f col = Vec3d.unpackRgb(color).toVector3f();
+        DustParticleEffect dustParticle = new DustParticleEffect( col, size);
+        this.displayParticle(dustParticle, pos);
+    }
 
     public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel){
         /*if(shouldCut && checkCut(pos)){

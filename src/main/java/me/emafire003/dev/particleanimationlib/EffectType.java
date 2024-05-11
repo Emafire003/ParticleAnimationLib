@@ -2,6 +2,7 @@ package me.emafire003.dev.particleanimationlib;
 
 public enum EffectType {
 
+    //TODO maybe add a sort of completable effect
     /**
      * Effect is once played instantly.
      * Currently unused v 0.0.1
