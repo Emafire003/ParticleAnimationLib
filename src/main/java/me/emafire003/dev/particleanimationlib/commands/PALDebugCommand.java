@@ -3,12 +3,15 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import me.emafire003.dev.particleanimationlib.effects.image.ColoredImageEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.Collection;
 
@@ -24,10 +27,36 @@ public class PALDebugCommand implements PALCommand {
                 /*LineEffect lineEffect = new LineEffect(source.getWorld(), ParticleTypes.SCRAPE, target.getPos(),
                 150, 5, 5, true, 2,
                         new Vec3d(0, 0, 0), new Vec3d(0.05, -0.03, 0), null);
+
                 */
+
                 if(target.getWorld().isClient()){
                     return 0;
                 }
+
+                ColoredImageEffect.builder(source.getWorld(), target.getEyePos(), new Identifier(ParticleAnimationLib.MOD_ID, "images/image.png"))
+                        .particleSize(0.5f).scale(0.05f).stepX(5).stepY(5).transparency(true)
+                        .build().runFor(2);
+/*
+                ColoredImageEffect imageEffect = new ColoredImageEffect(source.getWorld(), target.getEyePos(), ); //new Identifier("textures/effect/dither.png")
+                imageEffect.enableRotation = false;
+                imageEffect.transparency = true;
+                //imageEffect.angularVelocityZ = Math.PI/16;
+                imageEffect.particleSize = 0.5f;
+                imageEffect.scale = 0.012f;
+                imageEffect.setYaw(target.getYaw());
+                imageEffect.setPitch(target.getPitch());
+                imageEffect.stepX = 10;
+                imageEffect.stepY = 10;
+                imageEffect.orient = false;
+
+                imageEffect.rotation = new Vec3d(0, -Math.PI/2, 0);
+                //imageEffect.onlyOrientYaw = true;
+                //imageEffect.setEntityOrigin(target);
+                //imageEffect.shouldUpdateYPR = true;
+                imageEffect.frameDelay = 1;
+                //imageEffect.plane = BaseImageEffect.Plane.XY;
+                imageEffect.runFor(5);*/
 
                 //VortexEffect effect = new VortexEffect(source.getWorld(), ParticleTypes.DRAGON_BREATH, target.getPos(), 90, -90);
 

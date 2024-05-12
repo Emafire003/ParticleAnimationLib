@@ -107,7 +107,8 @@ public abstract class BaseImageEffect extends YPREffect {
 
     protected ImageLoadCallback imageLoadCallback;
 
-    public static final Identifier ERROR_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "textures/error_particle_image.png");
+    public static final Identifier ERROR_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID ,"images/error.png");
+    //public static final Identifier LOGO_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "images/icon.png");
 
     /**
      * Creates a new base image effect. It won't do much on its own. Use {@link ColoredImageEffect} or {@link BlackAndWhiteImageEffect}
@@ -117,7 +118,7 @@ public abstract class BaseImageEffect extends YPREffect {
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param fileName The path and the name of the file that you want to display. It can also be an URL.
-     *                 You can also use {@code new Identifier(modid, resource).getPath()}. Supported formats include jpg, png, gif
+     *                Supported formats include jpg, png, gif
      * @param transparency If true transparent pixels will be transparent, otherwise they will be black.
      * @param frameDelay How many ticks to show each frame for
      * @param stepX How many pixel should be skipped on the X? Aka show only one pixel every *n* on the X plane
@@ -141,7 +142,7 @@ public abstract class BaseImageEffect extends YPREffect {
             load(fileName);
         }else{
             ParticleAnimationLib.LOGGER.error("The file you have specified is invalid! The file path you have specified is: " + fileName);
-            load(ERROR_IMAGE.getPath());
+            load(ERROR_IMAGE);
         }
         this.transparency = transparency;
         this.frameDelay = frameDelay;
@@ -190,28 +191,55 @@ public abstract class BaseImageEffect extends YPREffect {
             load(fileName);
         }else{
             ParticleAnimationLib.LOGGER.error("The file you have specified is invalid! The file path you have specified is: " + fileName);
-            load(ERROR_IMAGE.getPath());
+            load(ERROR_IMAGE);
         }
     }
 
     public BaseImageEffect(ServerWorld world, Vec3d originPos, Identifier image) {
         super(world, EffectType.REPEATING, null, originPos);
-        this.fileName = image.getPath();
+        this.fileName = "id:"+image.toString();
+        load(image);
+    }
+
+    //Used by the builder methods of the other Image effects
+    public BaseImageEffect(ServerWorld world, Vec3d originPos, Identifier image, String image_fileName){
+        super(world, EffectType.REPEATING, null, originPos);
+        if(image != null){
+            this.fileName = "id:"+image;
+            load(image);
+            return;
+        }
+        this.fileName = image_fileName;
         if(fileName != null && !fileName.isBlank()){
             load(fileName);
         }else{
             ParticleAnimationLib.LOGGER.error("The file you have specified is invalid! The file path you have specified is: " + fileName);
-            load(ERROR_IMAGE.getPath());
+            load(ERROR_IMAGE);
         }
     }
 
-    /**Updates the image that is displayed. WARNING! Maye cause issues*/
+    /**Automatically called when creating a new ImageEffect using a string path
+     * Can be used to update the image that is displayed.
+     * WARNING! Maye cause issues
+     * */
     public void load(String fileName) {
         imageLoadCallback = i -> {
             images = i;
             imageLoadCallback = null;
         };
-        loadImage(fileName, imageLoadCallback);
+        loadImage(fileName, imageLoadCallback, this.getWorld().getServer());
+    }
+
+    /**Automatically called when creating a new ImageEffect using a string path
+     * Can be used to update the image that is displayed.
+     * WARNING! Maye cause issues
+     * */
+    public void load(Identifier fileName) {
+        imageLoadCallback = i -> {
+            images = i;
+            imageLoadCallback = null;
+        };
+        loadImage(fileName, imageLoadCallback, this.getWorld().getServer());
     }
 
     public void loadFile(File file) {

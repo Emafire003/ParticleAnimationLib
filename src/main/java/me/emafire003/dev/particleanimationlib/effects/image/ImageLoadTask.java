@@ -1,6 +1,8 @@
 package me.emafire003.dev.particleanimationlib.effects.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import net.minecraft.resource.Resource;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 
 import javax.imageio.ImageIO;
@@ -15,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import static me.emafire003.dev.particleanimationlib.ParticleAnimationLib.LOGGER;
 
@@ -26,22 +29,52 @@ public class ImageLoadTask{
     private static boolean dirsMade = false;
     private final String fileName;
     private final ImageLoadCallback callback;
+    private final MinecraftServer server;
 
-    //TODO add support for identifiers?
-
-    public ImageLoadTask(String filePath, ImageLoadCallback callback) {
+    public ImageLoadTask(String filePath, ImageLoadCallback callback, MinecraftServer server) {
         this.fileName = filePath;
         this.callback = callback;
-    }
-
-    public ImageLoadTask(Identifier fileId, ImageLoadCallback callback) {
-        this.fileName = fileId.getPath();
-        this.callback = callback;
+        this.server = server;
     }
 
     public void run() {
         BufferedImage[] images;
         File imageFile;
+
+        LOGGER.info("The fileName is: " + fileName);
+        if(fileName.startsWith("id:")){
+            Identifier id = new Identifier(fileName.replaceFirst("id:", ""));
+            Optional<Resource> resourceOptional = server.getResourceManager().getResource(id);
+            if(resourceOptional.isEmpty()){
+                LOGGER.error("Error! Can't find image from the id: " + id);
+                return;
+            }
+
+            Resource imageResource = resourceOptional.get();
+            try{
+
+                if (fileName.endsWith(".gif")) {
+                    ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
+                    ImageInputStream in = ImageIO.createImageInputStream(imageResource.getInputStream());
+                    reader.setInput(in);
+                    int numImages = reader.getNumImages(true);
+                    images = new BufferedImage[numImages];
+                    for (int i = 0; i < numImages-1; i++) {
+                        images[i] = reader.read(i);
+                    }
+                } else {
+                    images = new BufferedImage[1];
+                    images[0] = ImageIO.read(imageResource.getInputStream());
+                }
+                imageResource.getReader().close();
+                imageResource.getInputStream().close();
+                callback.loaded(images);
+                return;
+            }catch (Exception e){
+                LOGGER.error("There was an error while trying to read from a file Identifier!");
+                e.printStackTrace();
+            }
+        }
 
         if (fileName.startsWith("http")) {
             try {
@@ -80,7 +113,7 @@ public class ImageLoadTask{
                     out.close();
                 }
             } catch (Exception ex) {
-                LOGGER.warn("Failed to load file " + fileName, ex);
+                LOGGER.error("Failed to load file " + fileName, ex);
                 callback.loaded(new BufferedImage[0]);
                 return;
             }
@@ -93,6 +126,7 @@ public class ImageLoadTask{
         } else {
             imageFile = new File(fileName);
         }
+
         if (!imageFile.exists()) {
             LOGGER.warn("Failed to find file " + fileName);
             images = new BufferedImage[0];

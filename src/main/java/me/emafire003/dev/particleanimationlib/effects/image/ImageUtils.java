@@ -1,6 +1,8 @@
 package me.emafire003.dev.particleanimationlib.effects.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,7 +12,6 @@ import java.util.Map;
 public class ImageUtils {
 
 
-    //TODO make configurable or use teh Identifiers or something
     private static File imageCacheFolder;
     private static Map<String, BufferedImage[]> imageCache = new HashMap<>();
     public static void setImageCacheFolder(File folder) {
@@ -24,24 +25,34 @@ public class ImageUtils {
         return imageCacheFolder;
     }
 
-    private static void startTask(final String fileName, final ImageLoadCallback callback){
+    private static void startTask(final String fileName, final ImageLoadCallback callback, MinecraftServer server){
         ImageLoadTask imageLoadTask = new ImageLoadTask(fileName, images -> {
             imageCache.put(fileName, images);
             callback.loaded(images);
-        });
+        }, server);
         imageLoadTask.run();
     }
-    public static void loadImage(final String fileName, final ImageLoadCallback callback) {
+
+    private static void startTask(final Identifier fileName, final ImageLoadCallback callback, MinecraftServer server){
+        ImageLoadTask imageLoadTask = new ImageLoadTask("id:"+fileName.toString(), images -> {
+            imageCache.put("id:"+fileName, images);
+            callback.loaded(images);
+        }, server);
+        imageLoadTask.run();
+    }
+
+
+    public static void loadImage(final String fileName, final ImageLoadCallback callback, MinecraftServer server) {
         if(imageCache == null){
             imageCache = new HashMap<>();
-            startTask(fileName, callback);
+            startTask(fileName, callback, server);
         }
 
         BufferedImage[] images = imageCache.get(fileName);
         if (images != null) {
             callback.loaded(images);
         }else{
-            startTask(fileName, callback);
+            startTask(fileName, callback, server);
         }
 
 
@@ -61,5 +72,21 @@ public class ImageUtils {
             }
         }));*/
     }
+
+    public static void loadImage(final Identifier fileName, final ImageLoadCallback callback, MinecraftServer server) {
+
+        if(imageCache == null){
+            imageCache = new HashMap<>();
+            startTask(fileName, callback, server);
+        }
+
+        BufferedImage[] images = imageCache.get("id:"+fileName);
+        if (images != null && images.length > 0) {
+            callback.loaded(images);
+        }else{
+            startTask(fileName, callback, server);
+        }
+    }
+
 
 }

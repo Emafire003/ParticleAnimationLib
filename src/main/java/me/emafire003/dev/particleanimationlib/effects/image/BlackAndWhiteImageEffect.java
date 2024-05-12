@@ -84,7 +84,7 @@ public class BlackAndWhiteImageEffect extends BaseImageEffect {
     }
 
     private BlackAndWhiteImageEffect(Builder builder) {
-        super(builder.world, builder.originPos, builder.fileName);
+        super(builder.world, builder.originPos, builder.fileId, builder.fileName);
         setIterations(builder.iterations);
         setOriginPos(builder.originPos);
         setUpdatePositions(builder.updatePositions);
@@ -137,14 +137,15 @@ public class BlackAndWhiteImageEffect extends BaseImageEffect {
     /** Returns a builder for the effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param image An Identifier pointing to an image. Supported formats include jpg, png, gif
+     * @param image An identifier representing the image that will be displayed.
+     *              <b>The image must be placed in the <i>/data/</i> folder and not the <i>/assets/</i> folder!</b>
      * @param originPos The origin position of the effect
      *<p>
      * Setting a world, an image path and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
     public static Builder builder(ServerWorld world, Vec3d originPos, Identifier image) {
-        return new Builder().world(world).fileName(image.getPath()).originPos(originPos);
+        return new Builder().world(world).fileId(image).originPos(originPos);
     }
 
     @Override
@@ -172,6 +173,7 @@ public class BlackAndWhiteImageEffect extends BaseImageEffect {
      * {@code BlackAndWhiteImageEffect} builder static inner class.
      */
     public static final class Builder {
+        private Identifier fileId = null;
         private int iterations;
         private Vec3d originPos;
         private boolean updatePositions;
@@ -202,6 +204,18 @@ public class BlackAndWhiteImageEffect extends BaseImageEffect {
         private boolean invert;
 
         private Builder() {
+        }
+
+        /**
+         * Sets the {@code fileId} and returns a reference to this Builder enabling method chaining.
+         * This will override any specified string filename
+         *
+         * @param fileId the {@code fileId} to set
+         * @return a reference to this Builder
+         */
+        public Builder fileId(Identifier fileId) {
+            this.fileId = fileId;
+            return this;
         }
 
         /**

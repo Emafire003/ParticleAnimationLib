@@ -19,7 +19,7 @@ public class ColoredImageEffect extends BaseImageEffect {
     }
 
     public ColoredImageEffect(ServerWorld world, Vec3d originPos, Identifier image) {
-        super(world, originPos, image.getPath());
+        super(world, originPos, image);
     }
 
     /**
@@ -30,7 +30,7 @@ public class ColoredImageEffect extends BaseImageEffect {
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param fileName The path and the name of the file that you want to display. It can also be an URL.
-     *                 You can also use {@code new Identifier(modid, resource).getPath()}. Supported formats include jpg, png, gif
+     *                 Supported formats include jpg, png, gif
      * @param transparency If true transparent pixels will be transparent, otherwise they will be black.
      * @param frameDelay How many ticks to show each frame for
      * @param stepX How many pixel should be skipped on the X? Aka show only one pixel every *n* on the X plane
@@ -72,7 +72,7 @@ public class ColoredImageEffect extends BaseImageEffect {
     }
 
     private ColoredImageEffect(Builder builder) {
-        super(builder.world, builder.originPos, builder.fileName);
+        super(builder.world, builder.originPos, builder.fileId, builder.fileName);
         setIterations(builder.iterations);
         setOriginPos(builder.originPos);
         setUpdatePositions(builder.updatePositions);
@@ -119,15 +119,17 @@ public class ColoredImageEffect extends BaseImageEffect {
     /** Returns a builder for the effect.
      *
      * @param world The world the particles are going to spawn in
-     * @param image An Identifier pointing to an image. Supported formats include jpg, png, gif
+     * @param image An identifier representing the image that will be displayed.
+     *              <b>The image must be placed in the <i>/data/</i> folder and not the <i>/assets/</i> folder!</b>
      * @param originPos The origin position of the effect
      *<p>
      * Setting a world, an image path and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
     public static Builder builder(ServerWorld world, Vec3d originPos, Identifier image) {
-        return new Builder().world(world).fileName(image.getPath()).originPos(originPos);
+        return new Builder().world(world).fileId(image).originPos(originPos);
     }
+
 
     protected void display(BufferedImage image, Vec3d v, Vec3d pos, int pixel_color) {
         this.displayParticle(pos.add(v), pixel_color, particleSize);
@@ -138,6 +140,7 @@ public class ColoredImageEffect extends BaseImageEffect {
      * {@code ColoredImageEffect} builder static inner class.
      */
     public static final class Builder {
+        private Identifier fileId = null;
         private int iterations;
         private Vec3d originPos;
         private boolean updatePositions;
@@ -218,6 +221,18 @@ public class ColoredImageEffect extends BaseImageEffect {
         private double angularVelocityZ = Math.PI / 155;
 
         private Builder() {
+        }
+
+        /**
+         * Sets the {@code fileId} and returns a reference to this Builder enabling method chaining.
+         * This will override any specified string filename
+         *
+         * @param fileId the {@code fileId} to set
+         * @return a reference to this Builder
+         */
+        public Builder fileId(Identifier fileId) {
+            this.fileId = fileId;
+            return this;
         }
 
         /**
