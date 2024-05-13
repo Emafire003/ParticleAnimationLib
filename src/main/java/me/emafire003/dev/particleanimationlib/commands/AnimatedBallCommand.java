@@ -29,7 +29,7 @@ public class AnimatedBallCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -48,7 +48,7 @@ public class AnimatedBallCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -71,7 +71,7 @@ public class AnimatedBallCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -80,7 +80,7 @@ public class AnimatedBallCommand implements PALCommand {
     public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
                 .literal("animatedball")
-                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect())
                         .then(CommandManager.argument("pos", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
                                         .executes(this::spawnDefault)
@@ -89,7 +89,7 @@ public class AnimatedBallCommand implements PALCommand {
                         )
 
                 )
-                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect())
                         .then(CommandManager.argument("pos", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("count", IntegerArgumentType.integer())
                                         .then(CommandManager.argument("perIteration", IntegerArgumentType.integer(0))
@@ -102,7 +102,7 @@ public class AnimatedBallCommand implements PALCommand {
                                 )
                         )
                 )
-                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect())
                         .then(CommandManager.argument("pos", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("count", IntegerArgumentType.integer())
                                         .then(CommandManager.argument("perIteration", IntegerArgumentType.integer(0))

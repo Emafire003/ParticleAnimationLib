@@ -44,7 +44,7 @@ public class ConeCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -68,7 +68,7 @@ public class ConeCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -77,7 +77,7 @@ public class ConeCommand implements PALCommand {
     public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
                 .literal("cone")
-                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect())
                         .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("count", IntegerArgumentType.integer(0))
                                         .then(CommandManager.argument("particles_per_iteration", IntegerArgumentType.integer(0))
@@ -108,7 +108,7 @@ public class ConeCommand implements PALCommand {
                         )
 
                 )
-                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect())
                         .then(CommandManager.argument("originPos", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("yaw", FloatArgumentType.floatArg())
                                         .then(CommandManager.argument("pitch", FloatArgumentType.floatArg())

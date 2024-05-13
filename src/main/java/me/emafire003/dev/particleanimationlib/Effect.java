@@ -7,8 +7,8 @@ import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public abstract class Effect {
@@ -247,7 +247,7 @@ public abstract class Effect {
     }
 
     public void displayParticle(Vec3d pos, int color, float size){
-        Vector3f col = Vec3d.unpackRgb(color).toVector3f();
+        Vec3f col = new Vec3f(Vec3d.unpackRgb(color));
         DustParticleEffect dustParticle = new DustParticleEffect( col, size);
         this.displayParticle(dustParticle, pos);
     }

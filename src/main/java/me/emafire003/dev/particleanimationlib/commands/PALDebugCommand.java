@@ -107,7 +107,7 @@ public class PALDebugCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
 

@@ -46,7 +46,7 @@ public class CuboidCommand implements PALCommand {
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -54,7 +54,7 @@ public class CuboidCommand implements PALCommand {
     public LiteralCommandNode<ServerCommandSource> getNode(CommandRegistryAccess registryAccess) {
         return CommandManager
                 .literal("cuboid")
-                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect(registryAccess))
+                .then(CommandManager.argument("particle", ParticleEffectArgumentType.particleEffect())
                         .then(CommandManager.argument("origin", Vec3ArgumentType.vec3())
                                 .then(CommandManager.argument("target", Vec3ArgumentType.vec3())
                                         .then(CommandManager.argument("useCorners", BoolArgumentType.bool())
