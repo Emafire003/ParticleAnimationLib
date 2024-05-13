@@ -172,12 +172,12 @@ public class ColoredImageEffect extends BaseImageEffect {
         /**
          * Each stepX pixel will be shown. Saves packets for high resolutions.
          */
-        private int stepX = 10;
+        private int stepX = 5;
 
         /**
          * Each stepY pixel will be shown. Saves packets for high resolutions.
          */
-        private int stepY = 10;
+        private int stepY = 5;
 
         /**
          * Scale the image down

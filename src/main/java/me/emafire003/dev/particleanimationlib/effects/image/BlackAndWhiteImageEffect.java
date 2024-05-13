@@ -187,21 +187,72 @@ public class BlackAndWhiteImageEffect extends BaseImageEffect {
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR;
+        /**
+         * For configuration-driven files
+         */
         private String fileName;
-        private boolean transparency;
-        private int frameDelay;
-        private int stepX;
-        private int stepY;
-        private float scale;
-        private float particleSize;
-        private boolean enableRotation;
-        private Vec3d rotation;
-        private boolean orient;
-        private Plane plane;
-        private double angularVelocityX;
-        private double angularVelocityY;
-        private double angularVelocityZ;
-        private boolean invert;
+
+        /**
+         * Whether or not to check for transparent pixels
+         */
+        private boolean transparency = false;
+
+        /**
+         * How many ticks to show each frame
+         */
+        private int frameDelay = 5;
+
+        /**
+         * Each stepX pixel will be shown. Saves packets for high resolutions.
+         */
+        private int stepX = 5;
+
+        /**
+         * Each stepY pixel will be shown. Saves packets for high resolutions.
+         */
+        private int stepY = 5;
+
+        /**
+         * Scale the image down
+         */
+        private float scale = (float) 1 / 40;
+
+        /**How big should the dust particles be?*/
+        private float particleSize = 1f;
+
+        /**
+         * Should it rotate?
+         */
+        private boolean enableRotation = true;
+
+        /**
+         * Apply a fixed rotation
+         */
+        private Vec3d rotation = null;
+
+        /**Orients the image to the specified Yaw Pitch, for example facing a player*/
+        private boolean orient = false;
+
+        /**
+         * What plane should it rotate?
+         */
+        private Plane plane = Plane.XYZ;
+
+        /**
+         * Turns the image by this angle each iteration around the x-axis
+         */
+        private double angularVelocityX = Math.PI / 200;
+
+        /**
+         * Turns the image by this angle each iteration around the y-axis
+         */
+        private double angularVelocityY = Math.PI / 170;
+
+        /**
+         * Turns the image by this angle each iteration around the z-axis
+         */
+        private double angularVelocityZ = Math.PI / 155;
+        private boolean invert = false;
 
         private Builder() {
         }

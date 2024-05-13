@@ -34,12 +34,12 @@ public abstract class BaseImageEffect extends YPREffect {
     /**
      * Each stepX pixel will be shown. Saves packets for high resolutions.
      */
-    public int stepX = 10;
+    public int stepX = 5;
 
     /**
      * Each stepY pixel will be shown. Saves packets for high resolutions.
      */
-    public int stepY = 10;
+    public int stepY = 5;
 
     /**
      * Scale the image down
