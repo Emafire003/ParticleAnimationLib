@@ -1,4 +1,3 @@
-# Particle Animation Library
 ![particle_animation_library_header](https://github.com/Emafire003/ParticleAnimationLib/assets/29462910/3b1316c8-96c3-4450-abf8-241ce05eaf2e)
 
 
@@ -7,7 +6,7 @@ It is mainly a developer utility, but as a player you can play around with the c
 
 Currently available effects:
 - [3D] Animated Sphere, Sphere, Cuboid, Vortex, Cone
-- [2D] Arc, Line, Animated Circle
+- [2D] Arc, Line, Animated Circle, Colored and BW Images
 
 
 **At present time this mod is in alpha stage meaning that stuff could change or break between version, so be aware of that (I will try to avoid making such changes tho). Moreover, only a small part of effects planned are available, and the documentation will be relegated mostly to the javadocs for the time being, although I hope to make a wiki in the future!**
