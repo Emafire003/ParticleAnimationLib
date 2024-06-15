@@ -1,13 +1,12 @@
-# Particle Animation Library
 ![particle_animation_library_header](https://github.com/Emafire003/ParticleAnimationLib/assets/29462910/3b1316c8-96c3-4450-abf8-241ce05eaf2e)
 
 
-Do you want to create cool particle effects such as cones cubues spheres and vortices but don't know how? Well then this mod is for you! 
+Do you want to create cool particle effects such as cones, cubes, spheres, and vortices but don't know how? Well, then this mod is for you! 
 It is mainly a developer utility, but as a player you can play around with the commands, especially to try out the effects before implementing them with code. It is also fully serverside, meaning you won't need it on the client. It is inspirerd by the [EffectLib](https://github.com/elBukkit/EffectLib) plugin as you may have guessed.
 
 Currently available effects:
 - [3D] Animated Sphere, Sphere, Cuboid, Vortex, Cone
-- [2D] Arc, Line, Animated Circle
+- [2D] Arc, Line, Animated Circle, Colored and BW Images
 
 
 **At present time this mod is in alpha stage meaning that stuff could change or break between version, so be aware of that (I will try to avoid making such changes tho). Moreover, only a small part of effects planned are available, and the documentation will be relegated mostly to the javadocs for the time being, although I hope to make a wiki in the future!**
@@ -30,7 +29,7 @@ effect.setIterations(5*20);
 effect.run();
 ```
 
-**Note:** when using the builder you will need to alwasy supply the world particle effect and origin pos to the method, beacuse every animation effect uses them and it is assumed they are not null. You can change them later if you need to. 
+**Note:** when using the builder you will need to always supply the world particle effect and origin pos to the method, beacuse every animation effect uses them and it is assumed they are not null. You can change them later if you need to. 
 **TLDR;** you are forced to supply them in order to make the effect work instead of crashing!
 
 <center>
@@ -47,7 +46,7 @@ effect.run();
 Every effect has its own getters and setters, so you can use those to change the settings before calling the run method. You can also provide a lamda that will execute each tickt that the effect is active to the run/runFor method. For more information about what each setting does please refer to the javadoc of the constructor for that effect.
 
 ## How do I use the commands?
-You can use either `pal` or `particleanimationlib` and then use tab-completition to create your effects. They kinda lack documentation except from the names of the arguments, so I suggest to look in the corresponding classes of the effect and see from the javadoc what each thing does. Sorry :P
+You can use either `pal` or `particleanimationlib` and then use tab-completition to create your effects. They kinda lack documentation except for the names of the arguments, so I suggest looking in the corresponding classes of the effect and see from the javadoc what each thing does. Sorry :P
 
 *Note*: The commands that take in stuff like rotations and such, change the integer values to "x.5", since the game thinks they are positions. You can get around that by inputting a double instead of an integer like so "x.0" (for example 2.0 or 0.0)
 
@@ -71,7 +70,7 @@ dependencies {
 You can get the version number from the modrinth versions page.
 
 ## Credit
-This mod is based on the bukkit plugin [EffectLib](https://github.com/elBukkit/EffectLib) by elBukkit team, check it out too! The effects are taken from there and tweaked to be made compatible with modding, occasionally adding extra functionality.
+This mod is based on the bukkit plugin [EffectLib](https://github.com/elBukkit/EffectLib) by elBukkit team, check it out too! The effects are taken from there and tweaked to be compatible with modding, occasionally adding extra functionality.
 
 ## License
 This library is available under MIT license
