@@ -3,7 +3,7 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import me.emafire003.dev.particleanimationlib.effects.image.BaseImageEffect;
 import me.emafire003.dev.particleanimationlib.effects.image.ColoredImageEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Collection;
 
@@ -34,9 +34,10 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
-                ColoredImageEffect.builder(source.getWorld(), target.getEyePos(), new Identifier(ParticleAnimationLib.MOD_ID, "images/image.png"))
-                        .particleSize(0.5f).scale(0.05f).stepX(5).stepY(5).transparency(true)
-                        .build().runFor(2);
+                ColoredImageEffect.builder(source.getWorld(), target.getEyePos().add(-2.7, 0,0), "https://fabricmc.net/assets/logo.png")
+                        .particleSize(0.5f).rotation(new Vec3d(0, Math.PI/2, 0)).scale(0.04f).stepX(2).stepY(2).transparency(true)
+                        .enableRotation(true).angularVelocityX(0).angularVelocityZ(0).angularVelocityY(Math.PI/40).plane(BaseImageEffect.Plane.Y)
+                        .build().runFor(4);
 /*
                 ColoredImageEffect imageEffect = new ColoredImageEffect(source.getWorld(), target.getEyePos(), ); //new Identifier("textures/effect/dither.png")
                 imageEffect.enableRotation = false;

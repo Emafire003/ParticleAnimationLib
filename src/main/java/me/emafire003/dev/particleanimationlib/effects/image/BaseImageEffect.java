@@ -107,7 +107,7 @@ public abstract class BaseImageEffect extends YPREffect {
 
     protected ImageLoadCallback imageLoadCallback;
 
-    public static final Identifier ERROR_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID ,"images/error.png");
+    public static final Identifier ERROR_IMAGE = ParticleAnimationLib.getIdentifier("images/error.png");
     //public static final Identifier LOGO_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "images/icon.png");
 
     /**

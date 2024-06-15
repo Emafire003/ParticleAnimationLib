@@ -6,6 +6,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,10 @@ public class ParticleAnimationLib implements ModInitializer {
 
 		LOGGER.info("Loading ParticleAnimationLib for awesome particle effects!");
 		CommandRegistrationCallback.EVENT.register(PALCommands::registerCommands);
+	}
+
+	public static Identifier getIdentifier(String path){
+		return Identifier.of(MOD_ID ,path);
 	}
 
 	/** Specify a Custom folder where loaded images are going to be cached.

@@ -43,7 +43,7 @@ public class ImageLoadTask{
 
         LOGGER.info("The fileName is: " + fileName);
         if(fileName.startsWith("id:")){
-            Identifier id = new Identifier(fileName.replaceFirst("id:", ""));
+            Identifier id = Identifier.of(fileName.replaceFirst("id:", ""));
             Optional<Resource> resourceOptional = server.getResourceManager().getResource(id);
             if(resourceOptional.isEmpty()){
                 LOGGER.error("Error! Can't find image from the id: " + id);
