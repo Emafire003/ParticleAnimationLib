@@ -5,13 +5,16 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
-public abstract class Effect {
+public class Effect {
+
     protected int iterations;
     protected Vec3d originPos;
     protected boolean updatePositions;
@@ -38,16 +41,19 @@ public abstract class Effect {
     protected boolean done = false;
     protected int ticks = 0;
 
+    private RegistryKey<World> worldRegistryKey;
+
     public Effect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos){
         this.world = world;
         this.type = type;
         this.particle = particle;
         this.originPos = originPos;
+        worldRegistryKey = world.getRegistryKey();
     }
 
     //Used by the copy method only!
     private Effect(){
-
+        worldRegistryKey = world.getRegistryKey();
     }
 
     protected static void copy(Effect original, Effect copy) {
@@ -95,6 +101,9 @@ public abstract class Effect {
     }
 
 
+    public EffectType getType(){
+        return type;
+    }
 
     public void updatePos(){
         if(entityOrigin != null){
@@ -321,8 +330,13 @@ public abstract class Effect {
     public void setUseEyePosAsOrigin(boolean useEyePosAsOrigin) {
         this.useEyePosAsOrigin = useEyePosAsOrigin;
     }
+
     public ServerWorld getWorld() {
         return world;
+    }
+
+    public RegistryKey<World> getWorldRegistryKey() {
+        return worldRegistryKey;
     }
 
     public void setWorld(ServerWorld world) {

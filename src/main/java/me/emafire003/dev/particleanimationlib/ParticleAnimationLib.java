@@ -5,7 +5,9 @@ import me.emafire003.dev.particleanimationlib.effects.image.ImageUtils;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,8 @@ public class ParticleAnimationLib implements ModInitializer {
 	//TODO this may need to change for quilt & forge and such
 	public static final Path DEFAULT_CHACE_PATH = FabricLoader.getInstance().getConfigDir().resolve(MOD_ID+"_cache");
 
+	public static MinecraftServer SERVER_INSTANCE = null;
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -30,11 +34,16 @@ public class ParticleAnimationLib implements ModInitializer {
 
 		LOGGER.info("Loading ParticleAnimationLib for awesome particle effects!");
 		CommandRegistrationCallback.EVENT.register(PALCommands::registerCommands);
+		//A bit hacky, but there is no other way :/
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			SERVER_INSTANCE = server;
+		});
 	}
 
 	public static Identifier getIdentifier(String path){
 		return Identifier.of(MOD_ID ,path);
 	}
+
 
 	/** Specify a Custom folder where loaded images are going to be cached.
 	 * Defaults to: <i>config/particleanimationlib_cache/</i>
