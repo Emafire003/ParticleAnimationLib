@@ -3,17 +3,18 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.effects.image.BaseImageEffect;
-import me.emafire003.dev.particleanimationlib.effects.image.ColoredImageEffect;
+import me.emafire003.dev.particleanimationlib.effects.TextEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
 
+import java.awt.*;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PALDebugCommand implements PALCommand {
 
@@ -34,10 +35,23 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
-                ColoredImageEffect.builder(source.getWorld(), target.getEyePos().add(-2.7, 0,0), "https://fabricmc.net/assets/logo.png")
+                //TODO seeems to be very server side laggy. Like 1 seconds takes 20 instead of the reverse
+                TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), 90, 90, "Hello world", false, 1, 1, (float) 1 / 5, true, new Font("Tahoma", Font.PLAIN, 16));
+                //textEffect.runFor(5);
+                textEffect.runFor(5, ((effect, current_tick) -> {
+                    TextEffect instance = (TextEffect) effect;
+                    instance.text = "hello world " + current_tick;
+                    //instance.text = "hello world " + source.getPlayer().getRandom().nextBetween(0,10);
+
+                }));
+
+                /*ColoredImageEffect.builder(source.getWorld(), target.getEyePos().add(-2.7, 0,0), "https://fabricmc.net/assets/logo.png")
                         .particleSize(0.5f).rotation(new Vec3d(0, Math.PI/2, 0)).scale(0.04f).stepX(2).stepY(2).transparency(true)
                         .enableRotation(true).angularVelocityX(0).angularVelocityZ(0).angularVelocityY(Math.PI/40).plane(BaseImageEffect.Plane.Y)
-                        .build().runFor(4);
+                        .build().runFor(4);*/
+
+
+
 /*
                 ColoredImageEffect imageEffect = new ColoredImageEffect(source.getWorld(), target.getEyePos(), ); //new Identifier("textures/effect/dither.png")
                 imageEffect.enableRotation = false;
