@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 public class ParticleAnimationLib implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -50,6 +51,35 @@ public class ParticleAnimationLib implements ModInitializer {
 	 * */
 	public static void setImageCacheFolder(File folder) {
 		ImageUtils.setImageCacheFolder(folder);
+	}
+
+	//TODO test
+	/**
+	 * Caches / preloads some images that will be used in the Image Effects later on, to speed up the display
+	 *
+	 * @param image_paths A list of strings containing the paths of all the images you want to pre-load
+	 * */
+	public static void preloadImages(List<String> image_paths){
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			image_paths.forEach(path -> {
+				ImageUtils.loadImage(path, null, server);
+			});
+		});
+
+	}
+	//TODO test
+	/**
+	 * Caches / preloads some images that will be used in the Image Effects later on, to speed up the display
+	 *
+	 * @param image_paths A list of Identifiers containing the paths of all the images you want to pre-load
+	 * */
+	public static void preloadImagesIdentifiers(List<Identifier> image_paths){
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			image_paths.forEach(path -> {
+				ImageUtils.loadImage(path, null, server);
+			});
+		});
+
 	}
 
 	//TODO add a function to cache all of the images needed before starting/using them

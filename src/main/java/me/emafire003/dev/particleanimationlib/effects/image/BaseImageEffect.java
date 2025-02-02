@@ -230,7 +230,7 @@ public abstract class BaseImageEffect extends YPREffect {
         loadImage(fileName, imageLoadCallback, this.getWorld().getServer());
     }
 
-    /**Automatically called when creating a new ImageEffect using a string path
+    /**Automatically called when creating a new ImageEffect using an Identifier path
      * Can be used to update the image that is displayed.
      * WARNING! Maye cause issues
      * */

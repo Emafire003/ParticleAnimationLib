@@ -220,19 +220,17 @@ public class VortexEffect extends YPREffect {
             return;
         }
 
-        for(int j = 0; j < this.iterations; j++){
-            for (int x = 0; x < circles; x++) {
-                for (int i = 0; i < helixes; i++) {
-                    angle = step * radials + (2 * Math.PI * i / helixes);
-                    v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
-                    //The +90 flips the angle to be on the looking plane let's call it
-                    v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+        for (int x = 0; x < circles; x++) {
+            for (int i = 0; i < helixes; i++) {
+                angle = step * radials + (2 * Math.PI * i / helixes);
+                v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
+                //The +90 flips the angle to be on the looking plane let's call it
+                v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
-                    positions.add(v);
+                positions.add(v);
 
-                }
-                step++;
             }
+            step++;
         }
         this.counter = positions.size();//-1;
         step = 0;

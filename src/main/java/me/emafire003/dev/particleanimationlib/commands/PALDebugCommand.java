@@ -3,7 +3,11 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
+import me.emafire003.dev.particleanimationlib.effects.CuboidEffect;
 import me.emafire003.dev.particleanimationlib.effects.TextEffect;
+import me.emafire003.dev.particleanimationlib.effects.image.BaseImageEffect;
+import me.emafire003.dev.particleanimationlib.effects.image.ColoredImageEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
@@ -11,6 +15,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 import java.util.Collection;
@@ -35,8 +40,7 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
-                //TODO seeems to be very server side laggy. Like 1 seconds takes 20 instead of the reverse
-                TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), 90, 90, "Hello world", false, 1, 1, (float) 1 / 5, true, new Font("Tahoma", Font.PLAIN, 16));
+                TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), target.getHeadYaw(), target.getPitch(), "Hello world", false, 1, 1, (float) 1 / 10, true, new Font("Times New Roman", Font.PLAIN, 16));
                 //textEffect.runFor(5);
                 textEffect.runFor(5, ((effect, current_tick) -> {
                     TextEffect instance = (TextEffect) effect;
@@ -44,6 +48,12 @@ public class PALDebugCommand implements PALCommand {
                     //instance.text = "hello world " + source.getPlayer().getRandom().nextBetween(0,10);
 
                 }));
+
+                ConeEffect coneEffect = ConeEffect.builder(source.getWorld(), ParticleTypes.WITCH, target.getPos()).build();
+                coneEffect.runFor(5);
+
+                /*CuboidEffect effect = CuboidEffect.builder(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, source.getPosition().add(0,10,0)).build();
+                effect.runFor(5);*/
 
                 /*ColoredImageEffect.builder(source.getWorld(), target.getEyePos().add(-2.7, 0,0), "https://fabricmc.net/assets/logo.png")
                         .particleSize(0.5f).rotation(new Vec3d(0, Math.PI/2, 0)).scale(0.04f).stepX(2).stepY(2).transparency(true)

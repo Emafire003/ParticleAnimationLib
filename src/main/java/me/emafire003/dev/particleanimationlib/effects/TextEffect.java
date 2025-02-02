@@ -114,33 +114,31 @@ public class TextEffect extends YPREffect {
         int color;
         Vec3d v;
 
-        for(int i = 0; i < this.getIterations(); i++){
-            try {
-                if (image == null || shouldRecalculateImage()) {
-                    lastParsedText = text;
-                    lastParsedFont = font;
-                    // Use last parsed references instead for additional thread safety
-                    image = StringParser.stringToBufferedImage(lastParsedFont, lastParsedText);
-                }
-                for (int y = 0; y < image.getHeight(); y += stepY) {
-                    for (int x = 0; x < image.getWidth(); x += stepX) {
-                        color = image.getRGB(x, y);
-                        if (!invert && Color.black.getRGB() != color) continue;
-                        else if (invert && Color.black.getRGB() == color) continue;
 
-                        v = new Vec3d((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
-                        //VectorUtils.rotateAroundAxisY(v, -origin_pos.getYaw() * MathUtils.degreesToRadians);
-                        VectorUtils.rotateVector(v, -this.getYaw(), this.getPitch()+90);
-                        this.displayParticle(particle, originPos.add(v));
-                        //TODO toglie questo?
-                        origin_pos.subtract(v);
-                    }
-                }
-            } catch (Exception ex) {
-                // This seems to happen on bad characters in strings,
-                // I'm choosing to ignore the exception and cancel the effect for now.
-                return;
+
+        try {
+            if (image == null || shouldRecalculateImage()) {
+                lastParsedText = text;
+                lastParsedFont = font;
+                // Use last parsed references instead for additional thread safety
+                image = StringParser.stringToBufferedImage(lastParsedFont, lastParsedText);
             }
+            for (int y = 0; y < image.getHeight(); y += stepY) {
+                for (int x = 0; x < image.getWidth(); x += stepX) {
+                    color = image.getRGB(x, y);
+                    if (!invert && Color.black.getRGB() != color) continue;
+                    else if (invert && Color.black.getRGB() == color) continue;
+
+                    v = new Vec3d((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
+                    //VectorUtils.rotateAroundAxisY(v, -origin_pos.getYaw() * MathUtils.degreesToRadians);
+                    VectorUtils.rotateVector(v, -this.getYaw(), this.getPitch()+90);
+                    this.displayParticle(particle, originPos.add(v));
+                }
+            }
+        } catch (Exception ex) {
+            // This seems to happen on bad characters in strings,
+            // I'm choosing to ignore the exception and cancel the effect for now.
+            return;
         }
 
     }

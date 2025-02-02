@@ -249,32 +249,31 @@ public class ConeEffect extends YPREffect {
 
         Vec3d v;
 
-        for(int i = 0; i < this.getIterations(); i++){
-            for (int x = 0; x < particles; x++) {
+        for (int x = 0; x < particles; x++) {
 
-                if (step > particlesCone) step = 0;
-                if (randomize && step == 0) rotation = RandomUtils.getRandomAngle();
-                for (int y = 0; y < strands; y++) {
-                    angle = step * angularVelocity + rotation + (2 * Math.PI * y / strands);
-                    radius = step * radiusGrow;
+            if (step > particlesCone) step = 0;
+            if (randomize && step == 0) rotation = RandomUtils.getRandomAngle();
+            for (int y = 0; y < strands; y++) {
+                angle = step * angularVelocity + rotation + (2 * Math.PI * y / strands);
+                radius = step * radiusGrow;
 
-                    if (solid) {
-                        //what the heck is this?
-                        radius *= RandomUtils.random.nextFloat();
-                    }
-
-                    length = step * lengthGrow;
-
-                    v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
-
-                    v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
-
-                    this.positions.add(originPos.add(v));
-
+                if (solid) {
+                    //what the heck is this?
+                    radius *= RandomUtils.random.nextFloat();
                 }
-                step++;
+
+                length = step * lengthGrow;
+
+                v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
+
+                v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+
+                this.positions.add(originPos.add(v));
+
             }
+            step++;
         }
+
         step = 0;
         counter = this.positions.size();
 
