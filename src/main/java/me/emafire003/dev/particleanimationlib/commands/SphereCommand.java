@@ -1,5 +1,6 @@
 package me.emafire003.dev.particleanimationlib.commands;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -28,7 +29,9 @@ public class SphereCommand implements PALCommand {
                     IntegerArgumentType.getInteger(context, "count"),
                     DoubleArgumentType.getDouble(context, "radius"),
                     DoubleArgumentType.getDouble(context, "radiusIncrease"),
-                    IntegerArgumentType.getInteger(context, "particleIncrease")
+                    IntegerArgumentType.getInteger(context, "particleIncrease"),
+                    BoolArgumentType.getBool(context, "halfSphere"),
+                    BoolArgumentType.getBool(context, "invertHalfSphere")
             );
             effect.runFor(IntegerArgumentType.getInteger(context, "duration"));
 
@@ -49,8 +52,12 @@ public class SphereCommand implements PALCommand {
                                         .then(CommandManager.argument("radius", DoubleArgumentType.doubleArg(0))
                                                 .then(CommandManager.argument("radiusIncrease", DoubleArgumentType.doubleArg(0))
                                                         .then(CommandManager.argument("particleIncrease", IntegerArgumentType.integer(0))
-                                                                .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
-                                                                        .executes(this::spawnEffect)
+                                                                .then(CommandManager.argument("halfSphere", BoolArgumentType.bool())
+                                                                        .then(CommandManager.argument("invertHalfSphere", BoolArgumentType.bool())
+                                                                                .then(CommandManager.argument("duration", IntegerArgumentType.integer(0))
+                                                                                        .executes(this::spawnEffect)
+                                                                                )
+                                                                        )
                                                                 )
                                                         )
                                                 )

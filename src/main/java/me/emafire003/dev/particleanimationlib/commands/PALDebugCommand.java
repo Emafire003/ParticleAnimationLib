@@ -3,11 +3,8 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.effects.ConeEffect;
-import me.emafire003.dev.particleanimationlib.effects.CuboidEffect;
+import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.TextEffect;
-import me.emafire003.dev.particleanimationlib.effects.image.BaseImageEffect;
-import me.emafire003.dev.particleanimationlib.effects.image.ColoredImageEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
@@ -15,11 +12,9 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PALDebugCommand implements PALCommand {
 
@@ -40,17 +35,31 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
-                TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, target.getPos(), target.getHeadYaw(), target.getPitch(), "Hello world", false, 1, 1, (float) 1 / 10, true, new Font("Times New Roman", Font.PLAIN, 16));
+                /*TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos().add(0,2,0), target.getHeadYaw(), target.getPitch(), "Hello world", false, 1, 1, (float) 1 / 5, true, new Font("Courier New", Font.PLAIN, 13));
                 //textEffect.runFor(5);
                 textEffect.runFor(5, ((effect, current_tick) -> {
                     TextEffect instance = (TextEffect) effect;
                     instance.text = "hello world " + current_tick;
                     //instance.text = "hello world " + source.getPlayer().getRandom().nextBetween(0,10);
 
-                }));
+                }));*/
+                Font a = new Font("Tahoma", Font.PLAIN, 16);
 
-                ConeEffect coneEffect = ConeEffect.builder(source.getWorld(), ParticleTypes.WITCH, target.getPos()).build();
-                coneEffect.runFor(5);
+                //TODO niente lagga e si blocca se uso il builder
+                TextEffect textEffect1 = TextEffect.builder(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos()).text("\uD800\uDC06 Hello worldo \uD800\uDC06").font(new Font("Times New Roman", Font.PLAIN, 13)).build();
+                ParticleAnimationLib.LOGGER.info("The font: " + textEffect1.font);
+                ParticleAnimationLib.LOGGER.info("The scale: " + textEffect1.size);
+                //textEffect1.runFor(5);
+
+                TextEffect textEffect2 = TextEffect.builder(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos()).build();
+                TextEffect.copy(textEffect1, textEffect2);
+                textEffect2.setFont(new Font("Verdana", Font.PLAIN, 13));
+                textEffect2.setParticle(ParticleTypes.ELECTRIC_SPARK);
+                textEffect2.setOriginPos(target.getPos().add(2,0,0));
+                //textEffect2.runFor(3);
+
+                /*ConeEffect coneEffect = ConeEffect.builder(source.getWorld(), ParticleTypes.WITCH, target.getPos()).build();
+                coneEffect.runFor(5);*/
 
                 /*CuboidEffect effect = CuboidEffect.builder(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, source.getPosition().add(0,10,0)).build();
                 effect.runFor(5);*/

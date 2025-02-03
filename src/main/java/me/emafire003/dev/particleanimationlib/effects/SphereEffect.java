@@ -28,8 +28,15 @@ public class SphereEffect extends Effect {
      */
     public double radiusIncrease = 0;
 
-    // Amount to increase the particles per tick
+    /** Amount to increase the particles per tick*/
     public int particleIncrease = 0;
+    
+    //TODO new stuff
+    /**Should it display as an half sphere?*/
+    public boolean halfSphere = false;
+    
+    /**If it is an half sphere, should it be inverted the other way around? Like upside down*/
+    public boolean invertHalfSphere = false;
 
     /**
      * Creates a new sphere effect.
@@ -41,13 +48,17 @@ public class SphereEffect extends Effect {
      * @param radius The radius of the sphere
      * @param radiusIncrease The amount to increase the radius per iteration/tick
      * @param particleIncrease The amount to increase the particles per iteration/tick
+     * @param half_sphere If true, displays as an half sphere/dome
+     * @param invert_half_sphere If true and displaying as an half sphere, displays the bottom half
      * */
-    public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int particles, double radius, double radiusIncrease, int particleIncrease) {
+    public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int particles, double radius, double radiusIncrease, int particleIncrease, boolean half_sphere, boolean invert_half_sphere) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
         this.radius = radius;
         this.radiusIncrease = radiusIncrease;
         this.particleIncrease = particleIncrease;
+        this.halfSphere = half_sphere;
+        this.invertHalfSphere = invert_half_sphere;
     }
 
 
@@ -57,6 +68,8 @@ public class SphereEffect extends Effect {
         copy.setRadiusIncrease(original.getRadiusIncrease());
         copy.setParticleIncrease(original.getParticleIncrease());
         copy.setParticles(original.getParticles());
+        copy.setHalfSphere(original.isHalfSphere());
+        copy.setInvertedHalfSphere(original.isInvertHalSphere());
     }
 
     /**
@@ -100,6 +113,8 @@ public class SphereEffect extends Effect {
         setParticleIncrease(builder.particleIncrease);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
         setExecuteOnStop(builder.executeOnStop);
+        setHalfSphere(builder.halfSphere);
+        setInvertedHalfSphere(builder.invertHalfSphere);
     }
 
     
@@ -129,11 +144,19 @@ public class SphereEffect extends Effect {
 
         //Should be already adding the stuff
         //origin.add(0, yOffset, 0);
-        Vec3d v;
+        Vec3d vector;
 
         for (int i = 0; i < particles; i++) {
-            v = RandomUtils.getRandomVector().multiply(radius);
-            this.displayParticle(particle, origin.add(v));
+            vector = RandomUtils.getRandomVector().multiply(radius);
+            if (halfSphere) {
+                if (invertHalfSphere){
+                    vector = new Vec3d(vector.getX(), Math.abs(vector.getY()) * -1, vector.getZ());
+                }
+                else {
+                    vector = new Vec3d(vector.getX(), Math.abs(vector.getY()), vector.getZ());
+                }
+            }
+            this.displayParticle(particle, origin.add(vector));
         }
     }
 
@@ -168,6 +191,22 @@ public class SphereEffect extends Effect {
         this.particles = particles;
     }
 
+    public boolean isHalfSphere() {
+        return halfSphere;
+    }
+
+    public void setHalfSphere(boolean half_sphere) {
+        this.halfSphere = half_sphere;
+    }
+
+    public boolean isInvertHalSphere() {
+        return invertHalfSphere;
+    }
+
+    public void setInvertedHalfSphere(boolean invert_half_sphere) {
+        this.invertHalfSphere = invert_half_sphere;
+    }
+
     /**
      * {@code SphereEffect} builder static inner class.
      */
@@ -199,6 +238,12 @@ public class SphereEffect extends Effect {
 
         // Amount to increase the particles per tick
         private int particleIncrease = 0;
+
+        /**Should it display as an half sphere?*/
+        public boolean halfSphere = false;
+
+        /**If it is an half sphere, should it be inverted the other way around? Like upside down*/
+        public boolean invertHalfSphere = false;
 
 
         private Builder() {
@@ -344,6 +389,28 @@ public class SphereEffect extends Effect {
          */
         public Builder particleIncrease(int particleIncrease) {
             this.particleIncrease = particleIncrease;
+            return this;
+        }
+
+        /**
+         * Sets the {@code halfSphere} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param halfSphere the {@code halfSphere} to set
+         * @return a reference to this Builder
+         */
+        public Builder halfSphere(boolean halfSphere) {
+            this.halfSphere = halfSphere;
+            return this;
+        }
+
+        /**
+         * Sets the {@code invertHalfSphere} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param invertHalfSphere the {@code invertHalfSphere} to set
+         * @return a reference to this Builder
+         */
+        public Builder invertHalfSphere(boolean invertHalfSphere) {
+            this.invertHalfSphere = invertHalfSphere;
             return this;
         }
 
