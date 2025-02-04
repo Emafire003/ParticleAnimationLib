@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import me.emafire003.dev.particleanimationlib.effects.DonutEffect;
 import me.emafire003.dev.particleanimationlib.effects.TextEffect;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -12,6 +13,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 import java.util.Collection;
@@ -35,6 +37,16 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
+                DonutEffect donutEffect = new DonutEffect(source.getWorld(), ParticleTypes.END_ROD, target.getPos().add(0,1,0));
+                donutEffect.setRadiusDonut(2f);
+                donutEffect.setCircles(50);
+                donutEffect.setRadiusTube(1f);
+                donutEffect.setParticlesCircle(20);
+                //donutEffect.setYaw(target.getYaw());
+                //donutEffect.setPitch(target.getPitch());
+                donutEffect.setRotation(new Vec3d(0, 0, Math.PI/4));
+                donutEffect.runFor(5);
+
                 /*TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos().add(0,2,0), target.getHeadYaw(), target.getPitch(), "Hello world", false, 1, 1, (float) 1 / 5, true, new Font("Courier New", Font.PLAIN, 13));
                 //textEffect.runFor(5);
                 textEffect.runFor(5, ((effect, current_tick) -> {
@@ -43,12 +55,9 @@ public class PALDebugCommand implements PALCommand {
                     //instance.text = "hello world " + source.getPlayer().getRandom().nextBetween(0,10);
 
                 }));*/
-                Font a = new Font("Tahoma", Font.PLAIN, 16);
+                Font a = new Font("Aptos", Font.PLAIN, 16);
 
-                //TODO niente lagga e si blocca se uso il builder
-                TextEffect textEffect1 = TextEffect.builder(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos()).text("\uD800\uDC06 Hello worldo \uD800\uDC06").font(new Font("Times New Roman", Font.PLAIN, 13)).build();
-                ParticleAnimationLib.LOGGER.info("The font: " + textEffect1.font);
-                ParticleAnimationLib.LOGGER.info("The scale: " + textEffect1.size);
+                TextEffect textEffect1 = TextEffect.builder(source.getWorld(), ParticleTypes.EGG_CRACK, target.getPos()).yaw(target.getYaw()).pitch(target.getPitch()).text(" Hello worldo ").font(new Font("Times New Roman", Font.PLAIN, 13)).build();
                 //textEffect1.runFor(5);
 
                 TextEffect textEffect2 = TextEffect.builder(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos()).build();
