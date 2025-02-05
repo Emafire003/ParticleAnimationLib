@@ -143,6 +143,44 @@ public class ConeEffect extends YPREffect {
         this.setShouldUpdateYPR(true);
     }
 
+    private ConeEffect(Builder builder) {
+        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
+        setIterations(builder.iterations);
+        setOriginPos(builder.originPos);
+        setUpdatePositions(builder.updatePositions);
+        setEntityOrigin(builder.entityOrigin);
+        setOriginOffset(builder.originOffset);
+        world = builder.world;
+        particle = builder.particle;
+        setLengthGrow(builder.lengthGrow);
+        setAngularVelocity(builder.angularVelocity);
+        setParticles(builder.particles);
+        setRadiusGrow(builder.radiusGrow);
+        setParticlesCone(builder.particlesCone);
+        setRotation(builder.rotation);
+        setRandomize(builder.randomize);
+        setSolid(builder.solid);
+        setStrands(builder.strands);
+        setFlipped(builder.flipped);
+        setDrawCenterAxis(builder.drawCenterAxis);
+        setDrawFinishPoint(builder.drawFinishPoint);
+        setSecondaryParticle(builder.secondaryParticle);
+        setYawOffset(builder.yawOffset);
+        setPitchOffset(builder.pitchOffset);
+        setYaw(builder.yaw);
+        setPitch(builder.pitch);
+        setShouldUpdateYPR(builder.shouldUpdateYPR);
+        setInverted(builder.inverted);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setExecuteOnStop(builder.executeOnStop);
+        setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
+        setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
+        setParticleLimit(builder.particleLimit);
+        setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
+        setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+    }
+
     public static void copy(ConeEffect original, ConeEffect copy) {
         YPREffect.copy(original, copy);
         copy.setLengthGrow(original.getLengthGrow());
@@ -177,37 +215,7 @@ public class ConeEffect extends YPREffect {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
-    private ConeEffect(Builder builder) {
-        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
-        setIterations(builder.iterations);
-        setOriginPos(builder.originPos);
-        setUpdatePositions(builder.updatePositions);
-        setEntityOrigin(builder.entityOrigin);
-        setOriginOffset(builder.originOffset);
-        world = builder.world;
-        particle = builder.particle;
-        setLengthGrow(builder.lengthGrow);
-        setAngularVelocity(builder.angularVelocity);
-        setParticles(builder.particles);
-        setRadiusGrow(builder.radiusGrow);
-        setParticlesCone(builder.particlesCone);
-        setRotation(builder.rotation);
-        setRandomize(builder.randomize);
-        setSolid(builder.solid);
-        setStrands(builder.strands);
-        setFlipped(builder.flipped);
-        setDrawCenterAxis(builder.drawCenterAxis);
-        setDrawFinishPoint(builder.drawFinishPoint);
-        setSecondaryParticle(builder.secondaryParticle);
-        setYawOffset(builder.yawOffset);
-        setPitchOffset(builder.pitchOffset);
-        setYaw(builder.yaw);
-        setPitch(builder.pitch);
-        setShouldUpdateYPR(builder.shouldUpdateYPR);
-        setInverted(builder.inverted);
-        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
-        setExecuteOnStop(builder.executeOnStop);
-    }
+
 
     /** Returns a builder for the effect.
      *
@@ -531,19 +539,31 @@ public class ConeEffect extends YPREffect {
         private boolean flipped = false;
         private boolean inverted = false;
 
-        /** Do you want to draw the center axis as well?*/
+        /**
+         * Do you want to draw the center axis as well?
+         */
         private boolean drawCenterAxis = false;
 
-        /** Draws a point (one particle) where the effect ends*/
+        /**
+         * Draws a point (one particle) where the effect ends
+         */
         private boolean drawFinishPoint = false;
-        /** The particles to use for displaying the center axis/finish point
-         * Falls back to the particle of this effect*/
+        /**
+         * The particles to use for displaying the center axis/finish point
+         * Falls back to the particle of this effect
+         */
         private ParticleEffect secondaryParticle = particle;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR = true;
+        private boolean shouldSpawnParticlesEveryNIteration = false;
+        private int spawnParticlesEveryNIteration = 5;
+        private boolean shouldLimitParticlesSpawnedPerIteration = true;
+        private int particleLimit = 5000;
+        private boolean shouldLimitParticlesEveryNIterations = false;
+        private int limitParticlesEveryNIterations = 5;
 
         private Builder() {
         }
@@ -863,6 +883,72 @@ public class ConeEffect extends YPREffect {
          */
         public ConeEffect build() {
             return new ConeEffect(this);
+        }
+
+        /**
+         * Sets the {@code shouldSpawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldSpawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
+            shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code spawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code spawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder spawnParticlesEveryNIteration(int val) {
+            spawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesSpawnedPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesSpawnedPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesSpawnedPerIteration(boolean val) {
+            shouldLimitParticlesSpawnedPerIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particleLimit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code particleLimit} to set
+         * @return a reference to this Builder
+         */
+        public Builder particleLimit(int val) {
+            particleLimit = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesEveryNIterations(boolean val) {
+            shouldLimitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder limitParticlesEveryNIterations(int val) {
+            limitParticlesEveryNIterations = val;
+            return this;
         }
     }
 }

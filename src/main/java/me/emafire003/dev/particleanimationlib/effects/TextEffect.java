@@ -140,7 +140,14 @@ public class TextEffect extends YPREffect {
         setRealtime(builder.realtime);
         setFont(builder.font);
         setExecuteOnStop(builder.executeOnStop);
+        setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
+        setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
+        setParticleLimit(builder.particleLimit);
+        setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
+        setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
     }
+
 
     public static void copy(TextEffect original, TextEffect  copy) {
         YPREffect.copy(original, copy);
@@ -278,7 +285,7 @@ public class TextEffect extends YPREffect {
     public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
-    
+
     /**
      * {@code TextEffect} builder static inner class.
      */
@@ -334,10 +341,16 @@ public class TextEffect extends YPREffect {
          */
         public Font font = DEFAULT_FONT;
         private EffectModifier executeOnStop;
+        private boolean shouldSpawnParticlesEveryNIteration = false;
+        private int spawnParticlesEveryNIteration = 5;
+        private boolean shouldLimitParticlesSpawnedPerIteration = true;
+        private int particleLimit = 5000;
+        private boolean shouldLimitParticlesEveryNIterations = false;
+        private int limitParticlesEveryNIterations = 5;
 
         private Builder() {
         }
-        
+
 
         /**
          * Sets the {@code iterations} and returns a reference to this Builder enabling method chaining.
@@ -426,7 +439,7 @@ public class TextEffect extends YPREffect {
             particle = val;
             return this;
         }
-        
+
         /**
          * Sets the {@code yawOffset} and returns a reference to this Builder enabling method chaining.
          *
@@ -470,7 +483,7 @@ public class TextEffect extends YPREffect {
             pitch = val;
             return this;
         }
-        
+
 
         /**
          * Sets the {@code shouldUpdateYPR} and returns a reference to this Builder enabling method chaining.
@@ -578,6 +591,72 @@ public class TextEffect extends YPREffect {
          */
         public TextEffect build() {
             return new TextEffect(this);
+        }
+
+        /**
+         * Sets the {@code shouldSpawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldSpawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
+            shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code spawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code spawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder spawnParticlesEveryNIteration(int val) {
+            spawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesSpawnedPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesSpawnedPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesSpawnedPerIteration(boolean val) {
+            shouldLimitParticlesSpawnedPerIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particleLimit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code particleLimit} to set
+         * @return a reference to this Builder
+         */
+        public Builder particleLimit(int val) {
+            particleLimit = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesEveryNIterations(boolean val) {
+            shouldLimitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder limitParticlesEveryNIterations(int val) {
+            limitParticlesEveryNIterations = val;
+            return this;
         }
     }
 }

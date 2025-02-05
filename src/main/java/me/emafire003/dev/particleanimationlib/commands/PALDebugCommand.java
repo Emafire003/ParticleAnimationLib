@@ -3,7 +3,6 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.DonutEffect;
 import me.emafire003.dev.particleanimationlib.effects.TextEffect;
 import net.minecraft.command.CommandRegistryAccess;
@@ -15,7 +14,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
-import java.awt.*;
+import java.awt.Font;
 import java.util.Collection;
 
 public class PALDebugCommand implements PALCommand {
@@ -37,14 +36,23 @@ public class PALDebugCommand implements PALCommand {
                     return 0;
                 }
 
-                DonutEffect donutEffect = new DonutEffect(source.getWorld(), ParticleTypes.END_ROD, target.getPos().add(0,1,0));
-                donutEffect.setRadiusDonut(2f);
+                DonutEffect donutEffect = new DonutEffect(source.getWorld(), ParticleTypes.COMPOSTER, target.getPos().add(0,1,0));
+                donutEffect.setRadiusDonut(3f);
                 donutEffect.setCircles(50);
-                donutEffect.setRadiusTube(1f);
-                donutEffect.setParticlesCircle(20);
+                donutEffect.setRadiusTube(2f);
+                donutEffect.setParticlesCircle(50);
                 //donutEffect.setYaw(target.getYaw());
                 //donutEffect.setPitch(target.getPitch());
+                //donutEffect.setRadiusDonutIncrease(0.05f);
+                //donutEffect.setRadiusTubeIncrease(-0.001f);
+                donutEffect.setParticlesCircleIncrease(2);
+                donutEffect.setCirclesIncrease(1);
                 donutEffect.setRotation(new Vec3d(0, 0, Math.PI/4));
+
+                //donutEffect.setShouldLimitParticlesSpawnedPerIteration(true);
+                //donutEffect.setShouldSpawnParticlesEveryNIteration(true);
+                //donutEffect.setLimitParticlesEveryNIterations(2);
+
                 donutEffect.runFor(5);
 
                 /*TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos().add(0,2,0), target.getHeadYaw(), target.getPitch(), "Hello world", false, 1, 1, (float) 1 / 5, true, new Font("Courier New", Font.PLAIN, 13));

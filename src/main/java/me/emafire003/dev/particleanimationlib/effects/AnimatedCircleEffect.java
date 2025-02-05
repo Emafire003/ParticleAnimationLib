@@ -151,7 +151,6 @@ public class AnimatedCircleEffect extends YPREffect {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
-
     private AnimatedCircleEffect(Builder builder) {
         super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
         setIterations(builder.iterations);
@@ -184,7 +183,14 @@ public class AnimatedCircleEffect extends YPREffect {
         setShouldUpdateYPR(builder.shouldUpdateYPR);
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
         setExecuteOnStop(builder.executeOnStop);
+        setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
+        setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
+        setParticleLimit(builder.particleLimit);
+        setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
+        setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
     }
+
 
     /** Returns a builder for the effect.
      *
@@ -416,9 +422,29 @@ public class AnimatedCircleEffect extends YPREffect {
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR = true;
+        /** Set this to true to skip some iteration of particles spawning to save up on server and client resources*/
+        private boolean shouldSpawnParticlesEveryNIteration = false;
+
+        /** How many iterations to skip between a particle spawning and the other. By default, it's a quarter of a second
+         * Only works if {@code shouldSpawnParticlesEveryNIteration} is enabled*/
+        private int spawnParticlesEveryNIteration = 5;
+
+        /** Set this to true to limit the max number of particles spawned each iteration, to save up on memory
+         * By default it's on and is capped at 5000 particles per tick. Which is a lot.*/
+        private boolean shouldLimitParticlesSpawnedPerIteration = true;
+
+        /** The limit of particles spawned at a given time (like on one iteration)*/
+        private int particleLimit = 5000;
+
+        /** Limits the number of particles spawned every N iterations specified below*/
+        private boolean shouldLimitParticlesEveryNIterations = false;
+
+        /** Every N iterations specified here the number of maximum particles spawned in that time frame is {@code particleLimit} */
+        private int limitParticlesEveryNIterations = 5;
 
         private Builder() {
         }
+
 
         /**
          * Sets the {@code iterations} and returns a reference to this Builder enabling method chaining.
@@ -717,6 +743,72 @@ public class AnimatedCircleEffect extends YPREffect {
          */
         public AnimatedCircleEffect build() {
             return new AnimatedCircleEffect(this);
+        }
+
+        /**
+         * Sets the {@code shouldSpawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldSpawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
+            shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code spawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code spawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder spawnParticlesEveryNIteration(int val) {
+            spawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesSpawnedPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesSpawnedPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesSpawnedPerIteration(boolean val) {
+            shouldLimitParticlesSpawnedPerIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particleLimit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code particleLimit} to set
+         * @return a reference to this Builder
+         */
+        public Builder particleLimit(int val) {
+            particleLimit = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesEveryNIterations(boolean val) {
+            shouldLimitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder limitParticlesEveryNIterations(int val) {
+            limitParticlesEveryNIterations = val;
+            return this;
         }
     }
 }

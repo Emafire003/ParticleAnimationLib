@@ -59,6 +59,32 @@ public class ArcEffect extends TargetedEffect {
         this.setTargetPos(target);
     }
 
+    private ArcEffect(Builder builder) {
+        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
+        setIterations(builder.iterations);
+        setOriginPos(builder.originPos);
+        setUpdatePositions(builder.updatePositions);
+        setEntityOrigin(builder.entityOrigin);
+        setOriginOffset(builder.originOffset);
+        world = builder.world;
+        particle = builder.particle;
+        setHeight(builder.height);
+        setParticles(builder.particles);
+        setTargetPos(builder.targetPos);
+        setUpdateTargetPositions(builder.updateTargetPositions);
+        setEntityTarget(builder.entityTarget);
+        setTargetOffset(builder.targetOffset);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setUseEyePosAsTarget(builder.useEyePosAsTarget);
+        setExecuteOnStop(builder.executeOnStop);
+        setParticleLimit(builder.particleLimit);
+        setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
+        setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
+        setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
+        setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+    }
+
     public static void copy(ArcEffect original, ArcEffect copy) {
         TargetedEffect.copy(original, copy);
         copy.setHeight(original.getHeight());
@@ -81,25 +107,7 @@ public class ArcEffect extends TargetedEffect {
         this.particles = count;
     }
 
-    private ArcEffect(Builder builder) {
-        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
-        setIterations(builder.iterations);
-        setOriginPos(builder.originPos);
-        setUpdatePositions(builder.updatePositions);
-        setEntityOrigin(builder.entityOrigin);
-        setOriginOffset(builder.originOffset);
-        world = builder.world;
-        particle = builder.particle;
-        setHeight(builder.height);
-        setParticles(builder.particles);
-        setTargetPos(builder.targetPos);
-        setUpdateTargetPositions(builder.updateTargetPositions);
-        setEntityTarget(builder.entityTarget);
-        setTargetOffset(builder.targetOffset);
-        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
-        setUseEyePosAsTarget(builder.useEyePosAsTarget);
-        setExecuteOnStop(builder.executeOnStop);
-    }
+
 
     /** Returns a builder for the effect.
      *
@@ -193,9 +201,16 @@ public class ArcEffect extends TargetedEffect {
         private boolean useEyePosAsOrigin;
         private boolean useEyePosAsTarget;
         private EffectModifier executeOnStop;
+        private boolean shouldSpawnParticlesEveryNIteration = false;
+        private int spawnParticlesEveryNIteration = 5;
+        private boolean shouldLimitParticlesSpawnedPerIteration = true;
+        private int particleLimit = 5000;
+        private boolean shouldLimitParticlesEveryNIterations = false;
+        private int limitParticlesEveryNIterations = 5;
 
         private Builder() {
         }
+
 
         /**
          * Sets the {@code iterations} and returns a reference to this Builder enabling method chaining.
@@ -381,6 +396,72 @@ public class ArcEffect extends TargetedEffect {
          */
         public ArcEffect build() {
             return new ArcEffect(this);
+        }
+
+        /**
+         * Sets the {@code particleLimit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code particleLimit} to set
+         * @return a reference to this Builder
+         */
+        public Builder particleLimit(int val) {
+            particleLimit = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldSpawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldSpawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
+            shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code spawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code spawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder spawnParticlesEveryNIteration(int val) {
+            spawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesSpawnedPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesSpawnedPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesSpawnedPerIteration(boolean val) {
+            shouldLimitParticlesSpawnedPerIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesEveryNIterations(boolean val) {
+            shouldLimitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder limitParticlesEveryNIterations(int val) {
+            limitParticlesEveryNIterations = val;
+            return this;
         }
     }
 }

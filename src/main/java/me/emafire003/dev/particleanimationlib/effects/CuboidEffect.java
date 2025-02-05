@@ -186,6 +186,12 @@ public class CuboidEffect extends TargetedEffect {
         setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
         setUseEyePosAsTarget(builder.useEyePosAsTarget);
         setExecuteOnStop(builder.executeOnStop);
+        setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
+        setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setParticleLimit(builder.particleLimit);
+        setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
+        setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
+        setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
     }
 
     public static void copy(CuboidEffect original, CuboidEffect copy) {
@@ -425,6 +431,12 @@ public class CuboidEffect extends TargetedEffect {
         private boolean updateTargetPositions = true;
         private Entity entityTarget;
         private Vec3d targetOffset;
+        private boolean shouldSpawnParticlesEveryNIteration = false;
+        private int spawnParticlesEveryNIteration = 5;
+        private boolean shouldLimitParticlesSpawnedPerIteration = true;
+        private int particleLimit = 5000;
+        private boolean shouldLimitParticlesEveryNIterations = false;
+        private int limitParticlesEveryNIterations = 5;
 
         private Builder() {
         }
@@ -669,6 +681,72 @@ public class CuboidEffect extends TargetedEffect {
          */
         public CuboidEffect build() {
             return new CuboidEffect(this);
+        }
+
+        /**
+         * Sets the {@code spawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code spawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder spawnParticlesEveryNIteration(int val) {
+            spawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldSpawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldSpawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
+            shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particleLimit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code particleLimit} to set
+         * @return a reference to this Builder
+         */
+        public Builder particleLimit(int val) {
+            particleLimit = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesSpawnedPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesSpawnedPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesSpawnedPerIteration(boolean val) {
+            shouldLimitParticlesSpawnedPerIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesEveryNIterations(boolean val) {
+            shouldLimitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder limitParticlesEveryNIterations(int val) {
+            limitParticlesEveryNIterations = val;
+            return this;
         }
     }
 

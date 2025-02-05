@@ -46,8 +46,8 @@ public class SphereEffect extends Effect {
      * @param origin The origin position of the effect. Aka the center of the sphere
      * @param particles The number of particles the sphere will be made of
      * @param radius The radius of the sphere
-     * @param radiusIncrease The amount to increase the radius per iteration/tick
-     * @param particleIncrease The amount to increase the particles per iteration/tick
+     * @param radiusIncrease The amount used to increase the radius per iteration/tick
+     * @param particleIncrease The amount used to increase the particles per iteration/tick
      * @param half_sphere If true, displays as an half sphere/dome
      * @param invert_half_sphere If true and displaying as an half sphere, displays the bottom half
      * */
@@ -61,6 +61,30 @@ public class SphereEffect extends Effect {
         this.invertHalfSphere = invert_half_sphere;
     }
 
+    private SphereEffect(Builder builder) {
+        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
+        setIterations(builder.iterations);
+        setOriginPos(builder.originPos);
+        setUpdatePositions(builder.updatePositions);
+        setEntityOrigin(builder.entityOrigin);
+        setOriginOffset(builder.originOffset);
+        world = builder.world;
+        particle = builder.particle;
+        setRadius(builder.radius);
+        particles = builder.particles;
+        setRadiusIncrease(builder.radiusIncrease);
+        setParticleIncrease(builder.particleIncrease);
+        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
+        setExecuteOnStop(builder.executeOnStop);
+        setHalfSphere(builder.halfSphere);
+        setInvertedHalfSphere(builder.invertHalfSphere);
+        setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
+        setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
+        setParticleLimit(builder.particleLimit);
+        setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
+        setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+    }
 
     public static void copy(SphereEffect original, SphereEffect copy) {
         Effect.copy(original, copy);
@@ -98,24 +122,7 @@ public class SphereEffect extends Effect {
         this.radius = radius;
     }
 
-    private SphereEffect(Builder builder) {
-        super(builder.world, EffectType.REPEATING, builder.particle, builder.originPos);
-        setIterations(builder.iterations);
-        setOriginPos(builder.originPos);
-        setUpdatePositions(builder.updatePositions);
-        setEntityOrigin(builder.entityOrigin);
-        setOriginOffset(builder.originOffset);
-        world = builder.world;
-        particle = builder.particle;
-        setRadius(builder.radius);
-        particles = builder.particles;
-        setRadiusIncrease(builder.radiusIncrease);
-        setParticleIncrease(builder.particleIncrease);
-        setUseEyePosAsOrigin(builder.useEyePosAsOrigin);
-        setExecuteOnStop(builder.executeOnStop);
-        setHalfSphere(builder.halfSphere);
-        setInvertedHalfSphere(builder.invertHalfSphere);
-    }
+
 
     
     /** Returns a builder for the effect.
@@ -239,11 +246,21 @@ public class SphereEffect extends Effect {
         // Amount to increase the particles per tick
         private int particleIncrease = 0;
 
-        /**Should it display as an half sphere?*/
+        /**
+         * Should it display as an half sphere?
+         */
         public boolean halfSphere = false;
 
-        /**If it is an half sphere, should it be inverted the other way around? Like upside down*/
+        /**
+         * If it is an half sphere, should it be inverted the other way around? Like upside down
+         */
         public boolean invertHalfSphere = false;
+        private boolean shouldSpawnParticlesEveryNIteration = false;
+        private int spawnParticlesEveryNIteration = 5;
+        private boolean shouldLimitParticlesSpawnedPerIteration = true;
+        private int particleLimit = 5000;
+        private boolean shouldLimitParticlesEveryNIterations = false;
+        private int limitParticlesEveryNIterations = 5;
 
 
         private Builder() {
@@ -421,6 +438,72 @@ public class SphereEffect extends Effect {
          */
         public SphereEffect build() {
             return new SphereEffect(this);
+        }
+
+        /**
+         * Sets the {@code shouldSpawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldSpawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
+            shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code spawnParticlesEveryNIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code spawnParticlesEveryNIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder spawnParticlesEveryNIteration(int val) {
+            spawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesSpawnedPerIteration} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesSpawnedPerIteration} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesSpawnedPerIteration(boolean val) {
+            shouldLimitParticlesSpawnedPerIteration = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code particleLimit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code particleLimit} to set
+         * @return a reference to this Builder
+         */
+        public Builder particleLimit(int val) {
+            particleLimit = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code shouldLimitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code shouldLimitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder shouldLimitParticlesEveryNIterations(boolean val) {
+            shouldLimitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limitParticlesEveryNIterations} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limitParticlesEveryNIterations} to set
+         * @return a reference to this Builder
+         */
+        public Builder limitParticlesEveryNIterations(int val) {
+            limitParticlesEveryNIterations = val;
+            return this;
         }
     }
 }

@@ -19,13 +19,34 @@ public class Effect {
     protected Vec3d originPos;
     protected boolean updatePositions;
 
-    /**If true and an entity is the origin it will use their head position if possibile*/
+    /**If true and an entity is the origin it will use their head position if possible*/
     protected boolean useEyePosAsOrigin;
     protected Entity entityOrigin;
     protected Vec3d originOffset = Vec3d.ZERO;
-    /** A function that executes when the effect stops. For example you could use it to chain effects one after the other*/
 
+    /** A function that executes when the effect stops. For example, you could use it to chain effects one after the other*/
     public EffectModifier executeOnStop;
+
+    /** Set this to true to skip some iteration of particles spawning to save up on server and client resources*/
+    public boolean shouldSpawnParticlesEveryNIteration = false;
+
+    /** How many iterations to skip between a particle spawning and the other. By default, it's a quarter of a second
+     * Only works if {@code shouldSpawnParticlesEveryNIteration} is enabled*/
+    public int spawnParticlesEveryNIteration = 5;
+
+    /** Set this to true to limit the max number of particles spawned each iteration, to save up on memory
+     * By default it's on and is capped at 5000 particles per tick. Which is a lot.*/
+    public boolean shouldLimitParticlesSpawnedPerIteration = true;
+
+    /** The limit of particles spawned at a given time (like on one iteration)*/
+    public int particleLimit = 5000;
+
+    /** Limits the number of particles spawned every N iterations specified below*/
+    public boolean shouldLimitParticlesEveryNIterations = false;
+
+    /** Every N iterations specified here the number of maximum particles spawned in that time frame is {@code particleLimit} */
+    public int limitParticlesEveryNIterations = 5;
+
 
     /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
@@ -33,7 +54,7 @@ public class Effect {
     protected ServerWorld world;
 
     protected ParticleEffect particle;
-//TODO maybe add a completition effect like in tot time the particles appear and complete the thing? Maybe.
+
     public EffectType type;
 
     protected int delay;
@@ -43,6 +64,7 @@ public class Effect {
 
     private RegistryKey<World> worldRegistryKey;
 
+    //TODO maybe add a completition effect like in tot time the particles appear and complete the thing? Maybe.
     public Effect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos){
         this.world = world;
         this.type = type;
@@ -70,6 +92,13 @@ public class Effect {
         copy.setDelay(original.getDelay());
         copy.setUseEyePosAsOrigin(original.isUseEyePosAsOrigin());
         copy.setExecuteOnStop(original.getExecuteOnStop());
+        //New stuff 0.1.0
+        copy.setShouldSpawnParticlesEveryNIteration(original.shouldSpawnParticlesEveryNIteration());
+        copy.setShouldLimitParticlesEveryNIterations(original.shouldLimitParticlesEveryNIterations());
+        copy.setShouldLimitParticlesSpawnedPerIteration(original.shouldLimitParticlesSpawnedPerIteration());
+        copy.setLimitParticlesEveryNIterations(original.getLimitParticlesEveryNIterations());
+        copy.setSpawnParticlesEveryNIteration(original.getSpawnParticlesEveryNIteration());
+        copy.setParticleLimit(original.getParticleLimit());
 
         copy.type = original.type;
         copy.done = original.done;
@@ -198,10 +227,27 @@ public class Effect {
                     ticks = 0;
                     this.onRun();
                 }
-            }else{
-                //Repeating each tick
-                this.onRun();
+            }else{ //Repeating each tick
                 ticks++;
+                //Checks if the limiter is enabled
+                if(shouldSpawnParticlesEveryNIteration && !(ticks%spawnParticlesEveryNIteration==0)){
+                    //If it is, checks if the current iteration/tick gives a return of 0 from the %, if not skips the iteration
+                    return;
+                }
+                this.onRun();
+
+                //ParticleAnimationLib.LOGGER.info("Should limiti every n : "  + shouldLimitParticlesEveryNIterations + " iteratios limit: " + limitParticlesEveryNIterations + " the division: " + ticks%limitParticlesEveryNIterations);
+
+                //If the limiter on particle count every iteration is on, clears the current count when the n-iteration is reached
+                if(shouldLimitParticlesEveryNIterations && ticks%limitParticlesEveryNIterations==0){
+                    ParticleAnimationLib.LOGGER.info("Resetting the particle count, on iteration: " + ticks + " the count was: " + currentParticleCount);
+                    this.currentParticleCount = 0;
+                }else if(shouldLimitParticlesSpawnedPerIteration){
+                    ParticleAnimationLib.LOGGER.info("Resetting the particle count, on iteration: " + ticks + " the count was: " + currentParticleCount);
+                    //If it's every iteration, rests the count each time
+                    this.currentParticleCount = 0;
+                }
+
                 if(ticks > iterations){
                     done = true;
                     ticks = 0;
@@ -250,8 +296,8 @@ public class Effect {
         return false;
     }
 */
+
     public void displayParticle(ParticleEffect effect, Vec3d pos){
-        //TODO make the count and speed configurable?
         this.displayParticle(effect, pos, Vec3d.ZERO);
     }
 
@@ -261,10 +307,21 @@ public class Effect {
         this.displayParticle(dustParticle, pos);
     }
 
+    private int currentParticleCount = 0;
+
     public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel){
         /*if(shouldCut && checkCut(pos)){
             return;
         }*/
+        //Checks to see if limiters are in place and starts counting
+        if(shouldLimitParticlesSpawnedPerIteration || shouldLimitParticlesEveryNIterations){
+            currentParticleCount++;
+            //If above the particle limit, don't spawn the particles.
+            // Works when the particle limit is on a single iteration/tick, or when a few iteration passed without the count resetting (this happens in the run method)
+            if(currentParticleCount > particleLimit){
+                return;
+            }
+        }
         world.spawnParticles(effect, pos.getX(), pos.getY(), pos.getZ(), 1,vel.getX(), vel.getY(), vel.getZ() , 0);
     }
 
@@ -349,6 +406,54 @@ public class Effect {
 
     public void setParticle(ParticleEffect particle) {
         this.particle = particle;
+    }
+
+    public int getLimitParticlesEveryNIterations() {
+        return limitParticlesEveryNIterations;
+    }
+
+    public void setLimitParticlesEveryNIterations(int limitParticlesEveryNIterations) {
+        this.limitParticlesEveryNIterations = limitParticlesEveryNIterations;
+    }
+
+    public boolean shouldLimitParticlesEveryNIterations() {
+        return shouldLimitParticlesEveryNIterations;
+    }
+
+    public void setShouldLimitParticlesEveryNIterations(boolean shouldLimitParticlesEveryNIterations) {
+        this.shouldLimitParticlesEveryNIterations = shouldLimitParticlesEveryNIterations;
+    }
+
+    public int getParticleLimit() {
+        return particleLimit;
+    }
+
+    public void setParticleLimit(int particleLimit) {
+        this.particleLimit = particleLimit;
+    }
+
+    public int getSpawnParticlesEveryNIteration() {
+        return spawnParticlesEveryNIteration;
+    }
+
+    public void setSpawnParticlesEveryNIteration(int spawnParticlesEveryNIteration) {
+        this.spawnParticlesEveryNIteration = spawnParticlesEveryNIteration;
+    }
+
+    public boolean shouldSpawnParticlesEveryNIteration() {
+        return shouldSpawnParticlesEveryNIteration;
+    }
+
+    public void setShouldSpawnParticlesEveryNIteration(boolean shouldSpawnParticlesEveryNIteration) {
+        this.shouldSpawnParticlesEveryNIteration = shouldSpawnParticlesEveryNIteration;
+    }
+
+    public boolean shouldLimitParticlesSpawnedPerIteration() {
+        return shouldLimitParticlesSpawnedPerIteration;
+    }
+
+    public void setShouldLimitParticlesSpawnedPerIteration(boolean shouldLimitParticlesSpawnedPerIteration) {
+        this.shouldLimitParticlesSpawnedPerIteration = shouldLimitParticlesSpawnedPerIteration;
     }
 
 }
