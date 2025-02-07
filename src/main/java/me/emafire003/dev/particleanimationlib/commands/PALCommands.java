@@ -18,25 +18,8 @@ public class PALCommands {
 
         dispatcher.getRoot().addChild(pal_commands);
 
-        LiteralCommandNode<ServerCommandSource> pal_alias = CommandManager
-                .literal("particleanimationlib")
-                .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
-                .build();
-
-
-        dispatcher.getRoot().addChild(pal_alias);
-
         PALCommand[] commands = new PALCommand[] {
                 new PALDebugCommand(),
-                new AnimatedBallCommand(),
-                new ArcCommand(),
-                new CuboidCommand(),
-                new SphereCommand(),
-                new ConeCommand(),
-                new VortexCommand(),
-                new LineCommand(),
-                new AnimatedCircleCommand(),
-                new ColoredImageCommand()
         };
 
         for (PALCommand command : commands) {
