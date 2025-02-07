@@ -12,8 +12,6 @@ Currently available effects:
 **At present time this mod is in alpha stage meaning that stuff could change or break between version, so be aware of that (I will try to avoid making such changes tho). Moreover, only a small part of effects planned are available, and the documentation will be relegated mostly to the javadocs for the time being, although I hope to make a wiki in the future!**
 A forge/neoforge version may come in the future, but I first want to get the fabric/quilt one to a beta stage before starting the porting!
 
-[![bisecthosting](https://github.com/Emafire003/ColoredGlowLib/assets/29462910/973c0c1a-062c-4c4a-aa04-f02e184fd5d7)](https://www.bisecthosting.com/LightDev)
-
 ## How to create the effects?
 All of the effects are in the `effects` package and you can create a new effect simply by creating a new effect object or you can use their builder method, kinda like the Block properties.
 
