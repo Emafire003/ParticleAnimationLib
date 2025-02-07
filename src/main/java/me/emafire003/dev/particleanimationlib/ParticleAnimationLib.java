@@ -1,10 +1,8 @@
 package me.emafire003.dev.particleanimationlib;
 
-import me.emafire003.dev.particleanimationlib.commands.PALCommands;
 import me.emafire003.dev.particleanimationlib.effects.image.ImageUtils;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 
 public class ParticleAnimationLib implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -34,11 +31,8 @@ public class ParticleAnimationLib implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Loading ParticleAnimationLib for awesome particle effects!");
-		CommandRegistrationCallback.EVENT.register(PALCommands::registerCommands);
 		//A bit hacky, but there is no other way :/
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-			SERVER_INSTANCE = server;
-		});
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER_INSTANCE = server);
 	}
 
 	public static Identifier getIdentifier(String path){
