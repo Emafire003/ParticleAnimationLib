@@ -1,5 +1,6 @@
 package me.emafire003.dev.particleanimationlib.effects;
 
+import com.google.gson.annotations.Expose;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
@@ -15,55 +16,67 @@ public class DonutEffect extends YPREffect {
     /**
      * Amount of particles inside a single vertical circle
      */
+    @Expose
     public int particlesCircle = 10;
 
     /**
      * Amount of circles to build the torus
      */
+    @Expose
     public int circles = 36;
 
     /**
      * Radius of the torus
      */
+    @Expose
     public float radiusDonut = 2;
 
     /**
      * Radius of the tube (the circles on the outside).
      */
+    @Expose
     public float radiusTube = .5f;
 
     /**
      * Rotation of the torus.
      */
+    @Expose
     public Vec3d rotation = Vec3d.ZERO;
 
     /**
      * Increases the donut radius this much each tick
      */
+    @Expose
     public float radiusDonutIncrease = 0;
 
     /**
      * Increases the radius of the tube (the circles on the outside) this much each iteration
      */
+    @Expose
     public float radiusTubeIncrease = 0;
 
     /**
      * Increases the amount of particles inside a single vertical circle this much each iteration
      */
+    @Expose
     public int particlesCircleIncrease = 0;
 
     /**Increase the amount of circles making up the donut*/
+    @Expose
     public int circlesIncrease = 0;
 
     /**Increases the number of circles by {@code circleIncrease} once every tot iterations
      * By default it's 20 iterations, so once every second*/
+    @Expose
     public int increaseCirclesEveryNIterations = 20;
 
     /**Increases the number of particles per circle by {@code particlesCircleIncrease} once every tot iterations
      * By default it's 20 iterations, so once every second*/
+    @Expose
     public int increaseParticlesCircleEveryNIterations = 20;
 
     // Calculations
+    @Expose
     private int iteration = 0;
 
     /** Creates a new donut effect

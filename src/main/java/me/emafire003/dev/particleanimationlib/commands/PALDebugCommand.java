@@ -3,8 +3,13 @@ package me.emafire003.dev.particleanimationlib.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.emafire003.dev.particleanimationlib.EffectSerializer;
+import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.DonutEffect;
 import me.emafire003.dev.particleanimationlib.effects.TextEffect;
+import me.emafire003.dev.particleanimationlib.effects.image.BaseImageEffect;
+import me.emafire003.dev.particleanimationlib.effects.image.ColoredImageEffect;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
@@ -16,6 +21,8 @@ import net.minecraft.util.math.Vec3d;
 
 import java.awt.Font;
 import java.util.Collection;
+
+import static me.emafire003.dev.particleanimationlib.ParticleAnimationLib.MOD_ID;
 
 public class PALDebugCommand implements PALCommand {
 
@@ -49,11 +56,13 @@ public class PALDebugCommand implements PALCommand {
                 donutEffect.setCirclesIncrease(1);
                 donutEffect.setRotation(new Vec3d(0, 0, Math.PI/4));
 
+                EffectSerializer.serializeEffect(donutEffect, "donut1");
+
                 //donutEffect.setShouldLimitParticlesSpawnedPerIteration(true);
                 //donutEffect.setShouldSpawnParticlesEveryNIteration(true);
                 //donutEffect.setLimitParticlesEveryNIterations(2);
 
-                donutEffect.runFor(5);
+                //donutEffect.runFor(5);
 
                 /*TextEffect textEffect = new TextEffect(source.getWorld(), ParticleTypes.ENCHANTED_HIT, target.getPos().add(0,2,0), target.getHeadYaw(), target.getPitch(), "Hello world", false, 1, 1, (float) 1 / 5, true, new Font("Courier New", Font.PLAIN, 13));
                 //textEffect.runFor(5);
@@ -80,11 +89,11 @@ public class PALDebugCommand implements PALCommand {
 
                 /*CuboidEffect effect = CuboidEffect.builder(source.getWorld(), ParticleTypes.ELECTRIC_SPARK, source.getPosition().add(0,10,0)).build();
                 effect.runFor(5);*/
-
-                /*ColoredImageEffect.builder(source.getWorld(), target.getEyePos().add(-2.7, 0,0), "https://fabricmc.net/assets/logo.png")
+                        //https://fabricmc.net/assets/logo.png
+                ColoredImageEffect.builder(source.getWorld(), target.getEyePos().add(-2.7, 0,0), "C:\\Users\\Ema\\Desktop\\Projects\\Java_projects\\ParticleAnimationLib\\apple.png")
                         .particleSize(0.5f).rotation(new Vec3d(0, Math.PI/2, 0)).scale(0.04f).stepX(2).stepY(2).transparency(true)
                         .enableRotation(true).angularVelocityX(0).angularVelocityZ(0).angularVelocityY(Math.PI/40).plane(BaseImageEffect.Plane.Y)
-                        .build().runFor(4);*/
+                        .build().runFor(4);
 
 
 

@@ -1,5 +1,6 @@
 package me.emafire003.dev.particleanimationlib;
 
+import com.google.gson.annotations.Expose;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
@@ -15,54 +16,73 @@ import org.joml.Vector3f;
 @SuppressWarnings("unused")
 public class Effect {
 
+    @Expose
     protected int iterations;
+    @Expose
     protected Vec3d originPos;
+    @Expose
     protected boolean updatePositions;
 
     /**If true and an entity is the origin it will use their head position if possible*/
+    @Expose
     protected boolean useEyePosAsOrigin;
+    @Expose
     protected Entity entityOrigin;
+    @Expose
     protected Vec3d originOffset = Vec3d.ZERO;
 
-    /** A function that executes when the effect stops. For example, you could use it to chain effects one after the other*/
-    public EffectModifier executeOnStop;
+    /** A function that executes when the effect stops. For example, you could use it to chain effects one after the other
+     *
+     * NOTE It won't be saved in serialization!*/
+    public transient EffectModifier executeOnStop;
 
     /** Set this to true to skip some iteration of particles spawning to save up on server and client resources*/
+    @Expose
     public boolean shouldSpawnParticlesEveryNIteration = false;
 
     /** How many iterations to skip between a particle spawning and the other. By default, it's a quarter of a second
      * Only works if {@code shouldSpawnParticlesEveryNIteration} is enabled*/
+    @Expose
     public int spawnParticlesEveryNIteration = 5;
 
     /** Set this to true to limit the max number of particles spawned each iteration, to save up on memory
      * By default it's on and is capped at 5000 particles per tick. Which is a lot.*/
+    @Expose
     public boolean shouldLimitParticlesSpawnedPerIteration = true;
 
     /** The limit of particles spawned at a given time (like on one iteration)*/
+    @Expose
     public int particleLimit = 5000;
 
     /** Limits the number of particles spawned every N iterations specified below*/
+    @Expose
     public boolean shouldLimitParticlesEveryNIterations = false;
 
     /** Every N iterations specified here the number of maximum particles spawned in that time frame is {@code particleLimit} */
+    @Expose
     public int limitParticlesEveryNIterations = 5;
 
 
     /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
     public boolean shouldCut = false;*/
-    protected ServerWorld world;
+    protected transient ServerWorld world;
 
+    @Expose
     protected ParticleEffect particle;
 
+    @Expose
     public EffectType type;
 
+    @Expose
     protected int delay;
 
+    @Expose
     protected boolean done = false;
+    @Expose
     protected int ticks = 0;
 
-    private RegistryKey<World> worldRegistryKey;
+    private transient RegistryKey<World> worldRegistryKey;
 
     //TODO maybe add a completition effect like in tot time the particles appear and complete the thing? Maybe.
     public Effect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos){
@@ -240,10 +260,8 @@ public class Effect {
 
                 //If the limiter on particle count every iteration is on, clears the current count when the n-iteration is reached
                 if(shouldLimitParticlesEveryNIterations && ticks%limitParticlesEveryNIterations==0){
-                    ParticleAnimationLib.LOGGER.info("Resetting the particle count, on iteration: " + ticks + " the count was: " + currentParticleCount);
                     this.currentParticleCount = 0;
                 }else if(shouldLimitParticlesSpawnedPerIteration){
-                    ParticleAnimationLib.LOGGER.info("Resetting the particle count, on iteration: " + ticks + " the count was: " + currentParticleCount);
                     //If it's every iteration, rests the count each time
                     this.currentParticleCount = 0;
                 }
