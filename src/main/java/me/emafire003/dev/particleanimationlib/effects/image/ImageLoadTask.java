@@ -41,7 +41,6 @@ public class ImageLoadTask{
         BufferedImage[] images;
         File imageFile;
 
-        LOGGER.info("The fileName is: " + fileName);
         if(fileName.startsWith("id:")){
             Identifier id = Identifier.of(fileName.replaceFirst("id:", ""));
             Optional<Resource> resourceOptional = server.getResourceManager().getResource(id);
