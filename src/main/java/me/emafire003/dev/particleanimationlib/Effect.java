@@ -240,10 +240,8 @@ public class Effect {
 
                 //If the limiter on particle count every iteration is on, clears the current count when the n-iteration is reached
                 if(shouldLimitParticlesEveryNIterations && ticks%limitParticlesEveryNIterations==0){
-                    ParticleAnimationLib.LOGGER.info("Resetting the particle count, on iteration: " + ticks + " the count was: " + currentParticleCount);
                     this.currentParticleCount = 0;
                 }else if(shouldLimitParticlesSpawnedPerIteration){
-                    ParticleAnimationLib.LOGGER.info("Resetting the particle count, on iteration: " + ticks + " the count was: " + currentParticleCount);
                     //If it's every iteration, rests the count each time
                     this.currentParticleCount = 0;
                 }

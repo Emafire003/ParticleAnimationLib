@@ -33,7 +33,7 @@ public class BlackAndWhiteImageEffect extends BaseImageEffect {
     }
 
     /**
-     * Creates a new Colored Image effect
+     * Creates a new Black And White Image effect
      *
      * @param world The world the particles are going to spawn in
      * @param origin The origin position of the effect, aka the starting point of the cone

@@ -99,7 +99,7 @@ public class TextEffect extends YPREffect {
      *              UNRECOMMENDED: May very likely butcher the text if it's not set to 1
      * @param stepY Each stepX pixel will be shown. Saves packets for lower fontsizes.
      *              UNRECOMMENDED: May very likely butcher the text if it's not set to 1
-     * @param size The size of the text to display. Keep it around 1/5 to be displayed correctly with fonts like Times New Roman and Thaoma
+     * @param size The size of the text to display. Play around with the font size itself too. Usually to get a good quality you would lower the size (this) to some fraction, and increase the font size to around 18
      * @param realtime Set this to True if you want to update the text that is displayed
      * @param font The font that will be applied to the displayed Text
      * */
