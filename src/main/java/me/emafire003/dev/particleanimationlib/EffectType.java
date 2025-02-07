@@ -22,7 +22,6 @@ public enum EffectType implements StringIdentifiable {
      */
     DELAYED("delayed");
 
-    public static final EnumCodec<EffectType> CODEC = StringIdentifiable.createCodec(EffectType::values);
     private final String name;
 
 
