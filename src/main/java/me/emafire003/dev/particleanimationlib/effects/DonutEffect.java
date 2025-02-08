@@ -336,17 +336,56 @@ public class DonutEffect extends YPREffect {
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR;
-        private int particlesCircle;
-        private int circles;
-        private float radiusDonut;
-        private float radiusTube;
-        private Vec3d rotation;
-        private float radiusDonutIncrease;
-        private float radiusTubeIncrease;
-        private int particlesCircleIncrease;
-        private int circlesIncrease;
-        private int increaseCirclesEveryNIterations;
-        private int increaseParticlesCircleEveryNIterations;
+        /**
+         * Amount of particles inside a single vertical circle
+         */
+        public int particlesCircle = 10;
+
+        /**
+         * Amount of circles to build the torus
+         */
+        public int circles = 36;
+
+        /**
+         * Radius of the torus
+         */
+        public float radiusDonut = 2;
+
+        /**
+         * Radius of the tube (the circles on the outside).
+         */
+        public float radiusTube = .5f;
+
+        /**
+         * Rotation of the torus.
+         */
+        public Vec3d rotation = Vec3d.ZERO;
+
+        /**
+         * Increases the donut radius this much each tick
+         */
+        public float radiusDonutIncrease = 0;
+
+        /**
+         * Increases the radius of the tube (the circles on the outside) this much each iteration
+         */
+        public float radiusTubeIncrease = 0;
+
+        /**
+         * Increases the amount of particles inside a single vertical circle this much each iteration
+         */
+        public int particlesCircleIncrease = 0;
+
+        /**Increase the amount of circles making up the donut*/
+        public int circlesIncrease = 0;
+
+        /**Increases the number of circles by {@code circleIncrease} once every tot iterations
+         * By default it's 20 iterations, so once every second*/
+        public int increaseCirclesEveryNIterations = 20;
+
+        /**Increases the number of particles per circle by {@code particlesCircleIncrease} once every tot iterations
+         * By default it's 20 iterations, so once every second*/
+        public int increaseParticlesCircleEveryNIterations = 20;
 
         public Builder() {
         }

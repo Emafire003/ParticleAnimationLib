@@ -1,9 +1,10 @@
-package me.emafire003.dev.particleanimationlib.effects.image;
+package me.emafire003.dev.particleanimationlib.effects;
 
 
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
+import me.emafire003.dev.particleanimationlib.util.image.ImageLoadCallback;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.entity.Entity;
@@ -15,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import java.awt.image.BufferedImage;
 
 import static java.lang.Math.abs;
-import static me.emafire003.dev.particleanimationlib.effects.image.ImageUtils.loadImage;
+import static me.emafire003.dev.particleanimationlib.util.image.ImageUtils.loadImage;
 
 public class ImageEffect extends YPREffect {
 
@@ -636,22 +637,77 @@ public class ImageEffect extends YPREffect {
         private float yaw;
         private float pitch;
         private boolean shouldUpdateYPR;
+        /**
+         * For configuration-driven files
+         */
         private String fileName;
-        private boolean transparency;
-        private int frameDelay;
-        private int stepX;
-        private int stepY;
-        private float scale;
-        private float particleSize;
-        private boolean enableRotation;
-        private Vec3d rotation;
-        private boolean orient;
-        private Plane plane;
-        private double angularVelocityX;
-        private double angularVelocityY;
-        private double angularVelocityZ;
-        private boolean blackAndWhite;
-        private boolean invertColors;
+
+        /**
+         * Whether or not to check for transparent pixels
+         */
+        private boolean transparency = false;
+
+        /**
+         * How many ticks to show each frame
+         */
+        private int frameDelay = 5;
+
+        /**
+         * Each stepX pixel will be shown. Saves packets for high resolutions.
+         */
+        private int stepX = 5;
+
+        /**
+         * Each stepY pixel will be shown. Saves packets for high resolutions.
+         */
+        private int stepY = 5;
+
+        /**
+         * Scale the image down
+         */
+        private float scale = (float) 1 / 40;
+
+        /**How big should the dust particles be?*/
+        private float particleSize = 1f;
+
+        /**
+         * Should it rotate?
+         */
+        private boolean enableRotation = true;
+
+        /**
+         * Apply a fixed rotation
+         */
+        private Vec3d rotation = null;
+
+        /**Orients the image to the specified Yaw Pitch, for example facing a player*/
+        private boolean orient = false;
+
+        /**
+         * What plane should it rotate?
+         */
+        private Plane plane = Plane.XYZ;
+
+        /**
+         * Turns the image by this angle each iteration around the x-axis
+         */
+        private double angularVelocityX = Math.PI / 200;
+
+        /**
+         * Turns the image by this angle each iteration around the y-axis
+         */
+        private double angularVelocityY = Math.PI / 170;
+
+        /**
+         * Turns the image by this angle each iteration around the z-axis
+         */
+        private double angularVelocityZ = Math.PI / 155;
+
+        /**Weather or not this should display as black and white*/
+        private boolean blackAndWhite = false;
+
+        /**Weather or not the color of the image should be inverted*/
+        private boolean invertColors = false;
         private Identifier fileId;
 
         public Builder() {

@@ -1,6 +1,6 @@
 package me.emafire003.dev.particleanimationlib;
 
-import me.emafire003.dev.particleanimationlib.effects.image.ImageUtils;
+import me.emafire003.dev.particleanimationlib.util.image.ImageUtils;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

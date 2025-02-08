@@ -1,4 +1,4 @@
-package me.emafire003.dev.particleanimationlib.effects.image;
+package me.emafire003.dev.particleanimationlib.util.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.resource.Resource;
