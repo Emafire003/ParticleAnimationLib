@@ -14,6 +14,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.awt.image.BufferedImage;
 
+import static java.lang.Math.abs;
 import static me.emafire003.dev.particleanimationlib.effects.image.ImageUtils.loadImage;
 
 public class ImageEffect extends YPREffect {
@@ -118,7 +119,7 @@ public class ImageEffect extends YPREffect {
     //public static final Identifier LOGO_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "images/icon.png");
 
     /**
-     * Creates a new ImageEffect
+     * Creates a new ImageEffect. By default, it is coloured, but you can set it to be black and white (which were the best gen pokèmon games btw)
      *
      * @param world The world the particles are going to spawn in
      * @param origin The origin position of the effect, aka the starting point of the cone
@@ -139,12 +140,14 @@ public class ImageEffect extends YPREffect {
      * @param angularVelocityX Turns the image by this angle each iteration around the x-axis (radians)
      * @param angularVelocityY Turns the image by this angle each iteration around the y-axis (radians)
      * @param angularVelocityZ Turns the image by this angle each iteration around the z-axis (radians)
-     * @param
+     * @param blackAndWhite Makes the image display in binary colors, black and white
+     * @param invertColors Inverts the color of the image, displaying its negative
      * */
     public ImageEffect(ServerWorld world, Vec3d origin, float yaw, float pitch, String fileName,
                        boolean transparency, int frameDelay, int stepX, int stepY, float scale,
                        float particleSize, Vec3d rotation, boolean orient, boolean enableRotation,
-                       Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ, boolean blackAndWhite, boolean invertColors) {
+                       Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ,
+                       boolean blackAndWhite, boolean invertColors) {
         super(world, EffectType.REPEATING, null, origin);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -589,18 +592,14 @@ public class ImageEffect extends YPREffect {
     }
 
     private static final int black = 0;
-    private static final int white = 0;
+    private static final int white = 16777215;
 
     /**This methods handles the display of the image into particle form*/
     protected void display(BufferedImage image, Vec3d v, Vec3d pos, int pixel_color){
-
-        //If the transparency is enabled, all pixels given to this function should be black
-        if(this.blackAndWhite && this.transparency){
-            pixel_color = black;
-        }else if(this.blackAndWhite){
-            //Otherwise, the pixel that are less dark the half of white, should be black the other whites
-            //TODO this method needs some work i think. Maybe i should edit the image color above the chain
-            if(pixel_color < white/2){
+        if(this.blackAndWhite){
+            pixel_color = abs(pixel_color);
+            //The pixel that are less dark the half of white, should be black the other whites
+            if(pixel_color > white/2){
                 pixel_color = black;
             }else{
                 pixel_color = white;
