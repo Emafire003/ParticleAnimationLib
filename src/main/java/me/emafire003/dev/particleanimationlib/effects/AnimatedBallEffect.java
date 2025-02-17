@@ -58,7 +58,8 @@ public class AnimatedBallEffect extends Effect {
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect
      * @param count The total number of particles that will be displayed
-     * @param particles_per_iteration The number of particles displayed in each iteration
+     * @param particles_per_iteration The number of particles displayed in each
+     *                                iteration
      * @param size The size of the ball effect
      * @param factors A {@link Vec3d} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
      * @param rotation A {@link Vec3d} of xyz rotations (in radians) for the ball effect.

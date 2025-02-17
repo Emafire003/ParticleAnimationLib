@@ -35,11 +35,6 @@ public class ParticleAnimationLib implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER_INSTANCE = server);
 	}
 
-	public static Identifier getIdentifier(String path){
-		return Identifier.of(MOD_ID ,path);
-	}
-
-
 	/** Specify a Custom folder where loaded images are going to be cached.
 	 * Defaults to: <i>config/particleanimationlib_cache/</i>
 	 * */

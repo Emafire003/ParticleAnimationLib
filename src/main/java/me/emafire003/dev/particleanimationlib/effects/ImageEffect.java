@@ -116,7 +116,9 @@ public class ImageEffect extends YPREffect {
 
     protected ImageLoadCallback imageLoadCallback;
 
-    public static final Identifier ERROR_IMAGE = ParticleAnimationLib.getIdentifier("images/error.png");
+    public static final String ERROR_IMAGE = "https://github.com/Emafire003/ParticleAnimationLib/blob/main/src/main/resources/data/particleanimationlib/images/error.png";
+
+    //public static final Identifier ERROR_IMAGE = ParticleAnimationLib.getIdentifier("images/error.png");
     //public static final Identifier LOGO_IMAGE = new Identifier(ParticleAnimationLib.MOD_ID, "images/icon.png");
 
     /**

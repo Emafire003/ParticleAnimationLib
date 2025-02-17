@@ -49,10 +49,6 @@ public class AnimatedCircleEffect extends YPREffect {
      */
     public boolean resetCircle = false;
 
-    /**
-     * Subtracts from origin if needed
-     */
-    public double xSubtract, ySubtract, zSubtract;
 
     /**
      * Should it rotate?
@@ -94,16 +90,16 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param particles_per_circle Number of particles that make up each circle
      * @param radius The radius of the circle
-     * @param radiusGrow Radius growth amount per each iteration. Setting to 0 won't make the radius grow
+     * @param radiusGrow Radius growth amount per each iteration. Setting to 0 won't make the radius grow. It can be used to make spirals instead of circles.
      * @param maxAngle Used to make a partial circle. Expressed in radians
-     * @param wholeCircle Makes a whole circle every iteration
-     * @param resetCircle Start at the same origin each step, use this along with maxAngle and wholeCircle to form persistent semicircles
+     * @param wholeCircle Makes a whole circle every iteration. If disabled there will be an animation of particles completing the circle, similar to {@link AnimatedBallEffect} or a "loading" circle
+     * @param resetCircle Start at the same origin each step, use this along with maxAngle and wholeCircle to form persistent semicircles. (If you have wholeCircle on false it won't work)
      * @param enableRotation Should the circle rotate?
      * @param angularVelocity A {@link Vec3d} of the angular velocities of the effect (for the rotation) expressed in radials. Turns the circle by this angle each iteration around the (x|y|z)-axis
+     *                        Tip: It also works with restCircle, and it creates interesting shapes! It can also work a bit like the animated ball!
      * @param rotations A {@link Vec3d} of Rotations of the torus/circles
-     * @param subtractFromOrigin A {@link Vec3d} of values that will be subtracted from the origin is needed
      * */
-    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle, boolean enableRotation, Vec3d angularVelocity, Vec3d rotations, Vec3d subtractFromOrigin) {
+    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle, boolean enableRotation, Vec3d angularVelocity, Vec3d rotations) {
         super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -120,9 +116,6 @@ public class AnimatedCircleEffect extends YPREffect {
         this.xRotation = (float) rotations.getX();
         this.yRotation = (float) rotations.getY();
         this.zRotation = (float) rotations.getZ();
-        this.xSubtract = subtractFromOrigin.getX();
-        this.ySubtract = subtractFromOrigin.getY();
-        this.zSubtract = subtractFromOrigin.getZ();
     }
 
     /**
@@ -169,9 +162,6 @@ public class AnimatedCircleEffect extends YPREffect {
         setRadius(builder.radius);
         setMaxAngle(builder.maxAngle);
         setResetCircle(builder.resetCircle);
-        xSubtract = builder.xSubtract;
-        ySubtract = builder.ySubtract;
-        zSubtract = builder.zSubtract;
         setEnableRotation(builder.enableRotation);
         setParticles(builder.particles);
         setWholeCircle(builder.wholeCircle);
@@ -215,7 +205,6 @@ public class AnimatedCircleEffect extends YPREffect {
         copy.setWholeCircle(original.isWholeCircle());
         copy.setRadiusGrow(original.getRadiusGrow());
         copy.setRotations(new Vec3d(original.xRotation, original.yRotation, original.zRotation));
-        copy.setSubtracts(new Vec3d(original.xSubtract, original.ySubtract, original.zSubtract));
         copy.setAngularVelocity(new Vec3d(original.angularVelocityX, original.angularVelocityY, original.angularVelocityZ));
     }
 
@@ -227,7 +216,7 @@ public class AnimatedCircleEffect extends YPREffect {
             return;
         }
 
-        origin = origin.subtract(xSubtract, ySubtract, zSubtract);
+
         if(radiusGrow != 0){
             radius = radius+step * radiusGrow;
         }
@@ -326,15 +315,6 @@ public class AnimatedCircleEffect extends YPREffect {
         this.zRotation = (float) rotations.getZ();
     }
 
-    public Vec3d getSubtracts() {
-        return new Vec3d(xSubtract, ySubtract, zSubtract);
-    }
-
-    public void setSubtracts(Vec3d subtracts) {
-        this.xSubtract = subtracts.getX();
-        this.ySubtract = subtracts.getY();
-        this.zSubtract = subtracts.getZ();
-    }
 
     public void setAngularVelocity(Vec3d angularVelocity) {
         this.angularVelocityX = angularVelocity.getX();
@@ -390,11 +370,6 @@ public class AnimatedCircleEffect extends YPREffect {
          * along with maxAngle and wholeCircle to form persistent semicircles
          */
         private boolean resetCircle = false;
-
-        /**
-         * Subtracts from origin if needed
-         */
-        private double xSubtract, ySubtract, zSubtract;
 
         /**
          * Should it rotate?
@@ -621,19 +596,6 @@ public class AnimatedCircleEffect extends YPREffect {
          */
         public Builder resetCircle(boolean resetCircle) {
             this.resetCircle = resetCircle;
-            return this;
-        }
-
-        /**
-         * Sets the {@code subtract} and returns a reference to this Builder enabling method chaining.
-         *
-         * @param subtract A Vec3d representing the xyz subtractions to set to the effect
-         * @return a reference to this Builder
-         */
-        public Builder subtract(Vec3d subtract) {
-            this.xSubtract = subtract.getX();
-            this.ySubtract = subtract.getY();
-            this.zSubtract = subtract.getZ();
             return this;
         }
 
