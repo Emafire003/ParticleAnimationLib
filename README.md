@@ -5,12 +5,17 @@ Do you want to create cool particle effects such as cones, cubes, spheres, and v
 It is mainly a developer utility, but as a player you can play around with the commands, especially to try out the effects before implementing them with code. It is also fully serverside, meaning you won't need it on the client. It is inspirerd by the [EffectLib](https://github.com/elBukkit/EffectLib) plugin as you may have guessed.
 
 Currently available effects:
-- [3D] Animated Sphere, Sphere, Cuboid, Vortex, Cone
-- [2D] Arc, Line, Animated Circle, Colored and BW Images
+- [3D] Animated Sphere, Sphere, Cuboid, Vortex, Cone, Donut
+- [2D] Arc, Line, Animated Circle, Colored and BW Images, Text
 
 
-**At present time this mod is in alpha stage meaning that stuff could change or break between version, so be aware of that (I will try to avoid making such changes tho). Moreover, only a small part of effects planned are available, and the documentation will be relegated mostly to the javadocs for the time being, although I hope to make a wiki in the future!**
-A forge/neoforge version may come in the future, but I first want to get the fabric/quilt one to a beta stage before starting the porting!
+**At present time this mod is in beta, meaning that stuff could still break or change a bit. And some effects are still missing**
+A forge/neoforge version may come in the future, but I first want to get the fabric/quilt all done before starting the port. Sorry! (It most likely will work with Syntra connector for the time being)
+
+## How to use this mod
+This mod on its own, is only intended for developers. But don't worry, if you are a player and still want to try out all of the amazing effects (albeit with some limitations currently) you can do so by install [ParticleAnimationLibCommands](https://modrinth.com/mod/particleanimationlibcommands). 
+
+Yes, I know, the commands are a bit long and confusing, that's why I've also started working on a wiki, that you can find [right here](https://emafire003.gitbook.io/particleanimationlibwiki/commands)!
 
 ## How to create the effects?
 All of the effects are in the `effects` package and you can create a new effect simply by creating a new effect object or you can use their builder method, kinda like the Block properties.
@@ -44,9 +49,10 @@ effect.run();
 Every effect has its own getters and setters, so you can use those to change the settings before calling the run method. You can also provide a lamda that will execute each tickt that the effect is active to the run/runFor method. For more information about what each setting does please refer to the javadoc of the constructor for that effect.
 
 ## How do I use the commands?
-You can use either `pal` or `particleanimationlib` and then use tab-completition to create your effects. They kinda lack documentation except for the names of the arguments, so I suggest looking in the corresponding classes of the effect and see from the javadoc what each thing does. Sorry :P
+First of all, you must install the companion mod [ParticleAnimationLibCommands](https://modrinth.com/mod/particleanimationlibcommands).
+You can use either `pal` or `particleanimationlib` and then use tab-completition to create your effects. You can even have a preview of each effect by using `/pal <effect> demo <particle> <pos>`!
 
-*Note*: The commands that take in stuff like rotations and such, change the integer values to "x.5", since the game thinks they are positions. You can get around that by inputting a double instead of an integer like so "x.0" (for example 2.0 or 0.0)
+Please refer to the [wiki](https://emafire003.gitbook.io/particleanimationlibwiki/commands) for more information!
 
 ### For developers:
 Add this library into your `build.gradle` as a dependency
