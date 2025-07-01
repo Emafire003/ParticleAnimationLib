@@ -306,7 +306,7 @@ public class Effect {
 
     public void displayParticle(Vec3d pos, int color, float size){
         Vector3f col = Vec3d.unpackRgb(color).toVector3f();
-        DustParticleEffect dustParticle = new DustParticleEffect( col, size);
+        DustParticleEffect dustParticle = new DustParticleEffect(col, size);
         this.displayParticle(dustParticle, pos);
     }
 
@@ -325,7 +325,7 @@ public class Effect {
                 return;
             }
         }
-        world.spawnParticles(effect, forced, forced, pos.getX(), pos.getY(), pos.getZ(), 1, vel.getX(), vel.getY(), vel.getZ() , 0);
+        world.getPlayers().forEach(serverPlayerEntity -> world.spawnParticles(serverPlayerEntity, effect, forced, pos.getX(), pos.getY(), pos.getZ(), 1, vel.getX(), vel.getY(), vel.getZ(), 0));
     }
 
     public int getIterations() {
