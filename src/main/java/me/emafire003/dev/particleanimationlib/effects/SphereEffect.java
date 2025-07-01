@@ -11,6 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("unused")
+//TODO add an invert option like the other ones.
 public class SphereEffect extends Effect {
 
     /**

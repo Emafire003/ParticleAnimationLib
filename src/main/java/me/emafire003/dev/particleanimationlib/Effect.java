@@ -10,7 +10,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class Effect {
@@ -300,8 +299,8 @@ public class Effect {
     }
 
     public void displayParticle(Vec3d pos, int color, float size){
-        Vector3f col = Vec3d.unpackRgb(color).toVector3f();
-        DustParticleEffect dustParticle = new DustParticleEffect( col, size);
+        //Vector3f col = Vec3d.unpackRgb(color).toVector3f();
+        DustParticleEffect dustParticle = new DustParticleEffect( color, size);
         this.displayParticle(dustParticle, pos);
     }
 
