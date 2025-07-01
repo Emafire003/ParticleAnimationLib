@@ -173,6 +173,7 @@ public class DonutEffect extends YPREffect {
         setCirclesIncrease(builder.circlesIncrease);
         setIncreaseCirclesEveryNIterations(builder.increaseCirclesEveryNIterations);
         setIncreaseParticlesCircleEveryNIterations(builder.increaseParticlesCircleEveryNIterations);
+        setForced(builder.forced);
     }
 
     @Override
@@ -728,6 +729,18 @@ public class DonutEffect extends YPREffect {
          */
         public Builder increaseParticlesCircleEveryNIterations(int val) {
             increaseParticlesCircleEveryNIterations = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
 

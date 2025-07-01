@@ -162,6 +162,7 @@ public class AnimatedBallEffect extends Effect {
         setParticleLimit(builder.particleLimit);
         setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
         setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+        setForced(builder.forced);
     }
 
 
@@ -348,6 +349,7 @@ public class AnimatedBallEffect extends Effect {
         private ParticleEffect particle;
         private EffectModifier executeOnStop;
         private boolean useEyePosAsOrigin = false;
+        private boolean forced = false;
         /**
          * Ball particles total (150)
          */
@@ -416,6 +418,16 @@ public class AnimatedBallEffect extends Effect {
          */
         public Builder originPos(Vec3d originPos) {
             this.originPos = originPos;
+            return this;
+        }
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
 

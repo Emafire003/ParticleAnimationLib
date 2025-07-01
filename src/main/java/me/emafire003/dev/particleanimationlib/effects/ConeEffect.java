@@ -179,6 +179,7 @@ public class ConeEffect extends YPREffect {
         setParticleLimit(builder.particleLimit);
         setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
         setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+        setForced(builder.forced);
     }
 
     public static void copy(ConeEffect original, ConeEffect copy) {
@@ -948,6 +949,18 @@ public class ConeEffect extends YPREffect {
          */
         public Builder limitParticlesEveryNIterations(int val) {
             limitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
     }
