@@ -214,6 +214,7 @@ public class ImageEffect extends YPREffect {
         setAngularVelocityZ(builder.angularVelocityZ);
         setBlackAndWhite(builder.blackAndWhite);
         setInvertColors(builder.invertColors);
+        setForced(builder.forced);
 
         if(builder.fileId != null){
             this.fileName = "id:"+builder.fileId;
@@ -1108,6 +1109,18 @@ public class ImageEffect extends YPREffect {
          */
         public Builder invertColors(boolean val) {
             invertColors = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
 

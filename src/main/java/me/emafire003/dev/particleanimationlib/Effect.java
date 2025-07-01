@@ -46,6 +46,9 @@ public class Effect {
     /** Every N iterations specified here the number of maximum particles spawned in that time frame is {@code particleLimit} */
     public int limitParticlesEveryNIterations = 5;
 
+    /** Weather or not the particles spawned have the "forced" property aka rendered much further away and bypass the option to not show them on the client */
+    public boolean forced = false;
+
 
     /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
@@ -98,6 +101,8 @@ public class Effect {
         copy.setLimitParticlesEveryNIterations(original.getLimitParticlesEveryNIterations());
         copy.setSpawnParticlesEveryNIteration(original.getSpawnParticlesEveryNIteration());
         copy.setParticleLimit(original.getParticleLimit());
+        //0.1.2
+        copy.setForced(original.isForced());
 
         copy.type = original.type;
         copy.done = original.done;
@@ -319,7 +324,7 @@ public class Effect {
                 return;
             }
         }
-        world.spawnParticles(effect, pos.getX(), pos.getY(), pos.getZ(), 1,vel.getX(), vel.getY(), vel.getZ() , 0);
+        world.spawnParticles(effect, forced, forced, pos.getX(), pos.getY(), pos.getZ(), 1, vel.getX(), vel.getY(), vel.getZ() , 0);
     }
 
     public int getIterations() {
@@ -451,6 +456,14 @@ public class Effect {
 
     public void setShouldLimitParticlesSpawnedPerIteration(boolean shouldLimitParticlesSpawnedPerIteration) {
         this.shouldLimitParticlesSpawnedPerIteration = shouldLimitParticlesSpawnedPerIteration;
+    }
+
+    public boolean isForced() {
+        return forced;
+    }
+
+    public void setForced(boolean forced) {
+        this.forced = forced;
     }
 
 }

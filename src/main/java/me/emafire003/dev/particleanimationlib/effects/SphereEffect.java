@@ -85,6 +85,7 @@ public class SphereEffect extends Effect {
         setParticleLimit(builder.particleLimit);
         setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
         setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+        setForced(builder.forced);
     }
 
     public static void copy(SphereEffect original, SphereEffect copy) {
@@ -504,6 +505,18 @@ public class SphereEffect extends Effect {
          */
         public Builder limitParticlesEveryNIterations(int val) {
             limitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
     }

@@ -190,6 +190,7 @@ public class VortexEffect extends YPREffect {
         setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
         setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
         setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setForced(builder.forced);
     }
 
     /** Returns a builder for the effect.
@@ -782,6 +783,18 @@ public class VortexEffect extends YPREffect {
          */
         public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
             shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
     }

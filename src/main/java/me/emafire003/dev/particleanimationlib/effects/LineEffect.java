@@ -162,6 +162,7 @@ public class LineEffect extends TargetedYPREffect {
         setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
         setSpawnParticlesEveryNIteration(builder.spawnParticlesEveryNIteration);
         setShouldSpawnParticlesEveryNIteration(builder.shouldSpawnParticlesEveryNIteration);
+        setForced(builder.forced);
     }
 
     public static void copy(LineEffect original, LineEffect copy) {
@@ -828,6 +829,18 @@ public class LineEffect extends TargetedYPREffect {
          */
         public Builder shouldSpawnParticlesEveryNIteration(boolean val) {
             shouldSpawnParticlesEveryNIteration = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
     }

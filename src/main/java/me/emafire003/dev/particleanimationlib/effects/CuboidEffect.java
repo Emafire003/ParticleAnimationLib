@@ -192,6 +192,7 @@ public class CuboidEffect extends TargetedEffect {
         setShouldLimitParticlesSpawnedPerIteration(builder.shouldLimitParticlesSpawnedPerIteration);
         setShouldLimitParticlesEveryNIterations(builder.shouldLimitParticlesEveryNIterations);
         setLimitParticlesEveryNIterations(builder.limitParticlesEveryNIterations);
+        setForced(builder.forced);
     }
 
     public static void copy(CuboidEffect original, CuboidEffect copy) {
@@ -746,6 +747,18 @@ public class CuboidEffect extends TargetedEffect {
          */
         public Builder limitParticlesEveryNIterations(int val) {
             limitParticlesEveryNIterations = val;
+            return this;
+        }
+
+        private boolean forced = false;
+        /**
+         * Sets the {@code forced} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param forced the {@code forced} to set
+         * @return a reference to this Builder
+         */
+        public Builder forced(boolean forced) {
+            this.forced = forced;
             return this;
         }
     }
