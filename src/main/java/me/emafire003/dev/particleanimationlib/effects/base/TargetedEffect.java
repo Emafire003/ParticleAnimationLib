@@ -47,14 +47,14 @@ public class TargetedEffect extends Effect {
                     this.targetPos = entityTarget.getEyePos();
                     return;
                 }
-                this.targetPos = entityTarget.getPos();
+                this.targetPos = entityTarget.getEntityPos();
                 return;
             }
             if(useEyePosAsTarget){
                 this.targetPos = entityTarget.getEyePos().add(targetOffset);
                 return;
             }
-            this.targetPos = entityTarget.getPos().add(targetOffset);
+            this.targetPos = entityTarget.getEntityPos().add(targetOffset);
         }
     }
 

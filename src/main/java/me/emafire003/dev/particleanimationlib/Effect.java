@@ -145,14 +145,14 @@ public class Effect {
                     this.originPos = entityOrigin.getEyePos();
                     return;
                 }
-                this.originPos = entityOrigin.getPos();
+                this.originPos = entityOrigin.getEntityPos();
                 return;
             }
             if(useEyePosAsOrigin){
                 this.originPos = entityOrigin.getEyePos().add(originOffset);
                 return;
             }
-            this.originPos = entityOrigin.getPos().add(originOffset);
+            this.originPos = entityOrigin.getEntityPos().add(originOffset);
         }
     }
 
@@ -201,7 +201,7 @@ public class Effect {
      * You have access to the effect instance and the current tick
      * */
     public void run(EffectModifier modifier){
-        if(this.world.isClient){
+        if(this.world.isClient()){
             return;
         }
 
