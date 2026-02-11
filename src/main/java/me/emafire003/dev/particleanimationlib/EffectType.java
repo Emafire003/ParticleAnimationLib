@@ -1,8 +1,8 @@
 package me.emafire003.dev.particleanimationlib;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum EffectType implements StringIdentifiable {
+public enum EffectType implements StringRepresentable {
 
     //TODO maybe add a sort of completable effect
     /**
@@ -30,7 +30,7 @@ public enum EffectType implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 }

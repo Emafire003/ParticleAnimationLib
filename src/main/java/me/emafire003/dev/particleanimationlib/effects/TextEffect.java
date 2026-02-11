@@ -10,11 +10,11 @@ import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.StringParser;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 public class TextEffect extends YPREffect {
 
@@ -103,7 +103,7 @@ public class TextEffect extends YPREffect {
      * @param realtime Set this to True if you want to update the text that is displayed
      * @param font The font that will be applied to the displayed Text
      * */
-    public TextEffect(ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch, String text,
+    public TextEffect(ServerLevel world, ParticleOptions particle, Vec3 originPos, float yaw, float pitch, String text,
                       boolean invert, int stepX, int stepY, float size, boolean realtime, Font font) {
         super(world, EffectType.REPEATING, particle, originPos);
         this.yaw = yaw;
@@ -226,14 +226,14 @@ public class TextEffect extends YPREffect {
             return;
         }
 
-        Vec3d origin_pos = this.getOriginPos();
+        Vec3 origin_pos = this.getOriginPos();
 
         if (origin_pos == null) {
             return;
         }
 
         int color;
-        Vec3d v;
+        Vec3 v;
 
         try {
             if (image == null || shouldRecalculateImage()) {
@@ -248,7 +248,7 @@ public class TextEffect extends YPREffect {
                     if (!invert && Color.black.getRGB() != color) continue;
                     else if (invert && Color.black.getRGB() == color) continue;
 
-                    v = new Vec3d((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
+                    v = new Vec3((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).scale(size);
                     //VectorUtils.rotateAroundAxisY(v, -origin_pos.getYaw() * MathUtils.degreesToRadians);
                     //v = VectorUtils.rotateVector(v, this.getYaw()-90, this.getPitch());
                     //TODO find another way to rotate the vector
@@ -283,7 +283,7 @@ public class TextEffect extends YPREffect {
      *  Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -292,13 +292,13 @@ public class TextEffect extends YPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
@@ -370,7 +370,7 @@ public class TextEffect extends YPREffect {
          * @param val the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d val) {
+        public Builder originPos(Vec3 val) {
             originPos = val;
             return this;
         }
@@ -414,7 +414,7 @@ public class TextEffect extends YPREffect {
          * @param val the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d val) {
+        public Builder originOffset(Vec3 val) {
             originOffset = val;
             return this;
         }
@@ -425,7 +425,7 @@ public class TextEffect extends YPREffect {
          * @param val the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld val) {
+        public Builder world(ServerLevel val) {
             world = val;
             return this;
         }
@@ -436,7 +436,7 @@ public class TextEffect extends YPREffect {
          * @param val the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect val) {
+        public Builder particle(ParticleOptions val) {
             particle = val;
             return this;
         }

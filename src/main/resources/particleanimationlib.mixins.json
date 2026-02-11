@@ -1,4 +1,4 @@
-{
+  {
 	"required": true,
 	"package": "me.emafire003.dev.particleanimationlib.mixin",
 	"compatibilityLevel": "JAVA_16",

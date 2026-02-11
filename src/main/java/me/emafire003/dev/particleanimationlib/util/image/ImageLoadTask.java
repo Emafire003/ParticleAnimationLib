@@ -1,9 +1,9 @@
 package me.emafire003.dev.particleanimationlib.util.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
-import net.minecraft.resource.Resource;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -42,7 +42,7 @@ public class ImageLoadTask{
         File imageFile;
 
         if(fileName.startsWith("id:")){
-            Identifier id = Identifier.of(fileName.replaceFirst("id:", ""));
+            ResourceLocation id = ResourceLocation.parse(fileName.replaceFirst("id:", ""));
             Optional<Resource> resourceOptional = server.getResourceManager().getResource(id);
             if(resourceOptional.isEmpty()){
                 LOGGER.error("Error! Can't find image from the id: " + id);
@@ -54,7 +54,7 @@ public class ImageLoadTask{
 
                 if (fileName.endsWith(".gif")) {
                     ImageReader reader = ImageIO.getImageReadersBySuffix("GIF").next();
-                    ImageInputStream in = ImageIO.createImageInputStream(imageResource.getInputStream());
+                    ImageInputStream in = ImageIO.createImageInputStream(imageResource.open());
                     reader.setInput(in);
                     int numImages = reader.getNumImages(true);
                     images = new BufferedImage[numImages];
@@ -63,10 +63,10 @@ public class ImageLoadTask{
                     }
                 } else {
                     images = new BufferedImage[1];
-                    images[0] = ImageIO.read(imageResource.getInputStream());
+                    images[0] = ImageIO.read(imageResource.open());
                 }
-                imageResource.getReader().close();
-                imageResource.getInputStream().close();
+                imageResource.openAsReader().close();
+                imageResource.open().close();
                 callback.loaded(images);
                 return;
             }catch (Exception e){

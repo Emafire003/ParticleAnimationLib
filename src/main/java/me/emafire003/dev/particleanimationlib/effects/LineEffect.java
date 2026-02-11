@@ -5,11 +5,11 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedYPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
 public class LineEffect extends TargetedYPREffect {
@@ -27,12 +27,12 @@ public class LineEffect extends TargetedYPREffect {
     /**
      * Direction of zig-zags
      */
-    public Vec3d zigZagOffset = new Vec3d(0, 0.1, 0);
+    public Vec3 zigZagOffset = new Vec3(0, 0.1, 0);
 
     /**
      * Relative direction of zig-zags
      */
-    public Vec3d zigZagRelativeOffset = new Vec3d(0, 0, 0);
+    public Vec3 zigZagRelativeOffset = new Vec3(0, 0, 0);
 
     /**
      * Particles per arc
@@ -87,7 +87,7 @@ public class LineEffect extends TargetedYPREffect {
      * @param zigZagRelativeOffset A relative offsets for the zigzags
      * @param effectAtEnd Another Effect that will be spawned at the ending position of the line (its originPos will be set to the end of the line)
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset, Effect effectAtEnd) {
+    public LineEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3 zigZagOffset, Vec3 zigZagRelativeOffset, Effect effectAtEnd) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
         this.length = length;
@@ -115,7 +115,7 @@ public class LineEffect extends TargetedYPREffect {
      * @param zigZagOffset An offset for the zigZag
      * @param zigZagRelativeOffset A relative offsets for the zigzags
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset) {
+    public LineEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch, int particles, double length, boolean isZigZag, int numberOfZigZags, Vec3 zigZagOffset, Vec3 zigZagRelativeOffset) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
         this.length = length;
@@ -190,7 +190,7 @@ public class LineEffect extends TargetedYPREffect {
      * @param particles The number of particles that make up the line
      * @param length The length of the line
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles, double length) {
+    public LineEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch, int particles, double length) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
         this.length = length;
@@ -213,7 +213,7 @@ public class LineEffect extends TargetedYPREffect {
      * @param zigZagOffset An offset for the zigZag
      * @param zigZagRelativeOffset A relative offsets for the zigzags
      */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3d zigZagOffset, Vec3d zigZagRelativeOffset) {
+    public LineEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, Vec3 target, int particles, int maxLength, boolean isZigZag, int numberOfZigZags, Vec3 zigZagOffset, Vec3 zigZagRelativeOffset) {
         super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles;
@@ -234,7 +234,7 @@ public class LineEffect extends TargetedYPREffect {
      * @param target The ending position of the line
      * @param particles The number of particles that make up the line
      * */
-    public LineEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int particles) {
+    public LineEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, Vec3 target, int particles) {
         super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles;
@@ -251,22 +251,22 @@ public class LineEffect extends TargetedYPREffect {
      * Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
 
     @Override
     public void onRun() {
-        Vec3d origin = this.getOriginPos();
-        Vec3d target;
+        Vec3 origin = this.getOriginPos();
+        Vec3 target;
 
         if (origin == null) {
             return;
         }
 
         if (length > 0){
-            target = origin.add(this.getDirection().normalize().multiply(length));
+            target = origin.add(this.getDirection().normalize().scale(length));
         }
         else {
             target = this.getTargetPos();
@@ -281,7 +281,7 @@ public class LineEffect extends TargetedYPREffect {
             return;
         }
 
-        Vec3d link = target.subtract(origin);
+        Vec3 link = target.subtract(origin);
         float length = (float) link.length();
         if (maxLength > 0){
             length = (float) Math.min(length, maxLength);
@@ -290,9 +290,9 @@ public class LineEffect extends TargetedYPREffect {
         link = link.normalize();
 
         float ratio = length / particles;
-        Vec3d v = link.multiply(ratio);
-        Vec3d loc = origin.subtract(v);
-        Vec3d rel;
+        Vec3 v = link.scale(ratio);
+        Vec3 loc = origin.subtract(v);
+        Vec3 rel;
 
         for (int i = 0; i < particles; i++) {
             if (isZigZag) {
@@ -336,19 +336,19 @@ public class LineEffect extends TargetedYPREffect {
         this.zigZags = zigZags;
     }
 
-    public Vec3d getZigZagOffset() {
+    public Vec3 getZigZagOffset() {
         return zigZagOffset;
     }
 
-    public void setZigZagOffset(Vec3d zigZagOffset) {
+    public void setZigZagOffset(Vec3 zigZagOffset) {
         this.zigZagOffset = zigZagOffset;
     }
 
-    public Vec3d getZigZagRelativeOffset() {
+    public Vec3 getZigZagRelativeOffset() {
         return zigZagRelativeOffset;
     }
 
-    public void setZigZagRelativeOffset(Vec3d zigZagRelativeOffset) {
+    public void setZigZagRelativeOffset(Vec3 zigZagRelativeOffset) {
         this.zigZagRelativeOffset = zigZagRelativeOffset;
     }
 
@@ -389,12 +389,12 @@ public class LineEffect extends TargetedYPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private EffectModifier executeOnStop;
         /**
          * Should it do a zig zag?
@@ -409,12 +409,12 @@ public class LineEffect extends TargetedYPREffect {
         /**
          * Direction of zig-zags
          */
-        private Vec3d zigZagOffset = new Vec3d(0, 0.1, 0);
+        private Vec3 zigZagOffset = new Vec3(0, 0.1, 0);
 
         /**
          * Relative direction of zig-zags
          */
-        private Vec3d zigZagRelativeOffset = new Vec3d(0, 0, 0);
+        private Vec3 zigZagRelativeOffset = new Vec3(0, 0, 0);
 
         /**
          * Particles per arc
@@ -439,10 +439,10 @@ public class LineEffect extends TargetedYPREffect {
          * This will play a subeffect at the end origin of the line
          */
         private Effect subEffectAtEnd = null;
-        private Vec3d targetPos;
+        private Vec3 targetPos;
         private boolean updateTargetPositions = true;
         private Entity entityTarget;
-        private Vec3d targetOffset;
+        private Vec3 targetOffset;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
@@ -477,7 +477,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -543,7 +543,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -554,7 +554,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -565,7 +565,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }
@@ -598,7 +598,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param zigZagOffset the {@code zigZagOffset} to set
          * @return a reference to this Builder
          */
-        public Builder zigZagOffset(Vec3d zigZagOffset) {
+        public Builder zigZagOffset(Vec3 zigZagOffset) {
             this.zigZagOffset = zigZagOffset;
             return this;
         }
@@ -609,7 +609,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param zigZagRelativeOffset the {@code zigZagRelativeOffset} to set
          * @return a reference to this Builder
          */
-        public Builder zigZagRelativeOffset(Vec3d zigZagRelativeOffset) {
+        public Builder zigZagRelativeOffset(Vec3 zigZagRelativeOffset) {
             this.zigZagRelativeOffset = zigZagRelativeOffset;
             return this;
         }
@@ -664,7 +664,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param targetPos the {@code targetPos} to set
          * @return a reference to this Builder
          */
-        public Builder targetPos(Vec3d targetPos) {
+        public Builder targetPos(Vec3 targetPos) {
             this.targetPos = targetPos;
             return this;
         }
@@ -697,7 +697,7 @@ public class LineEffect extends TargetedYPREffect {
          * @param targetOffset the {@code targetOffset} to set
          * @return a reference to this Builder
          */
-        public Builder targetOffset(Vec3d targetOffset) {
+        public Builder targetOffset(Vec3 targetOffset) {
             this.targetOffset = targetOffset;
             return this;
         }

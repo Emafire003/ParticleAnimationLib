@@ -5,11 +5,11 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class VortexEffect extends YPREffect {
      */
     protected int step = 0;
     private boolean inversionCalculated = false;
-    private List<Vec3d> positions = new ArrayList<>();
+    private List<Vec3> positions = new ArrayList<>();
     private int counter;
 
 
@@ -92,7 +92,7 @@ public class VortexEffect extends YPREffect {
      * @param circles The number of circles per iteration
      * @param helixes The number of helixes or helices whatever per iteration
      * */
-    public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
+    public VortexEffect(@NotNull ServerLevel world, ParticleOptions particle, Vec3 originPos, float yaw, float pitch,
                         float radius, float radiusGrow, float startRange, float lengthGrow,
                         double radials_per_iteration, int circles, int helixes) {
         super(world, EffectType.REPEATING, particle, originPos);
@@ -126,7 +126,7 @@ public class VortexEffect extends YPREffect {
      * @param circles The number of circles per iteration
      * @param helixes The number of helixes or helices whatever per iteration
      * */
-    public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch,
+    public VortexEffect(@NotNull ServerLevel world, ParticleOptions particle, Vec3 originPos, float yaw, float pitch,
                         float radius, float lengthGrow, int circles, int helixes) {
         super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
@@ -150,7 +150,7 @@ public class VortexEffect extends YPREffect {
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * */
-    public VortexEffect(@NotNull ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch) {
+    public VortexEffect(@NotNull ServerLevel world, ParticleOptions particle, Vec3 originPos, float yaw, float pitch) {
         super(world, EffectType.REPEATING, particle, originPos);
         this.type = EffectType.REPEATING;
         this.world = world;
@@ -202,16 +202,16 @@ public class VortexEffect extends YPREffect {
      *  Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
     /**  Returns the predicted finish center position of the vortex, can be used to invert the vortex
      * */
-    public Vec3d getPredictedMaxCenterPosition(){
+    public Vec3 getPredictedMaxCenterPosition(){
         float total_length = this.getIterations() * lengthGrow * circles;
 
-        Vec3d v = new Vec3d(0, total_length, 0);
+        Vec3 v = new Vec3(0, total_length, 0);
 
         v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
@@ -219,9 +219,9 @@ public class VortexEffect extends YPREffect {
     }
 
     private void calculateAllPositions(){
-        Vec3d origin = this.getOriginPos();
+        Vec3 origin = this.getOriginPos();
         double angle;
-        Vec3d v;
+        Vec3 v;
 
         if(origin == null){
             return;
@@ -230,7 +230,7 @@ public class VortexEffect extends YPREffect {
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
                 angle = step * radials + (2 * Math.PI * i / helixes);
-                v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
+                v = new Vec3(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
                 //The +90 flips the angle to be on the looking plane let's call it
                 v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
@@ -246,9 +246,9 @@ public class VortexEffect extends YPREffect {
 
     @Override
     protected void onRun() {
-        Vec3d origin = this.getOriginPos();
+        Vec3 origin = this.getOriginPos();
         double angle;
-        Vec3d v;
+        Vec3 v;
 
         if(origin == null){
             return;
@@ -268,19 +268,19 @@ public class VortexEffect extends YPREffect {
                         return;
                     }
                     if(flipped){
-                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(positions.get(counter).multiply(-1)));
+                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(positions.get(counter).scale(-1)));
                     }else{
                         this.displayParticle(particle, origin.add(positions.get(counter)));
                     }
 
                 }else{
                     angle = step * radials + (2 * Math.PI * i / helixes);
-                    v = new Vec3d(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
+                    v = new Vec3(Math.cos(angle) * (radius + step * radiusGrow), startRange + step * lengthGrow, Math.sin(angle) * (radius + step * radiusGrow));
                     //The +90 flips the angle to be on the looking plane let's call it
                     v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
                     if(flipped){
-                        v = v.multiply(-1);
+                        v = v.scale(-1);
                         this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
                     }else{
                         this.displayParticle(particle, origin.add(v));
@@ -387,12 +387,12 @@ public class VortexEffect extends YPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private EffectModifier executeOnStop;
         /**
          * Radius of vortex (2)
@@ -475,7 +475,7 @@ public class VortexEffect extends YPREffect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -508,7 +508,7 @@ public class VortexEffect extends YPREffect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -541,7 +541,7 @@ public class VortexEffect extends YPREffect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -552,7 +552,7 @@ public class VortexEffect extends YPREffect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }

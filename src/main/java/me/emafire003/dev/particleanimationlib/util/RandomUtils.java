@@ -1,6 +1,6 @@
 package me.emafire003.dev.particleanimationlib.util;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,7 +13,7 @@ public final class RandomUtils {
         // No instance allowed
     }
 
-    public static Vec3d getRandomVector() {
+    public static Vec3 getRandomVector() {
         double u = random.nextDouble();
         double v = random.nextDouble();
 
@@ -31,24 +31,24 @@ public final class RandomUtils {
 
         // Going to take it on faith from the math gods that
         // this is always a normal vector
-        return new Vec3d(x, y, z);
+        return new Vec3(x, y, z);
     }
 
-    public static Vec3d getRandomFlatVector() {
+    public static Vec3 getRandomFlatVector() {
         double x, z;
         x = random.nextDouble() * 2 - 1;
         z = random.nextDouble() * 2 - 1;
 
-        return new Vec3d(x, 0, z);
+        return new Vec3(x, 0, z);
     }
 
-    public static Vec3d getRandomCircleVector() {
+    public static Vec3 getRandomCircleVector() {
         double rnd, x, z;
         rnd = random.nextDouble() * 2 * Math.PI;
         x = Math.cos(rnd);
         z = Math.sin(rnd);
 
-        return new Vec3d(x, 0, z);
+        return new Vec3(x, 0, z);
     }
 
     public static double getRandomAngle() {

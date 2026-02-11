@@ -4,11 +4,11 @@ import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Creates an animated Sphere. Thanks to the author for sharing it!
@@ -61,22 +61,22 @@ public class AnimatedBallEffect extends Effect {
      * @param particles_per_iteration The number of particles displayed in each
      *                                iteration
      * @param size The size of the ball effect
-     * @param factors A {@link Vec3d} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
-     * @param rotation A {@link Vec3d} of xyz rotations (in radians) for the ball effect.
+     * @param factors A {@link Vec3} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
+     * @param rotation A {@link Vec3} of xyz rotations (in radians) for the ball effect.
      * */
-    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size, Vec3d factors, Vec3d rotation) {
+    public AnimatedBallEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, int count, int particles_per_iteration, float size, Vec3 factors, Vec3 rotation) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
         this.particles = count;
         this.size = size;
         this.particlesPerIteration = particles_per_iteration;
-        this.xFactor = (float) factors.getX();
-        this.yFactor = (float) factors.getY();
-        this.zFactor = (float) factors.getZ();
-        this.xRotation = rotation.getX();
-        this.yRotation = rotation.getY();
-        this.zRotation = rotation.getZ();
+        this.xFactor = (float) factors.x();
+        this.yFactor = (float) factors.y();
+        this.zFactor = (float) factors.z();
+        this.xRotation = rotation.x();
+        this.yRotation = rotation.y();
+        this.zRotation = rotation.z();
     }
 
     /**
@@ -86,7 +86,7 @@ public class AnimatedBallEffect extends Effect {
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect
       */
-    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
+    public AnimatedBallEffect(ServerLevel world, ParticleOptions particle, Vec3 origin) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
@@ -103,7 +103,7 @@ public class AnimatedBallEffect extends Effect {
      * @param particles_per_iteration The number of particles displayed in each iteration
      * @param size The size of the ball effect
      */
-    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size) {
+    public AnimatedBallEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, int count, int particles_per_iteration, float size) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
@@ -121,18 +121,18 @@ public class AnimatedBallEffect extends Effect {
      * @param count The total number of particles that will be displayed
      * @param particles_per_iteration The number of particles displayed in each iteration
      * @param size The size of the ball effect
-     * @param factors A {@link Vec3d} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
+     * @param factors A {@link Vec3} of xyz float factors for the ball effect. Non-uniform values will elongate the ball in one direction, for example (1,2,1) makes a vertical oval
      */
-    public AnimatedBallEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int count, int particles_per_iteration, float size, Vec3d factors) {
+    public AnimatedBallEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, int count, int particles_per_iteration, float size, Vec3 factors) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particle = particle;
         this.world = world;
         this.particles = count;
         this.size = size;
         this.particlesPerIteration = particles_per_iteration;
-        this.xFactor = (float) factors.getX();
-        this.yFactor = (float) factors.getY();
-        this.zFactor = (float) factors.getZ();
+        this.xFactor = (float) factors.x();
+        this.yFactor = (float) factors.y();
+        this.zFactor = (float) factors.z();
     }
 
 
@@ -175,7 +175,7 @@ public class AnimatedBallEffect extends Effect {
      * Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -195,7 +195,7 @@ public class AnimatedBallEffect extends Effect {
 
     @Override
     protected void onRun() {
-        Vec3d pos = getOriginPos();
+        Vec3 pos = getOriginPos();
 
         if (pos == null) {
             return;
@@ -214,12 +214,12 @@ public class AnimatedBallEffect extends Effect {
             s = (float) (2 * Math.PI * t);
             //Need the offsets here because it's not using the originPos directly
             //TODO i think I should add the size in the x and z too
-            double x = (xFactor * r * Math.cos(s) + this.originOffset.getX());
-            double y = (yFactor * size * Math.cos(t) + this.originOffset.getY());
-            double z = (zFactor * r * Math.sin(s) + this.originOffset.getZ());
+            double x = (xFactor * r * Math.cos(s) + this.originOffset.x());
+            double y = (yFactor * size * Math.cos(t) + this.originOffset.y());
+            double z = (zFactor * r * Math.sin(s) + this.originOffset.z());
 
 
-            Vec3d vector = new Vec3d(x,y,z);
+            Vec3 vector = new Vec3(x,y,z);
             vector = VectorUtils.rotateVector(vector, (float) xRotation, (float) yRotation, (float) zRotation);
 
             this.displayParticle(this.particle, originPos.add(vector));
@@ -341,12 +341,12 @@ public class AnimatedBallEffect extends Effect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private EffectModifier executeOnStop;
         private boolean useEyePosAsOrigin = false;
         private boolean forced = false;
@@ -416,7 +416,7 @@ public class AnimatedBallEffect extends Effect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -470,7 +470,7 @@ public class AnimatedBallEffect extends Effect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -481,7 +481,7 @@ public class AnimatedBallEffect extends Effect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -492,7 +492,7 @@ public class AnimatedBallEffect extends Effect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }
@@ -547,10 +547,10 @@ public class AnimatedBallEffect extends Effect {
          * @param factor A Vec3d representing the xyz factors (aka xyz "strech" values) of the effect
          * @return a reference to this Builder
          */
-        public Builder factor(Vec3d factor) {
-            this.xFactor = (float) factor.getX();
-            this.yFactor = (float) factor.getY();
-            this.zFactor = (float) factor.getZ();
+        public Builder factor(Vec3 factor) {
+            this.xFactor = (float) factor.x();
+            this.yFactor = (float) factor.y();
+            this.zFactor = (float) factor.z();
             return this;
         }
 
@@ -560,10 +560,10 @@ public class AnimatedBallEffect extends Effect {
          * @param rotation A Vec3d representing the xyz rotations to set to the effect
          * @return a reference to this Builder
          */
-        public Builder rotation(Vec3d rotation) {
-            this.xRotation = rotation.getX();
-            this.yRotation = rotation.getY();
-            this.zRotation = rotation.getZ();
+        public Builder rotation(Vec3 rotation) {
+            this.xRotation = rotation.x();
+            this.yRotation = rotation.y();
+            this.zRotation = rotation.z();
             return this;
         }
 

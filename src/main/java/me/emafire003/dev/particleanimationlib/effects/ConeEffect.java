@@ -6,11 +6,11 @@ import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.RandomUtils;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,7 @@ public class ConeEffect extends YPREffect {
     public boolean drawFinishPoint = false;
     /** The particles to use for displaying the center axis/finish point
      * Falls back to the particle of this effect*/
-    public ParticleEffect secondaryParticle = particle;
+    public ParticleOptions secondaryParticle = particle;
 
 
     /**
@@ -89,7 +89,7 @@ public class ConeEffect extends YPREffect {
      */
     protected int step = 0;
     private boolean lineCreated = false;
-    private List<Vec3d> positions = new ArrayList<>();
+    private List<Vec3> positions = new ArrayList<>();
     private int counter;
     boolean inversionCalculated = false;
 
@@ -111,7 +111,7 @@ public class ConeEffect extends YPREffect {
      * @param solid Should the cone be solid?
      * @param random Makes the initial rotation of the cone random
      * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation, boolean solid, boolean random) {
+    public ConeEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch, int particleConeSize, int particlesPerIteration, int strands_number, float lengthGrow, float radiusGrow, double angularVel, double startRotation, boolean solid, boolean random) {
         super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -136,7 +136,7 @@ public class ConeEffect extends YPREffect {
      * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch) {
+    public ConeEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch) {
         super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -212,7 +212,7 @@ public class ConeEffect extends YPREffect {
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the starting point of the cone
      * */
-    public ConeEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
+    public ConeEffect(ServerLevel world, ParticleOptions particle, Vec3 origin) {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
@@ -227,7 +227,7 @@ public class ConeEffect extends YPREffect {
      * Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -235,10 +235,10 @@ public class ConeEffect extends YPREffect {
      *<p>
      * Experimental! May not work as intended if run for more or less than 10 seconds!*/
     //TODO figure out what's wrong :/
-    public Vec3d getPredictedMaxCenterPosition(){
+    public Vec3 getPredictedMaxCenterPosition(){
         float total_length = this.getIterations() * lengthGrow;
 
-        Vec3d v = new Vec3d(0, total_length, 0);
+        Vec3 v = new Vec3(0, total_length, 0);
 
         v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
@@ -246,7 +246,7 @@ public class ConeEffect extends YPREffect {
     }
 
     private void calculateAllPositions(){
-        Vec3d originPos = this.getOriginPos();
+        Vec3 originPos = this.getOriginPos();
 
         if (originPos == null) {
             return;
@@ -256,7 +256,7 @@ public class ConeEffect extends YPREffect {
         float radius;
         float length;
 
-        Vec3d v;
+        Vec3 v;
 
         for (int x = 0; x < particles; x++) {
 
@@ -273,7 +273,7 @@ public class ConeEffect extends YPREffect {
 
                 length = step * lengthGrow;
 
-                v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
+                v = new Vec3(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
 
                 v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
@@ -290,7 +290,7 @@ public class ConeEffect extends YPREffect {
 
     @Override
     protected void onRun() {
-        Vec3d originPos = this.getOriginPos();
+        Vec3 originPos = this.getOriginPos();
 
         if (originPos == null) {
             return;
@@ -305,7 +305,7 @@ public class ConeEffect extends YPREffect {
         float radius;
         float length;
 
-        Vec3d v;
+        Vec3 v;
 
         for (int x = 0; x < particles; x++) {
 
@@ -319,7 +319,7 @@ public class ConeEffect extends YPREffect {
                         return;
                     }
                     if(flipped){
-                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(positions.get(counter).multiply(-1)));
+                        this.displayParticle(particle, getPredictedMaxCenterPosition().add(positions.get(counter).scale(-1)));
                     }else{
                         this.displayParticle(particle, originPos.add(positions.get(counter)));
                     }
@@ -335,12 +335,12 @@ public class ConeEffect extends YPREffect {
 
                     length = step * lengthGrow;
 
-                    v = new Vec3d(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
+                    v = new Vec3(Math.cos(angle) * radius, length, Math.sin(angle) * radius);
 
                     v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
 
                     if(flipped){
-                        v = v.multiply(-1);
+                        v = v.scale(-1);
                         this.displayParticle(particle, getPredictedMaxCenterPosition().add(v));
                     }else{
                         this.displayParticle(particle, originPos.add(v));
@@ -461,11 +461,11 @@ public class ConeEffect extends YPREffect {
         this.drawCenterAxis = drawCenterAxis;
     }
 
-    public ParticleEffect getSecondaryParticle() {
+    public ParticleOptions getSecondaryParticle() {
         return secondaryParticle;
     }
 
-    public void setSecondaryParticle(ParticleEffect secondaryParticle) {
+    public void setSecondaryParticle(ParticleOptions secondaryParticle) {
         this.secondaryParticle = secondaryParticle;
     }
 
@@ -482,13 +482,13 @@ public class ConeEffect extends YPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle = ParticleTypes.DRAGON_BREATH;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle = ParticleTypes.DRAGON_BREATH;
         private EffectModifier executeOnStop;
         /**
          * Growing per iteration in the length (0.05)
@@ -553,7 +553,7 @@ public class ConeEffect extends YPREffect {
          * The particles to use for displaying the center axis/finish point
          * Falls back to the particle of this effect
          */
-        private ParticleEffect secondaryParticle = particle;
+        private ParticleOptions secondaryParticle = particle;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
@@ -586,7 +586,7 @@ public class ConeEffect extends YPREffect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -630,7 +630,7 @@ public class ConeEffect extends YPREffect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -641,7 +641,7 @@ public class ConeEffect extends YPREffect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -652,7 +652,7 @@ public class ConeEffect extends YPREffect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }
@@ -817,7 +817,7 @@ public class ConeEffect extends YPREffect {
          * @param secondaryParticle the {@code secondaryParticle} to set
          * @return a reference to this Builder
          */
-        public Builder secondaryParticle(ParticleEffect secondaryParticle) {
+        public Builder secondaryParticle(ParticleOptions secondaryParticle) {
             this.secondaryParticle = secondaryParticle;
             return this;
         }

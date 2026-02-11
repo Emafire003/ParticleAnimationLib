@@ -2,7 +2,7 @@ package me.emafire003.dev.particleanimationlib.util.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,7 +33,7 @@ public class ImageUtils {
         imageLoadTask.run();
     }
 
-    private static void startTask(final Identifier fileName, final ImageLoadCallback callback, MinecraftServer server){
+    private static void startTask(final ResourceLocation fileName, final ImageLoadCallback callback, MinecraftServer server){
         ImageLoadTask imageLoadTask = new ImageLoadTask("id:"+fileName.toString(), images -> {
             imageCache.put("id:"+fileName, images);
             callback.loaded(images);
@@ -73,7 +73,7 @@ public class ImageUtils {
         }));*/
     }
 
-    public static void loadImage(final Identifier fileName, final ImageLoadCallback callback, MinecraftServer server) {
+    public static void loadImage(final ResourceLocation fileName, final ImageLoadCallback callback, MinecraftServer server) {
 
         if(imageCache == null){
             imageCache = new HashMap<>();

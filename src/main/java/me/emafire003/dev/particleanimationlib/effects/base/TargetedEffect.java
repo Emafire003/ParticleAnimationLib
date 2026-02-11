@@ -2,23 +2,23 @@ package me.emafire003.dev.particleanimationlib.effects.base;
 
 import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 /** Used for effects that allow a target to be set*/
 @SuppressWarnings("unused")
 public class TargetedEffect extends Effect {
     //If an effect like an arc has a beginning and end pos, this is the one.
-    protected Vec3d targetPos;
+    protected Vec3 targetPos;
     protected boolean updateTargetPositions = true;
     protected boolean useEyePosAsTarget = false;
     protected Entity entityTarget;
-    protected Vec3d targetOffset = Vec3d.ZERO;
+    protected Vec3 targetOffset = Vec3.ZERO;
 
-    public TargetedEffect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos) {
+    public TargetedEffect(ServerLevel world, EffectType type, ParticleOptions particle, Vec3 originPos) {
         super(world, type, particle, originPos);
     }
 
@@ -44,17 +44,17 @@ public class TargetedEffect extends Effect {
         if(entityTarget != null){
             if(targetOffset == null){
                 if(useEyePosAsTarget){
-                    this.targetPos = entityTarget.getEyePos();
+                    this.targetPos = entityTarget.getEyePosition();
                     return;
                 }
-                this.targetPos = entityTarget.getPos();
+                this.targetPos = entityTarget.position();
                 return;
             }
             if(useEyePosAsTarget){
-                this.targetPos = entityTarget.getEyePos().add(targetOffset);
+                this.targetPos = entityTarget.getEyePosition().add(targetOffset);
                 return;
             }
-            this.targetPos = entityTarget.getPos().add(targetOffset);
+            this.targetPos = entityTarget.position().add(targetOffset);
         }
     }
 
@@ -68,7 +68,7 @@ public class TargetedEffect extends Effect {
 
     /** Already sums the offsets!*/
     @Nullable
-    public Vec3d getTargetPos() {
+    public Vec3 getTargetPos() {
         if(targetPos != null){
             if(targetOffset == null){
                 return targetPos;
@@ -78,7 +78,7 @@ public class TargetedEffect extends Effect {
         return null;
     }
 
-    public void setTargetPos(Vec3d finish_pos) {
+    public void setTargetPos(Vec3 finish_pos) {
         this.targetPos = finish_pos;
     }
 
@@ -90,11 +90,11 @@ public class TargetedEffect extends Effect {
         this.entityTarget = entityTarget;
     }
 
-    public Vec3d getTargetOffset() {
+    public Vec3 getTargetOffset() {
         return targetOffset;
     }
 
-    public void setTargetOffset(Vec3d targetOffset) {
+    public void setTargetOffset(Vec3 targetOffset) {
         this.targetOffset = targetOffset;
     }
 

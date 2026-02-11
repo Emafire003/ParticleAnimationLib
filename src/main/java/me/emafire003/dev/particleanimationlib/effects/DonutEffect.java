@@ -4,11 +4,11 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 public class DonutEffect extends YPREffect {
 
@@ -35,7 +35,7 @@ public class DonutEffect extends YPREffect {
     /**
      * Rotation of the torus.
      */
-    public Vec3d rotation = Vec3d.ZERO;
+    public Vec3 rotation = Vec3.ZERO;
 
     /**
      * Increases the donut radius this much each tick
@@ -91,7 +91,7 @@ public class DonutEffect extends YPREffect {
      * @param increaseCirclesEveryNIterations Increases the number of circles by {@code circleIncrease} once every tot iterations
      *      * By default it's 20 iterations, so once every second
      * */
-    public DonutEffect(ServerWorld world, ParticleEffect particle, Vec3d originPos, float yaw, float pitch, int particlesCircle, int circles, float radiusDonut, float radiusTube, Vec3d rotation, float radiusDonutIncrease, float radiusTubeIncrease, int particlesCircleIncrease, int increaseParticlesCircleEveryNIterations, int circlesIncrease, int increaseCirclesEveryNIterations) {
+    public DonutEffect(ServerLevel world, ParticleOptions particle, Vec3 originPos, float yaw, float pitch, int particlesCircle, int circles, float radiusDonut, float radiusTube, Vec3 rotation, float radiusDonutIncrease, float radiusTubeIncrease, int particlesCircleIncrease, int increaseParticlesCircleEveryNIterations, int circlesIncrease, int increaseCirclesEveryNIterations) {
         super(world, EffectType.REPEATING, particle, originPos);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -108,7 +108,7 @@ public class DonutEffect extends YPREffect {
         this.increaseCirclesEveryNIterations = increaseCirclesEveryNIterations;
     }
 
-    public DonutEffect(ServerWorld world, ParticleEffect particle, Vec3d originPos){
+    public DonutEffect(ServerLevel world, ParticleOptions particle, Vec3 originPos){
         super(world, EffectType.REPEATING, particle, originPos);
     }
 
@@ -136,7 +136,7 @@ public class DonutEffect extends YPREffect {
      *  Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -178,8 +178,8 @@ public class DonutEffect extends YPREffect {
 
     @Override
     public void onRun() {
-        Vec3d origin = this.getOriginPos();
-        Vec3d v;
+        Vec3 origin = this.getOriginPos();
+        Vec3 v;
 
         if (origin == null){
             return;
@@ -211,7 +211,7 @@ public class DonutEffect extends YPREffect {
             for (int j = 0; j < particlesCircle; j++) {
                 double phi = 2 * Math.PI * j / particlesCircle;
                 double cosPhi = Math.cos(phi);
-                v = new Vec3d((radiusDonut + radiusTube * cosPhi) * Math.cos(theta), (radiusDonut + radiusTube * cosPhi) * Math.sin(theta), radiusTube * Math.sin(phi));
+                v = new Vec3((radiusDonut + radiusTube * cosPhi) * Math.cos(theta), (radiusDonut + radiusTube * cosPhi) * Math.sin(theta), radiusTube * Math.sin(phi));
 
                 v = VectorUtils.rotateVector(v, this.getYaw()+90, this.getPitch()+90);
                 v = VectorUtils.rotateVector(v, (float) rotation.x, (float) rotation.y, (float) rotation.z);
@@ -257,11 +257,11 @@ public class DonutEffect extends YPREffect {
         this.radiusDonut = radiusDonut;
     }
 
-    public Vec3d getRotation() {
+    public Vec3 getRotation() {
         return rotation;
     }
 
-    public void setRotation(Vec3d rotation) {
+    public void setRotation(Vec3 rotation) {
         this.rotation = rotation;
     }
 
@@ -318,11 +318,11 @@ public class DonutEffect extends YPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
-        private Vec3d originOffset;
+        private Vec3 originOffset;
         private EffectModifier executeOnStop;
         private boolean shouldSpawnParticlesEveryNIteration;
         private int spawnParticlesEveryNIteration;
@@ -330,8 +330,8 @@ public class DonutEffect extends YPREffect {
         private int particleLimit;
         private boolean shouldLimitParticlesEveryNIterations;
         private int limitParticlesEveryNIterations;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
@@ -360,7 +360,7 @@ public class DonutEffect extends YPREffect {
         /**
          * Rotation of the torus.
          */
-        public Vec3d rotation = Vec3d.ZERO;
+        public Vec3 rotation = Vec3.ZERO;
 
         /**
          * Increases the donut radius this much each tick
@@ -408,7 +408,7 @@ public class DonutEffect extends YPREffect {
          * @param val the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d val) {
+        public Builder originPos(Vec3 val) {
             originPos = val;
             return this;
         }
@@ -452,7 +452,7 @@ public class DonutEffect extends YPREffect {
          * @param val the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d val) {
+        public Builder originOffset(Vec3 val) {
             originOffset = val;
             return this;
         }
@@ -540,7 +540,7 @@ public class DonutEffect extends YPREffect {
          * @param val the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld val) {
+        public Builder world(ServerLevel val) {
             world = val;
             return this;
         }
@@ -551,7 +551,7 @@ public class DonutEffect extends YPREffect {
          * @param val the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect val) {
+        public Builder particle(ParticleOptions val) {
             particle = val;
             return this;
         }
@@ -661,7 +661,7 @@ public class DonutEffect extends YPREffect {
          * @param val the {@code rotation} to set
          * @return a reference to this Builder
          */
-        public Builder rotation(Vec3d val) {
+        public Builder rotation(Vec3 val) {
             rotation = val;
             return this;
         }

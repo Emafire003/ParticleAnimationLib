@@ -1,9 +1,9 @@
 package me.emafire003.dev.particleanimationlib.effects.base;
 
 import me.emafire003.dev.particleanimationlib.EffectType;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 /**Class used for effects that also require yaw pitch roll values
@@ -19,7 +19,7 @@ public class TargetedYPREffect extends TargetedEffect {
     public float rollOffset = 0;
     public boolean shouldUpdateYPR = false;
 
-    public TargetedYPREffect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos) {
+    public TargetedYPREffect(ServerLevel world, EffectType type, ParticleOptions particle, Vec3 originPos) {
         super(world, type, particle, originPos);
     }
 
@@ -45,8 +45,8 @@ public class TargetedYPREffect extends TargetedEffect {
             return;
         }
         if(entityOrigin != null){
-            this.pitch = entityOrigin.getPitch()+this.pitchOffset;
-            this.yaw = entityOrigin.getYaw()+this.yawOffset;
+            this.pitch = entityOrigin.getXRot()+this.pitchOffset;
+            this.yaw = entityOrigin.getYRot()+this.yawOffset;
             //TODO may need to add the target's yaw pitch thing?
         }
     }
@@ -113,13 +113,13 @@ public class TargetedYPREffect extends TargetedEffect {
     }
 
     @NotNull
-    public Vec3d getDirection() {
-        Vec3d vector = Vec3d.ZERO;
+    public Vec3 getDirection() {
+        Vec3 vector = Vec3.ZERO;
         double rotX = this.getYaw();
         double rotY = this.getPitch();
-        vector = new Vec3d(vector.getX(), -Math.sin(Math.toRadians(rotY)), vector.getZ());
+        vector = new Vec3(vector.x(), -Math.sin(Math.toRadians(rotY)), vector.z());
         double xz = Math.cos(Math.toRadians(rotY));
-        vector = new Vec3d(-xz * Math.sin(Math.toRadians(rotX)), vector.getY(), xz * Math.cos(Math.toRadians(rotX)));
+        vector = new Vec3(-xz * Math.sin(Math.toRadians(rotX)), vector.y(), xz * Math.cos(Math.toRadians(rotX)));
         return vector;
     }
 }

@@ -3,11 +3,11 @@ package me.emafire003.dev.particleanimationlib.effects;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedEffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
 public class ArcEffect extends TargetedEffect {
@@ -39,7 +39,7 @@ public class ArcEffect extends TargetedEffect {
      * @param count The number of particles to spread between the two points
      * @param height The height (in blocks) of the arc, aka its curvature.
      */
-    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count, float height) {
+    public ArcEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, Vec3 target, int count, float height) {
         super(world, EffectType.REPEATING, particle, origin);
         this.setTargetPos(target);
         this.particles = count;
@@ -54,7 +54,7 @@ public class ArcEffect extends TargetedEffect {
      * @param origin The origin position of the effect, aka the initial point of the arc
      * @param target The target position of the effect, aka the finial point of the arc
      */
-    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target) {
+    public ArcEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, Vec3 target) {
         super(world, EffectType.REPEATING, particle, origin);
         this.setTargetPos(target);
     }
@@ -102,7 +102,7 @@ public class ArcEffect extends TargetedEffect {
      * @param target The target position of the effect, aka the finial point of the arc
      * @param count The number of particles to spread between the two points
      */
-    public ArcEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, Vec3d target, int count) {
+    public ArcEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, Vec3 target, int count) {
         super(world, EffectType.REPEATING, particle, origin);
         this.setTargetPos(target);
         this.particles = count;
@@ -119,15 +119,15 @@ public class ArcEffect extends TargetedEffect {
      *  Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
 
     @Override
     public void onRun() {
-        Vec3d origin = this.getOriginPos();
-        Vec3d target = this.getTargetPos();
+        Vec3 origin = this.getOriginPos();
+        Vec3 target = this.getTargetPos();
 
         if (target == null) {
             return;
@@ -137,18 +137,18 @@ public class ArcEffect extends TargetedEffect {
             return;
         }
 
-        Vec3d link = target.subtract(origin);
+        Vec3 link = target.subtract(origin);
         float length = (float) link.length();
         float pitch = (float) (4 * height / Math.pow(length, 2));
 
-        Vec3d v;
+        Vec3 v;
         float x;
         float y;
 
         for (int i = 0; i < particles; i++) {
 
             step++;
-            v = new Vec3d(link.getX(), link.getY(), link.getZ()).normalize().multiply(length * i / particles);
+            v = new Vec3(link.x(), link.y(), link.z()).normalize().scale(length * i / particles);
             //ParticleAnimationLib.LOGGER.info("The v is: " + v);
             x = ((float) i / particles) * length - length / 2;
             y = (float) (-pitch * Math.pow(x, 2) + height);
@@ -180,12 +180,12 @@ public class ArcEffect extends TargetedEffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         /**
          * Height of the arc in blocks
          */
@@ -195,10 +195,10 @@ public class ArcEffect extends TargetedEffect {
          * Particles per arc
          */
         private int particles = 100;
-        private Vec3d targetPos;
+        private Vec3 targetPos;
         private boolean updateTargetPositions = true;
         private Entity entityTarget;
-        private Vec3d targetOffset;
+        private Vec3 targetOffset;
         private boolean useEyePosAsOrigin;
         private boolean useEyePosAsTarget;
         private EffectModifier executeOnStop;
@@ -230,7 +230,7 @@ public class ArcEffect extends TargetedEffect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -297,7 +297,7 @@ public class ArcEffect extends TargetedEffect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -308,7 +308,7 @@ public class ArcEffect extends TargetedEffect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -319,7 +319,7 @@ public class ArcEffect extends TargetedEffect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }
@@ -352,7 +352,7 @@ public class ArcEffect extends TargetedEffect {
          * @param targetPos the {@code targetPos} to set
          * @return a reference to this Builder
          */
-        public Builder targetPos(Vec3d targetPos) {
+        public Builder targetPos(Vec3 targetPos) {
             this.targetPos = targetPos;
             return this;
         }
@@ -385,7 +385,7 @@ public class ArcEffect extends TargetedEffect {
          * @param targetOffset the {@code targetOffset} to set
          * @return a reference to this Builder
          */
-        public Builder targetOffset(Vec3d targetOffset) {
+        public Builder targetOffset(Vec3 targetOffset) {
             this.targetOffset = targetOffset;
             return this;
         }

@@ -4,12 +4,12 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import me.emafire003.dev.particleanimationlib.effects.base.TargetedEffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
@@ -58,7 +58,7 @@ public class CuboidEffect extends TargetedEffect {
     /**
      * State variables
      */
-    protected Vec3d minCorner;
+    protected Vec3 minCorner;
 
 
     /**
@@ -77,7 +77,7 @@ public class CuboidEffect extends TargetedEffect {
      * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
     @Deprecated
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
+    public CuboidEffect(@NotNull ServerLevel world, @NotNull ParticleOptions particle, @NotNull Vec3 origin, @NotNull Vec3 target, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles_per_row;
@@ -99,7 +99,7 @@ public class CuboidEffect extends TargetedEffect {
      * @param padding The padding to add to the sides of the cuboid. A padding of 0.5 will result in having the effect closer to the border of a block, a padding of 0 will place the effect in the middle of a block
      * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row, double padding, boolean blockSnap) {
+    public CuboidEffect(@NotNull ServerLevel world, @NotNull ParticleOptions particle, @NotNull Vec3 origin, @NotNull Vec3 target, int particles_per_row, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles_per_row;
@@ -120,7 +120,7 @@ public class CuboidEffect extends TargetedEffect {
      * @param padding The padding to add to the sides of the cuboid. A padding of 0.5 will result in having the effect closer to the border of a block, a padding of 0 will place the effect in the middle of a block
      * @param blockSnap Weather or not the corners should snap to blocks to be more precise.
      * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
+    public CuboidEffect(@NotNull ServerLevel world, @NotNull ParticleOptions particle, @NotNull Vec3 origin, int particles_per_row, double x_length, double y_length, double z_length, double padding, boolean blockSnap) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles_per_row;
         this.xLength = x_length;
@@ -141,7 +141,7 @@ public class CuboidEffect extends TargetedEffect {
      * @param y_length The length of the y component of the cuboid. The minimum is 1 block
      * @param z_length The length of the z component of the cuboid. The minimum is 1 block
      * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, int particles_per_row, double x_length, double y_length, double z_length) {
+    public CuboidEffect(@NotNull ServerLevel world, @NotNull ParticleOptions particle, @NotNull Vec3 origin, int particles_per_row, double x_length, double y_length, double z_length) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles_per_row;
         this.xLength = x_length;
@@ -158,7 +158,7 @@ public class CuboidEffect extends TargetedEffect {
      * @param target The target position of the effect, aka the opposite corner of the cuboid
      * @param particles_per_row How many particles should each side/row have
      * */
-    public CuboidEffect(@NotNull ServerWorld world, @NotNull ParticleEffect particle, @NotNull Vec3d origin, @NotNull Vec3d target, int particles_per_row) {
+    public CuboidEffect(@NotNull ServerLevel world, @NotNull ParticleOptions particle, @NotNull Vec3 origin, @NotNull Vec3 target, int particles_per_row) {
         super(world, EffectType.REPEATING, particle, origin);
         this.targetPos = target;
         this.particles = particles_per_row;
@@ -218,7 +218,7 @@ public class CuboidEffect extends TargetedEffect {
      * Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -226,12 +226,12 @@ public class CuboidEffect extends TargetedEffect {
     //TODO add a fill-in option
     @Override
     protected void onRun() {
-        if(this.world == null || this.world.isClient()){
+        if(this.world == null || this.world.isClientSide()){
             return;
         }
 
-        Vec3d target = this.getTargetPos();
-        Vec3d origin = this.getOriginPos();
+        Vec3 target = this.getTargetPos();
+        Vec3 origin = this.getOriginPos();
         if (origin == null) {
             return;
         }
@@ -242,32 +242,32 @@ public class CuboidEffect extends TargetedEffect {
 
         if (blockSnap) {
             if(target != null){
-                target = BlockPos.ofFloored(target).toCenterPos();
+                target = BlockPos.containing(target).getCenter();
             }
-            minCorner = BlockPos.ofFloored(origin).toCenterPos();
+            minCorner = BlockPos.containing(origin).getCenter();
         } else {
             minCorner = origin;
         }
 
         if (xLength == 0 && yLength == 0 && zLength == 0) {
 
-            double x = minCorner.getX();
-            double y = minCorner.getY();
-            double z = minCorner.getZ();
+            double x = minCorner.x();
+            double y = minCorner.y();
+            double z = minCorner.z();
             try{
-                if (target.getX() < x) x=target.getX();
-                if (target.getY() < y) y=target.getY();
-                if (target.getZ() < z) z=target.getZ();
+                if (target.x() < x) x=target.x();
+                if (target.y() < y) y=target.y();
+                if (target.z() < z) z=target.z();
             }catch (NullPointerException e){
                 ParticleAnimationLib.LOGGER.error("Error! The target position is null and the lengths are zero! Specify at least a target position or a length value!");
                 e.printStackTrace();
             }
 
-            minCorner = new Vec3d(x,y,z);
+            minCorner = new Vec3(x,y,z);
 
-            useXLength = Math.abs(origin.getX() - target.getX());
-            useYLength = Math.abs(origin.getY() - target.getY());
-            useZLength = Math.abs(origin.getZ() - target.getZ());
+            useXLength = Math.abs(origin.x() - target.x());
+            useYLength = Math.abs(origin.y() - target.y());
+            useZLength = Math.abs(origin.z() - target.z());
         } else {
             useXLength = xLength;
             useYLength = yLength;
@@ -390,14 +390,14 @@ public class CuboidEffect extends TargetedEffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private boolean useEyePosAsOrigin;
         private boolean useEyePosAsTarget;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private EffectModifier executeOnStop;
         /**
          * Particles in each row
@@ -428,10 +428,10 @@ public class CuboidEffect extends TargetedEffect {
          * Use corners of blocks
          */
         private boolean blockSnap = false;
-        private Vec3d targetPos;
+        private Vec3 targetPos;
         private boolean updateTargetPositions = true;
         private Entity entityTarget;
-        private Vec3d targetOffset;
+        private Vec3 targetOffset;
         private boolean shouldSpawnParticlesEveryNIteration = false;
         private int spawnParticlesEveryNIteration = 5;
         private boolean shouldLimitParticlesSpawnedPerIteration = true;
@@ -459,7 +459,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -503,7 +503,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -536,7 +536,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -547,7 +547,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }
@@ -602,7 +602,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param lengths A Vec3d of the xyz lengths to set
          * @return a reference to this Builder
          */
-        public Builder xLength(Vec3d lengths) {
+        public Builder xLength(Vec3 lengths) {
             this.xLength = lengths.x;
             this.yLength = lengths.y;
             this.zLength = lengths.z;
@@ -637,7 +637,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param targetPos the {@code targetPos} to set
          * @return a reference to this Builder
          */
-        public Builder targetPos(Vec3d targetPos) {
+        public Builder targetPos(Vec3 targetPos) {
             this.targetPos = targetPos;
             return this;
         }
@@ -670,7 +670,7 @@ public class CuboidEffect extends TargetedEffect {
          * @param targetOffset the {@code targetOffset} to set
          * @return a reference to this Builder
          */
-        public Builder targetOffset(Vec3d targetOffset) {
+        public Builder targetOffset(Vec3 targetOffset) {
             this.targetOffset = targetOffset;
             return this;
         }
