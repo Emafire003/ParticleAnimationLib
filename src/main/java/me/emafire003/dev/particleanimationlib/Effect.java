@@ -1,7 +1,7 @@
 package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import me.emafire003.dev.particleanimationlib.util.scheduler.SchedulerUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -62,8 +62,9 @@ public class Effect {
 
     protected int delay;
 
+    protected int currentTicks;
+
     protected boolean done = false;
-    protected int ticks = 0;
 
     private ResourceKey<Level> worldRegistryKey;
 
@@ -107,7 +108,7 @@ public class Effect {
 
         copy.type = original.type;
         copy.done = original.done;
-        copy.ticks = original.ticks;
+        copy.currentTicks = original.currentTicks;
     }
 
 
@@ -118,7 +119,7 @@ public class Effect {
     /**Can be override to add a finishing effect i guess*/
     protected void onStop(){
         if(this.executeOnStop != null){
-            this.executeOnStop.modifyEffect(this, ticks);
+            this.executeOnStop.modifyEffect(this, currentTicks);
         }
 
     }
@@ -210,38 +211,36 @@ public class Effect {
         if(this.type == EffectType.INSTANT){
             return;
         }
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+
+        SchedulerUtils.runEveryTick(((server, ticks) -> {
             if (done) {
-                return;
+                return false;
             }
+            currentTicks = ticks;
 
             if(modifier != null){
                 modifier.modifyEffect(this, ticks);
             }
-
-
+            
             if(updatePositions){
                 updatePos();
             }
 
             if(this.type == EffectType.DELAYED){
                 //Increasing tick count every tick, and executing one after the ticks reached the delay
-                ticks++;
                 if(ticks > delay){
                     done = true;
-                    ticks = 0;
                     this.onRun();
+                    return false;
                 }
             }else{ //Repeating each tick
-                ticks++;
+                
                 //Checks if the limiter is enabled
                 if(shouldSpawnParticlesEveryNIteration && !(ticks%spawnParticlesEveryNIteration==0)){
                     //If it is, checks if the current iteration/tick gives a return of 0 from the %, if not skips the iteration
-                    return;
+                    return true;
                 }
                 this.onRun();
-
-                //ParticleAnimationLib.LOGGER.info("Should limiti every n : "  + shouldLimitParticlesEveryNIterations + " iteratios limit: " + limitParticlesEveryNIterations + " the division: " + ticks%limitParticlesEveryNIterations);
 
                 //If the limiter on particle count every iteration is on, clears the current count when the n-iteration is reached
                 if(shouldLimitParticlesEveryNIterations && ticks%limitParticlesEveryNIterations==0){
@@ -253,11 +252,13 @@ public class Effect {
 
                 if(ticks > iterations){
                     done = true;
-                    ticks = 0;
                     this.onStop();
+                    return false;
                 }
             }
-        });
+            return true;
+        }));
+
     }
 
 

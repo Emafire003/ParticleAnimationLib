@@ -34,7 +34,7 @@ public class TargetedYPREffect extends TargetedEffect {
         copy.setShouldUpdateYPR(original.getShouldUpdateYPR());
         copy.type = original.type;
         copy.done = original.done;
-        copy.ticks = original.ticks;
+        copy.currentTicks = original.currentTicks;
         copy.updateTargetPositions = original.updateTargetPositions;
     }
 
