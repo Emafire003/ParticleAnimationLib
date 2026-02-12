@@ -2,7 +2,6 @@ package me.emafire003.dev.particleanimationlib.util.scheduler;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
@@ -58,7 +57,6 @@ public class SchedulerUtils {
     public static void runEveryTick(ServerTickRunnable action) {
         ServerTaskScheduler.schedule(new ScheduledTask() {
             int ticks = 0;
-            List<StructureTemplate.StructureBlockInfo> infoList = new ArrayList<>();
 
             @Override
             public boolean tick(MinecraftServer server) {
