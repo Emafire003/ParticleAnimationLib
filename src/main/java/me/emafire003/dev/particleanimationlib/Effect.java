@@ -221,7 +221,7 @@ public class Effect {
             if(modifier != null){
                 modifier.modifyEffect(this, ticks);
             }
-            
+
             if(updatePositions){
                 updatePos();
             }
@@ -234,7 +234,7 @@ public class Effect {
                     return false;
                 }
             }else{ //Repeating each tick
-                
+
                 //Checks if the limiter is enabled
                 if(shouldSpawnParticlesEveryNIteration && !(ticks%spawnParticlesEveryNIteration==0)){
                     //If it is, checks if the current iteration/tick gives a return of 0 from the %, if not skips the iteration

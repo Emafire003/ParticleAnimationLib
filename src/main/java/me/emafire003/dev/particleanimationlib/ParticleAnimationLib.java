@@ -1,10 +1,12 @@
 package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.image.ImageUtils;
+import me.emafire003.dev.particleanimationlib.util.scheduler.SchedulerUtils;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.file.Path;
 
+@Mod(ParticleAnimationLib.MOD_ID)
 public class ParticleAnimationLib {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -30,11 +33,11 @@ public class ParticleAnimationLib {
 	public ParticleAnimationLib(IEventBus modEventBus, ModContainer modContainer) {
 		LOGGER.info("Loading ParticleAnimationLib for awesome particle effects!");
 
-
 		// Register ourselves for server and other game events we are interested in.
 		// Note that this is necessary if and only if we want *this* class (ParticleAnimationLibraryPAL) to respond directly to events.
 		// Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
 		NeoForge.EVENT_BUS.register(this);
+		NeoForge.EVENT_BUS.register(SchedulerUtils.class);
 	}
 
 	@SubscribeEvent
