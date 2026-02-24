@@ -226,7 +226,10 @@ public class CuboidEffect extends TargetedEffect {
     //TODO add a fill-in option
     @Override
     protected void onRun() {
-        if(this.world == null || this.world.isClientSide()){
+        /*if(this.world == null || this.world.isClientSide()){
+            return;
+        }*/
+        if(this.world == null){
             return;
         }
 
@@ -251,13 +254,13 @@ public class CuboidEffect extends TargetedEffect {
 
         if (xLength == 0 && yLength == 0 && zLength == 0) {
 
-            double x = minCorner.x();
-            double y = minCorner.y();
-            double z = minCorner.z();
+            double x = minCorner.x;
+            double y = minCorner.y;
+            double z = minCorner.z;
             try{
-                if (target.x() < x) x=target.x();
-                if (target.y() < y) y=target.y();
-                if (target.z() < z) z=target.z();
+                if (target.x < x) x=target.x;
+                if (target.y < y) y=target.y;
+                if (target.z < z) z=target.z;
             }catch (NullPointerException e){
                 ParticleAnimationLib.LOGGER.error("Error! The target position is null and the lengths are zero! Specify at least a target position or a length value!");
                 e.printStackTrace();
@@ -265,9 +268,9 @@ public class CuboidEffect extends TargetedEffect {
 
             minCorner = new Vec3(x,y,z);
 
-            useXLength = Math.abs(origin.x() - target.x());
-            useYLength = Math.abs(origin.y() - target.y());
-            useZLength = Math.abs(origin.z() - target.z());
+            useXLength = Math.abs(origin.x - target.x);
+            useYLength = Math.abs(origin.y - target.y);
+            useZLength = Math.abs(origin.z - target.z);
         } else {
             useXLength = xLength;
             useYLength = yLength;

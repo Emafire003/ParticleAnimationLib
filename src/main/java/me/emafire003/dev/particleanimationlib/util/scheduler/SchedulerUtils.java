@@ -2,8 +2,8 @@ package me.emafire003.dev.particleanimationlib.util.scheduler;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.server.MinecraftServer;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class SchedulerUtils {
 
     // Subscribe
     @SubscribeEvent
-    public static void onServerTick(ServerTickEvent.Post event) {
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
         ServerTaskScheduler.tick(event.getServer());
     }
 

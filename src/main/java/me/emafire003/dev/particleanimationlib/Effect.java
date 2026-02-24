@@ -2,13 +2,11 @@ package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.scheduler.SchedulerUtils;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -66,20 +64,18 @@ public class Effect {
 
     protected boolean done = false;
 
-    private ResourceKey<Level> worldRegistryKey;
-
     //TODO maybe add a completition effect like in tot time the particles appear and complete the thing? Maybe.
     public Effect(ServerLevel world, EffectType type, ParticleOptions particle, Vec3 originPos){
         this.world = world;
         this.type = type;
         this.particle = particle;
         this.originPos = originPos;
-        worldRegistryKey = world.dimension();
+        //Why the heck did i need this? worldRegistryKey = world.dimension();
     }
 
     //Used by the copy method only!
     private Effect(){
-        worldRegistryKey = world.dimension();
+        //worldRegistryKey = world.dimension();
     }
 
     protected static void copy(Effect original, Effect copy) {
@@ -201,11 +197,14 @@ public class Effect {
     /**Runs the effect, you can also provide a custom
      * lambda function to modify the effect while it runs.
      * You have access to the effect instance and the current tick
+     * <p>
+     * If run client side it could crash or do some unexcpected stuff
      * */
     public void run(EffectModifier modifier){
-        if(this.world.isClientSide){
+        //TODO this is a problem apparently
+        /*if(this.world.isClientSide()){
             return;
-        }
+        }*/
 
         this.onRun();
         if(this.type == EffectType.INSTANT){
@@ -396,9 +395,9 @@ public class Effect {
         return world;
     }
 
-    public ResourceKey<Level> getWorldRegistryKey() {
+    /* why did i need this? public ResourceKey<Level> getWorldRegistryKey() {
         return worldRegistryKey;
-    }
+    }*/
 
     public void setWorld(ServerLevel world) {
         this.world = world;
