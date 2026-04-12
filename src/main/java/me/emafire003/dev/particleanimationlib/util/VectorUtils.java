@@ -1,13 +1,13 @@
 package me.emafire003.dev.particleanimationlib.util;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 public final class VectorUtils {
 
-    public static Vec3d rotateVector(Vec3d vector, float angleX, float angleY, float angleZ) {
-        vector = vector.rotateX(angleX);
-        vector = vector.rotateY(angleY);
-        vector = vector.rotateZ(angleZ);
+    public static Vec3 rotateVector(Vec3 vector, float angleX, float angleY, float angleZ) {
+        vector = vector.xRot(angleX);
+        vector = vector.yRot(angleY);
+        vector = vector.zRot(angleZ);
         return vector;
     }
 
@@ -21,7 +21,7 @@ public final class VectorUtils {
      * @param pitchDegrees pitch degrees
      * @return rotated vector
      */
-    public static Vec3d rotateVector(Vec3d vector, float yawDegrees, float pitchDegrees) {
+    public static Vec3 rotateVector(Vec3 vector, float yawDegrees, float pitchDegrees) {
         double yaw = Math.toRadians(-1 * (yawDegrees + 90));
         double pitch = Math.toRadians(-pitchDegrees);
 
@@ -34,49 +34,49 @@ public final class VectorUtils {
         double x, y, z;
 
         // Z_Axis rotation (Pitch)
-        initialX = vector.getX();
-        initialY = vector.getY();
+        initialX = vector.x();
+        initialY = vector.y();
         x = initialX * cosPitch - initialY * sinPitch;
         y = initialX * sinPitch + initialY * cosPitch;
 
         // Y_Axis rotation (Yaw)
-        initialZ = vector.getZ();
+        initialZ = vector.z();
         initialX = x;
         z = initialZ * cosYaw - initialX * sinYaw;
         x = initialZ * sinYaw + initialX * cosYaw;
 
-        return new Vec3d(x, y, z);
+        return new Vec3(x, y, z);
     }
 
     /*public static Vec3d rotateAroundAxisX(Vec3d vector, double angle) {
         double y, z, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
-        y = vector.getY() * cos - vector.getZ() * sin;
-        z = vector.getY() * sin + vector.getZ() * cos;
-        return new Vec3d(vector.getX(), y, z);
+        y = vector.y() * cos - vector.z() * sin;
+        z = vector.y() * sin + vector.z() * cos;
+        return new Vec3d(vector.x(), y, z);
     }
 
     public static Vec3d rotateAroundAxisY(Vec3d vector, double angle) {
         double x, z, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
-        x = vector.getX() * cos + vector.getZ() * sin;
-        z = vector.getX() * -sin + vector.getZ() * cos;
-        return new Vec3d(x, vector.getY(), z);
+        x = vector.x() * cos + vector.z() * sin;
+        z = vector.x() * -sin + vector.z() * cos;
+        return new Vec3d(x, vector.y(), z);
     }
 
     public static Vec3d rotateAroundAxisZ(Vec3d vector, double angle) {
         double x, y, cos, sin;
         cos = Math.cos(angle);
         sin = Math.sin(angle);
-        x = vector.getX() * cos - vector.getY() * sin;
-        y = vector.getX() * sin + vector.getY() * cos;
-        return new Vec3d(x, y, vector.getZ());
+        x = vector.x() * cos - vector.y() * sin;
+        y = vector.x() * sin + vector.y() * cos;
+        return new Vec3d(x, y, vector.z());
     }
 
     public static double angleToXAxis(Vec3d vector) {
-        return Math.atan2(vector.getX(), vector.getY());
+        return Math.atan2(vector.x(), vector.y());
     }
 */
 }

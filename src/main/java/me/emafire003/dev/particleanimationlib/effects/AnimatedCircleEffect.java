@@ -4,11 +4,11 @@ import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.particles.ParticleTypes;
 
 @SuppressWarnings("unused")
 public class AnimatedCircleEffect extends YPREffect {
@@ -78,7 +78,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * Current step. Works as a counter
      */
     protected float step = 0;
-    
+
 
     /**
      * Creates a new circle effect
@@ -86,7 +86,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the center point of the circle
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using yaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param particles_per_circle Number of particles that make up each circle
      * @param radius The radius of the circle
@@ -95,11 +95,11 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param wholeCircle Makes a whole circle every iteration. If disabled there will be an animation of particles completing the circle, similar to {@link AnimatedBallEffect} or a "loading" circle
      * @param resetCircle Start at the same origin each step, use this along with maxAngle and wholeCircle to form persistent semicircles. (If you have wholeCircle on false it won't work)
      * @param enableRotation Should the circle rotate?
-     * @param angularVelocity A {@link Vec3d} of the angular velocities of the effect (for the rotation) expressed in radials. Turns the circle by this angle each iteration around the (x|y|z)-axis
+     * @param angularVelocity A {@link Vec3} of the angular velocities of the effect (for the rotation) expressed in radials. Turns the circle by this angle each iteration around the (x|y|z)-axis
      *                        Tip: It also works with restCircle, and it creates interesting shapes! It can also work a bit like the animated ball!
-     * @param rotations A {@link Vec3d} of Rotations of the torus/circles
+     * @param rotations A {@link Vec3} of Rotations of the torus/circles
      * */
-    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle, boolean enableRotation, Vec3d angularVelocity, Vec3d rotations) {
+    public AnimatedCircleEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch, int particles_per_circle, float radius, float radiusGrow, double maxAngle, boolean wholeCircle, boolean resetCircle, boolean enableRotation, Vec3 angularVelocity, Vec3 rotations) {
         super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -110,12 +110,12 @@ public class AnimatedCircleEffect extends YPREffect {
         this.wholeCircle = wholeCircle;
         this.resetCircle = resetCircle;
         this.enableRotation = enableRotation;
-        this.angularVelocityX = angularVelocity.getX();
-        this.angularVelocityY = angularVelocity.getY();
-        this.angularVelocityZ = angularVelocity.getZ();
-        this.xRotation = (float) rotations.getX();
-        this.yRotation = (float) rotations.getY();
-        this.zRotation = (float) rotations.getZ();
+        this.angularVelocityX = angularVelocity.x();
+        this.angularVelocityY = angularVelocity.y();
+        this.angularVelocityZ = angularVelocity.z();
+        this.xRotation = (float) rotations.x();
+        this.yRotation = (float) rotations.y();
+        this.zRotation = (float) rotations.z();
     }
 
     /**
@@ -124,10 +124,10 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param world The world the particles are going to spawn in
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the center point of the circle
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using yaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * */
-    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, float yaw, float pitch) {
+    public AnimatedCircleEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, float yaw, float pitch) {
         super(world, EffectType.REPEATING, particle, origin);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -140,7 +140,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect, aka the center point of the circle
      * */
-    public AnimatedCircleEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
+    public AnimatedCircleEffect(ServerLevel world, ParticleOptions particle, Vec3 origin) {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
@@ -192,7 +192,7 @@ public class AnimatedCircleEffect extends YPREffect {
      * Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -205,13 +205,13 @@ public class AnimatedCircleEffect extends YPREffect {
         copy.setParticles(original.getParticles());
         copy.setWholeCircle(original.isWholeCircle());
         copy.setRadiusGrow(original.getRadiusGrow());
-        copy.setRotations(new Vec3d(original.xRotation, original.yRotation, original.zRotation));
-        copy.setAngularVelocity(new Vec3d(original.angularVelocityX, original.angularVelocityY, original.angularVelocityZ));
+        copy.setRotations(new Vec3(original.xRotation, original.yRotation, original.zRotation));
+        copy.setAngularVelocity(new Vec3(original.angularVelocityX, original.angularVelocityY, original.angularVelocityZ));
     }
 
     @Override
     public void onRun() {
-        Vec3d origin = this.getOriginPos();
+        Vec3 origin = this.getOriginPos();
 
         if (origin == null) {
             return;
@@ -226,15 +226,15 @@ public class AnimatedCircleEffect extends YPREffect {
         int steps = wholeCircle ? particles : 1;
 
         double angle;
-        Vec3d v;
+        Vec3 v;
 
         for (int i = 0; i < steps; i++) {
 
             angle = step * inc;
-            v = new Vec3d(Math.cos(angle) * radius, 0, Math.sin(angle) * radius );
+            v = new Vec3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius );
 
             v = VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-            v = VectorUtils.rotateVector(v, this.getYaw(), this.getPitch()+90);
+            v = VectorUtils.rotateVector(v, this.yRotation, this.getPitch()+90);
 
             if (enableRotation) {
                 v = VectorUtils.rotateVector(v, (float) (angularVelocityX * step), (float) (angularVelocityY * step), (float) (angularVelocityZ * step));
@@ -306,21 +306,21 @@ public class AnimatedCircleEffect extends YPREffect {
         this.radiusGrow = radiusGrow;
     }
 
-    public Vec3d getRotations() {
-        return new Vec3d(xRotation, yRotation, zRotation);
+    public Vec3 getRotations() {
+        return new Vec3(xRotation, yRotation, zRotation);
     }
 
-    public void setRotations(Vec3d rotations) {
-        this.xRotation = (float) rotations.getX();
-        this.yRotation = (float) rotations.getY();
-        this.zRotation = (float) rotations.getZ();
+    public void setRotations(Vec3 rotations) {
+        this.xRotation = (float) rotations.x();
+        this.yRotation = (float) rotations.y();
+        this.zRotation = (float) rotations.z();
     }
 
 
-    public void setAngularVelocity(Vec3d angularVelocity) {
-        this.angularVelocityX = angularVelocity.getX();
-        this.angularVelocityY = angularVelocity.getY();
-        this.angularVelocityZ = angularVelocity.getZ();
+    public void setAngularVelocity(Vec3 angularVelocity) {
+        this.angularVelocityX = angularVelocity.x();
+        this.angularVelocityY = angularVelocity.y();
+        this.angularVelocityZ = angularVelocity.z();
     }
 
     /**
@@ -328,13 +328,13 @@ public class AnimatedCircleEffect extends YPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private EffectModifier executeOnStop;
         /**
          * Rotation of the torus.
@@ -439,7 +439,7 @@ public class AnimatedCircleEffect extends YPREffect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -483,7 +483,7 @@ public class AnimatedCircleEffect extends YPREffect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -505,7 +505,7 @@ public class AnimatedCircleEffect extends YPREffect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -516,7 +516,7 @@ public class AnimatedCircleEffect extends YPREffect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }
@@ -524,13 +524,13 @@ public class AnimatedCircleEffect extends YPREffect {
         /**
          * Sets the rotations and returns a reference to this Builder enabling method chaining.
          *
-         * @param rotation A Vec3d representing the xyz rotations to set to the effect
+         * @param rotation A Vec3 representing the xyz rotations to set to the effect
          * @return a reference to this Builder
          */
-        public Builder rotations(Vec3d rotation) {
-            this.xRotation = (float) rotation.getX();
-            this.yRotation = (float) rotation.getY();
-            this.zRotation = (float) rotation.getZ();
+        public Builder rotations(Vec3 rotation) {
+            this.xRotation = (float) rotation.x();
+            this.yRotation = (float) rotation.y();
+            this.zRotation = (float) rotation.z();
             return this;
         }
 

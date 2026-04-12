@@ -1,8 +1,8 @@
 package me.emafire003.dev.particleanimationlib.util.image;
 
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

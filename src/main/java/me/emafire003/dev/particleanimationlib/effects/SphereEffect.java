@@ -4,11 +4,11 @@ import me.emafire003.dev.particleanimationlib.Effect;
 import me.emafire003.dev.particleanimationlib.EffectType;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.RandomUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
 //TODO add an invert option like the other ones.
@@ -31,11 +31,11 @@ public class SphereEffect extends Effect {
 
     /** Amount to increase the particles per tick*/
     public int particleIncrease = 0;
-    
+
     //TODO new stuff
     /**Should it display as an half sphere?*/
     public boolean halfSphere = false;
-    
+
     /**If it is an half sphere, should it be inverted the other way around? Like upside down*/
     public boolean invertHalfSphere = false;
 
@@ -52,7 +52,7 @@ public class SphereEffect extends Effect {
      * @param half_sphere If true, displays as an half sphere/dome
      * @param invert_half_sphere If true and displaying as an half sphere, displays the bottom half
      * */
-    public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int particles, double radius, double radiusIncrease, int particleIncrease, boolean half_sphere, boolean invert_half_sphere) {
+    public SphereEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, int particles, double radius, double radiusIncrease, int particleIncrease, boolean half_sphere, boolean invert_half_sphere) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
         this.radius = radius;
@@ -105,7 +105,7 @@ public class SphereEffect extends Effect {
      * @param particle The particle effect that is going to be spawned. You can use {@link ParticleTypes}
      * @param origin The origin position of the effect. Aka the center of the sphere
      * */
-    public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin) {
+    public SphereEffect(ServerLevel world, ParticleOptions particle, Vec3 origin) {
         super(world, EffectType.REPEATING, particle, origin);
     }
 
@@ -118,7 +118,7 @@ public class SphereEffect extends Effect {
      * @param particles The number of particles the sphere will be made of
      * @param radius The radius of the sphere
      * */
-    public SphereEffect(ServerWorld world, ParticleEffect particle, Vec3d origin, int particles, double radius) {
+    public SphereEffect(ServerLevel world, ParticleOptions particle, Vec3 origin, int particles, double radius) {
         super(world, EffectType.REPEATING, particle, origin);
         this.particles = particles;
         this.radius = radius;
@@ -126,7 +126,7 @@ public class SphereEffect extends Effect {
 
 
 
-    
+
     /** Returns a builder for the effect.
      *
      * @param world The world the particles are going to spawn in
@@ -136,7 +136,7 @@ public class SphereEffect extends Effect {
      *  Setting a world, a particle effect and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, ParticleEffect particle, Vec3d originPos) {
+    public static Builder builder(ServerLevel world, ParticleOptions particle, Vec3 originPos) {
         return new Builder().world(world).particle(particle).originPos(originPos);
     }
 
@@ -145,7 +145,7 @@ public class SphereEffect extends Effect {
         if (radiusIncrease != 0) radius += radiusIncrease;
         if (particleIncrease != 0) particles += particleIncrease;
 
-        Vec3d origin = this.getOriginPos();
+        Vec3 origin = this.getOriginPos();
 
         if (origin == null) {
             return;
@@ -153,16 +153,16 @@ public class SphereEffect extends Effect {
 
         //Should be already adding the stuff
         //origin.add(0, yOffset, 0);
-        Vec3d vector;
+        Vec3 vector;
 
         for (int i = 0; i < particles; i++) {
-            vector = RandomUtils.getRandomVector().multiply(radius);
+            vector = RandomUtils.getRandomVector().scale(radius);
             if (halfSphere) {
                 if (invertHalfSphere){
-                    vector = new Vec3d(vector.getX(), Math.abs(vector.getY()) * -1, vector.getZ());
+                    vector = new Vec3(vector.x(), Math.abs(vector.y()) * -1, vector.z());
                 }
                 else {
-                    vector = new Vec3d(vector.getX(), Math.abs(vector.getY()), vector.getZ());
+                    vector = new Vec3(vector.x(), Math.abs(vector.y()), vector.z());
                 }
             }
             this.displayParticle(particle, origin.add(vector));
@@ -221,12 +221,12 @@ public class SphereEffect extends Effect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private Entity entityOrigin;
-        private Vec3d originOffset;
-        private ServerWorld world;
-        private ParticleEffect particle;
+        private Vec3 originOffset;
+        private ServerLevel world;
+        private ParticleOptions particle;
         private boolean useEyePosAsOrigin;
         private EffectModifier executeOnStop;
         /**
@@ -285,7 +285,7 @@ public class SphereEffect extends Effect {
          * @param originPos the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d originPos) {
+        public Builder originPos(Vec3 originPos) {
             this.originPos = originPos;
             return this;
         }
@@ -340,7 +340,7 @@ public class SphereEffect extends Effect {
          * @param originOffset the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d originOffset) {
+        public Builder originOffset(Vec3 originOffset) {
             this.originOffset = originOffset;
             return this;
         }
@@ -351,7 +351,7 @@ public class SphereEffect extends Effect {
          * @param world the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld world) {
+        public Builder world(ServerLevel world) {
             this.world = world;
             return this;
         }
@@ -362,7 +362,7 @@ public class SphereEffect extends Effect {
          * @param particle the {@code particle} to set
          * @return a reference to this Builder
          */
-        public Builder particle(ParticleEffect particle) {
+        public Builder particle(ParticleOptions particle) {
             this.particle = particle;
             return this;
         }

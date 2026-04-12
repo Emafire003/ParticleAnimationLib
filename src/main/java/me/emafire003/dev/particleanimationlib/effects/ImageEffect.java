@@ -7,11 +7,11 @@ import me.emafire003.dev.particleanimationlib.effects.base.YPREffect;
 import me.emafire003.dev.particleanimationlib.util.image.ImageLoadCallback;
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.VectorUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
 
 import java.awt.image.BufferedImage;
 
@@ -61,7 +61,7 @@ public class ImageEffect extends YPREffect {
     /**
      * Apply a fixed rotation
      */
-    public Vec3d rotation = null;
+    public Vec3 rotation = null;
 
     /**Orients the image to the specified Yaw Pitch, for example facing a player*/
     public boolean orient = false;
@@ -126,7 +126,7 @@ public class ImageEffect extends YPREffect {
      *
      * @param world The world the particles are going to spawn in
      * @param origin The origin position of the effect, aka the starting point of the cone
-     * @param yaw The yaw of the effect. For example, you can get it from an Entity using getYaw()
+     * @param yaw The yaw of the effect. For example, you can get it from an Entity using yaw()
      * @param pitch The pitch of the effect. For example, you can get it from an Entity using getPitch()
      * @param fileName The path and the name of the file that you want to display. It can also be an URL.
      *                Supported formats include jpg, png, gif
@@ -135,7 +135,7 @@ public class ImageEffect extends YPREffect {
      * @param stepX How many pixel should be skipped on the X? Aka show only one pixel every *n* on the X plane
      * @param stepY How many pixel should be skipped on the Y? Aka show only one pixel every *n* on the Y plane
      * @param scale Scale factor for the image
-     * @param particleSize How big should each individual Dust particle be? See also {@link DustParticleEffect}
+     * @param particleSize How big should each individual Dust particle be? See also {@link DustParticleOptions}
      * @param rotation Apply a fixed rotation (independent of enableRotation)
      * @param orient Should the image orient towards yaw and pitch? For example orient to the player's facing direction
      * @param enableRotation Should it rotate?
@@ -146,9 +146,9 @@ public class ImageEffect extends YPREffect {
      * @param blackAndWhite Makes the image display in binary colors, black and white
      * @param invertColors Inverts the color of the image, displaying its negative
      * */
-    public ImageEffect(ServerWorld world, Vec3d origin, float yaw, float pitch, String fileName,
+    public ImageEffect(ServerLevel world, Vec3 origin, float yaw, float pitch, String fileName,
                        boolean transparency, int frameDelay, int stepX, int stepY, float scale,
-                       float particleSize, Vec3d rotation, boolean orient, boolean enableRotation,
+                       float particleSize, Vec3 rotation, boolean orient, boolean enableRotation,
                        Plane plane, double angularVelocityX, double angularVelocityY, double angularVelocityZ,
                        boolean blackAndWhite, boolean invertColors) {
         super(world, EffectType.REPEATING, null, origin);
@@ -261,7 +261,7 @@ public class ImageEffect extends YPREffect {
      * Setting a world, an image path and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, Vec3d originPos, String fileName) {
+    public static Builder builder(ServerLevel world, Vec3 originPos, String fileName) {
         return new Builder().world(world).fileName(fileName).originPos(originPos);
     }
 
@@ -275,13 +275,13 @@ public class ImageEffect extends YPREffect {
      * Setting a world, an image path and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerWorld world, Vec3d originPos, Identifier image) {
+    public static Builder builder(ServerLevel world, Vec3 originPos, Identifier image) {
         return new Builder().world(world).fileId(image).originPos(originPos);
     }
 
 
     /*
-    public ImageEffect(ServerWorld world, Vec3d originPos, String image_fileName) {
+    public ImageEffect(ServerWorld world, Vec3 originPos, String image_fileName) {
         super(world, EffectType.REPEATING, null, originPos);
         this.fileName = image_fileName;
         if(fileName != null && !fileName.isBlank()){
@@ -292,14 +292,14 @@ public class ImageEffect extends YPREffect {
         }
     }
 
-    public ImageEffect(ServerWorld world, Vec3d originPos, Identifier image) {
+    public ImageEffect(ServerWorld world, Vec3 originPos, Identifier image) {
         super(world, EffectType.REPEATING, null, originPos);
         this.fileName = "id:"+image.toString();
         load(image);
     }
 
     //Used by the builder methods of the other Image effects
-    public ImageEffect(ServerWorld world, Vec3d originPos, Identifier image, String image_fileName){
+    public ImageEffect(ServerWorld world, Vec3 originPos, Identifier image, String image_fileName){
         super(world, EffectType.REPEATING, null, originPos);
         if(image != null){
             this.fileName = "id:"+image;
@@ -371,8 +371,8 @@ public class ImageEffect extends YPREffect {
             step = 0;
         }
 
-        Vec3d origin = getOriginPos();
-        Vec3d v;
+        Vec3 origin = getOriginPos();
+        Vec3 v;
 
         int pixel;
         double rotX;
@@ -381,18 +381,18 @@ public class ImageEffect extends YPREffect {
 
         for (int y = 0; y < image.getHeight(); y += stepY) {
             for (int x = 0; x < image.getWidth(); x += stepX) {
-                v = new Vec3d((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(scale);
+                v = new Vec3((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).scale(scale);
 
                 if (rotation != null) {
-                    v = VectorUtils.rotateVector(v, (float) rotation.getX(), (float) rotation.getY(), (float) rotation.getZ());
-                    //Vec3dUtils.rotateVec3d(v, rotation.getX() * MathUtils.degreesToRadians, rotation.getY() * MathUtils.degreesToRadians, rotation.getZ() * MathUtils.degreesToRadians);
+                    v = VectorUtils.rotateVector(v, (float) rotation.x(), (float) rotation.y(), (float) rotation.z());
+                    //Vec3Utils.rotateVec3(v, rotation.x() * MathUtils.degreesToRadians, rotation.y() * MathUtils.degreesToRadians, rotation.z() * MathUtils.degreesToRadians);
                 }
 
                 if (origin != null) {
                     if(orient){
-                        v = v.rotateX((float) Math.toRadians(this.getPitch()));
-                        v = v.rotateY((float) Math.toRadians(this.getYaw()));
-                        //v = VectorUtils.rotateVector(v, this.getYaw()+90, this.getPitch());
+                        v = v.xRot((float) Math.toRadians(this.getPitch()));
+                        v = v.yRot((float) Math.toRadians(this.getYaw()));
+                        //v = VectorUtils.rotateVector(v, this.yaw()+90, this.getPitch());
                     }
                 }
 
@@ -526,11 +526,11 @@ public class ImageEffect extends YPREffect {
         this.enableRotation = enableRotation;
     }
 
-    public Vec3d getRotation() {
+    public Vec3 getRotation() {
         return rotation;
     }
 
-    public void setRotation(Vec3d rotation) {
+    public void setRotation(Vec3 rotation) {
         this.rotation = rotation;
     }
 
@@ -599,7 +599,7 @@ public class ImageEffect extends YPREffect {
     private static final int white = 16777215;
 
     /**This methods handles the display of the image into particle form*/
-    protected void display(BufferedImage image, Vec3d v, Vec3d pos, int pixel_color){
+    protected void display(BufferedImage image, Vec3 v, Vec3 pos, int pixel_color){
         if(this.blackAndWhite){
             pixel_color = abs(pixel_color);
             //The pixel that are less dark the half of white, should be black the other whites
@@ -622,11 +622,11 @@ public class ImageEffect extends YPREffect {
      */
     public static final class Builder {
         private int iterations;
-        private Vec3d originPos;
+        private Vec3 originPos;
         private boolean updatePositions;
         private boolean useEyePosAsOrigin;
         private Entity entityOrigin;
-        private Vec3d originOffset;
+        private Vec3 originOffset;
         private EffectModifier executeOnStop;
         private boolean shouldSpawnParticlesEveryNIteration;
         private int spawnParticlesEveryNIteration;
@@ -634,7 +634,7 @@ public class ImageEffect extends YPREffect {
         private int particleLimit;
         private boolean shouldLimitParticlesEveryNIterations;
         private int limitParticlesEveryNIterations;
-        private ServerWorld world;
+        private ServerLevel world;
         private float yawOffset;
         private float pitchOffset;
         private float yaw;
@@ -681,7 +681,7 @@ public class ImageEffect extends YPREffect {
         /**
          * Apply a fixed rotation
          */
-        private Vec3d rotation = null;
+        private Vec3 rotation = null;
 
         /**Orients the image to the specified Yaw Pitch, for example facing a player*/
         private boolean orient = false;
@@ -733,7 +733,7 @@ public class ImageEffect extends YPREffect {
          * @param val the {@code originPos} to set
          * @return a reference to this Builder
          */
-        public Builder originPos(Vec3d val) {
+        public Builder originPos(Vec3 val) {
             originPos = val;
             return this;
         }
@@ -777,7 +777,7 @@ public class ImageEffect extends YPREffect {
          * @param val the {@code originOffset} to set
          * @return a reference to this Builder
          */
-        public Builder originOffset(Vec3d val) {
+        public Builder originOffset(Vec3 val) {
             originOffset = val;
             return this;
         }
@@ -865,7 +865,7 @@ public class ImageEffect extends YPREffect {
          * @param val the {@code world} to set
          * @return a reference to this Builder
          */
-        public Builder world(ServerWorld val) {
+        public Builder world(ServerLevel val) {
             world = val;
             return this;
         }
@@ -1030,7 +1030,7 @@ public class ImageEffect extends YPREffect {
          * @param val the {@code rotation} to set
          * @return a reference to this Builder
          */
-        public Builder rotation(Vec3d val) {
+        public Builder rotation(Vec3 val) {
             rotation = val;
             return this;
         }

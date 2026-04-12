@@ -2,26 +2,26 @@ package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class Effect {
 
     protected int iterations;
-    protected Vec3d originPos;
+    protected Vec3 originPos;
     protected boolean updatePositions;
 
     /**If true and an entity is the origin it will use their head position if possible*/
     protected boolean useEyePosAsOrigin;
     protected Entity entityOrigin;
-    protected Vec3d originOffset = Vec3d.ZERO;
+    protected Vec3 originOffset = Vec3.ZERO;
 
     /** A function that executes when the effect stops. For example, you could use it to chain effects one after the other*/
     public EffectModifier executeOnStop;
@@ -53,9 +53,9 @@ public class Effect {
     /*public Vec3d cutAboveRightForward = Vec3d.ZERO;
     public Vec3d cutBelowLeftBackward = Vec3d.ZERO;
     public boolean shouldCut = false;*/
-    protected ServerWorld world;
+    protected ServerLevel world;
 
-    protected ParticleEffect particle;
+    protected ParticleOptions particle;
 
     public EffectType type;
 
@@ -64,20 +64,20 @@ public class Effect {
     protected boolean done = false;
     protected int ticks = 0;
 
-    private RegistryKey<World> worldRegistryKey;
+    private ResourceKey<Level> worldRegistryKey;
 
     //TODO maybe add a completition effect like in tot time the particles appear and complete the thing? Maybe.
-    public Effect(ServerWorld world, EffectType type, ParticleEffect particle, Vec3d originPos){
+    public Effect(ServerLevel world, EffectType type, ParticleOptions particle, Vec3 originPos){
         this.world = world;
         this.type = type;
         this.particle = particle;
         this.originPos = originPos;
-        worldRegistryKey = world.getRegistryKey();
+        worldRegistryKey = world.dimension();
     }
 
     //Used by the copy method only!
     private Effect(){
-        worldRegistryKey = world.getRegistryKey();
+        worldRegistryKey = world.dimension();
     }
 
     protected static void copy(Effect original, Effect copy) {
@@ -142,17 +142,17 @@ public class Effect {
         if(entityOrigin != null){
             if(originOffset == null){
                 if(useEyePosAsOrigin){
-                    this.originPos = entityOrigin.getEyePos();
+                    this.originPos = entityOrigin.getEyePosition();
                     return;
                 }
-                this.originPos = entityOrigin.getEntityPos();
+                this.originPos = entityOrigin.position();
                 return;
             }
             if(useEyePosAsOrigin){
-                this.originPos = entityOrigin.getEyePos().add(originOffset);
+                this.originPos = entityOrigin.getEyePosition().add(originOffset);
                 return;
             }
-            this.originPos = entityOrigin.getEntityPos().add(originOffset);
+            this.originPos = entityOrigin.position().add(originOffset);
         }
     }
 
@@ -201,7 +201,7 @@ public class Effect {
      * You have access to the effect instance and the current tick
      * */
     public void run(EffectModifier modifier){
-        if(this.world.isClient()){
+        if(this.world.isClientSide()){
             return;
         }
 
@@ -299,19 +299,19 @@ public class Effect {
     }
 */
 
-    public void displayParticle(ParticleEffect effect, Vec3d pos){
-        this.displayParticle(effect, pos, Vec3d.ZERO);
+    public void displayParticle(ParticleOptions effect, Vec3 pos){
+        this.displayParticle(effect, pos, Vec3.ZERO);
     }
 
-    public void displayParticle(Vec3d pos, int color, float size){
+    public void displayParticle(Vec3 pos, int color, float size){
         //Vector3f col = Vec3d.unpackRgb(color).toVector3f();
-        DustParticleEffect dustParticle = new DustParticleEffect( color, size);
-        this.displayParticle(dustParticle, pos);
+        DustParticleOptions dustParticleOptions = new DustParticleOptions( color, size);
+        this.displayParticle(dustParticleOptions, pos);
     }
 
     private int currentParticleCount = 0;
 
-    public void displayParticle(ParticleEffect effect, Vec3d pos, Vec3d vel){
+    public void displayParticle(ParticleOptions effect, Vec3 pos, Vec3 vel){
         /*if(shouldCut && checkCut(pos)){
             return;
         }*/
@@ -324,7 +324,7 @@ public class Effect {
                 return;
             }
         }
-        world.spawnParticles(effect, forced, forced, pos.getX(), pos.getY(), pos.getZ(), 1, vel.getX(), vel.getY(), vel.getZ() , 0);
+        world.sendParticles(effect, forced, forced, pos.x(), pos.y(), pos.z(), 1, vel.x(), vel.y(), vel.z() , 0);
     }
 
     public int getIterations() {
@@ -345,7 +345,7 @@ public class Effect {
 
     /** Already sums the offsets!*/
     @Nullable
-    public Vec3d getOriginPos() {
+    public Vec3 getOriginPos() {
         if(originPos != null){
             if(originOffset == null){
                 return originPos;
@@ -355,7 +355,7 @@ public class Effect {
         return null;
     }
 
-    public void setOriginPos(Vec3d origin_pos) {
+    public void setOriginPos(Vec3 origin_pos) {
         this.originPos = origin_pos;
     }
 
@@ -375,11 +375,11 @@ public class Effect {
         this.entityOrigin = entityOrigin;
     }
 
-    public Vec3d getOriginOffset() {
+    public Vec3 getOriginOffset() {
         return originOffset;
     }
 
-    public void setOriginOffset(Vec3d originOffset) {
+    public void setOriginOffset(Vec3 originOffset) {
         this.originOffset = originOffset;
     }
     public boolean isUseEyePosAsOrigin() {
@@ -390,23 +390,23 @@ public class Effect {
         this.useEyePosAsOrigin = useEyePosAsOrigin;
     }
 
-    public ServerWorld getWorld() {
+    public ServerLevel getWorld() {
         return world;
     }
 
-    public RegistryKey<World> getWorldRegistryKey() {
+    public ResourceKey<Level> getWorldRegistryKey() {
         return worldRegistryKey;
     }
 
-    public void setWorld(ServerWorld world) {
+    public void setWorld(ServerLevel world) {
         this.world = world;
     }
 
-    public ParticleEffect getParticle() {
+    public ParticleOptions getParticle() {
         return particle;
     }
 
-    public void setParticle(ParticleEffect particle) {
+    public void setParticle(ParticleOptions particle) {
         this.particle = particle;
     }
 
