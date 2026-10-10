@@ -1,6 +1,7 @@
 package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
+import me.emafire003.dev.particleanimationlib.util.scheduler.SchedulerUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
@@ -208,54 +209,42 @@ public class Effect {
         this.onRun();
         if(this.type == EffectType.INSTANT){
             return;
+        }else if(this.type == EffectType.DELAYED){
+            SchedulerUtils.runLater(delay, server -> {
+                done = true;
+                this.onRun();
+            });
         }
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if (done) {
-                return;
-            }
-
+        SchedulerUtils.runEveryTick( (server, ticks) -> {
             if(modifier != null){
                 modifier.modifyEffect(this, ticks);
             }
 
-
             if(updatePositions){
                 updatePos();
             }
-
-            if(this.type == EffectType.DELAYED){
-                //Increasing tick count every tick, and executing one after the ticks reached the delay
-                ticks++;
-                if(ticks > delay){
-                    done = true;
-                    ticks = 0;
-                    this.onRun();
-                }
-            }else{ //Repeating each tick
-                ticks++;
-                //Checks if the limiter is enabled
-                if(shouldSpawnParticlesEveryNIteration && !(ticks%spawnParticlesEveryNIteration==0)){
-                    //If it is, checks if the current iteration/tick gives a return of 0 from the %, if not skips the iteration
-                    return;
-                }
-                this.onRun();
-
-                //ParticleAnimationLib.LOGGER.info("Should limiti every n : "  + shouldLimitParticlesEveryNIterations + " iteratios limit: " + limitParticlesEveryNIterations + " the division: " + ticks%limitParticlesEveryNIterations);
-
-                //If the limiter on particle count every iteration is on, clears the current count when the n-iteration is reached
-                if(shouldLimitParticlesEveryNIterations && ticks%limitParticlesEveryNIterations==0){
-                    this.currentParticleCount = 0;
-                }else if(shouldLimitParticlesSpawnedPerIteration){
-                    //If it's every iteration, rests the count each time
-                    this.currentParticleCount = 0;
-                }
-
-                if(ticks > iterations){
-                    done = true;
-                    ticks = 0;
-                    this.onStop();
-                }
+            //Checks if the limiter is enabled
+            if(shouldSpawnParticlesEveryNIteration && !(ticks%spawnParticlesEveryNIteration==0)){
+                //If it is, checks if the current iteration/tick gives a return of 0 from the %, if not skips the iteration
+                return true;
             }
+            this.onRun();
+
+            //ParticleAnimationLib.LOGGER.info("Should limiti every n : "  + shouldLimitParticlesEveryNIterations + " iteratios limit: " + limitParticlesEveryNIterations + " the division: " + ticks%limitParticlesEveryNIterations);
+
+            //If the limiter on particle count every iteration is on, clears the current count when the n-iteration is reached
+            if(shouldLimitParticlesEveryNIterations && ticks%limitParticlesEveryNIterations==0){
+                this.currentParticleCount = 0;
+            }else if(shouldLimitParticlesSpawnedPerIteration){
+                //If it's every iteration, rests the count each time
+                this.currentParticleCount = 0;
+            }
+
+            if(ticks > iterations){
+                done = true;
+                this.onStop();
+            }
+            return !done;
         });
     }
 
