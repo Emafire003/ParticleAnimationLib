@@ -2,7 +2,6 @@ package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.EffectModifier;
 import me.emafire003.dev.particleanimationlib.util.scheduler.SchedulerUtils;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
