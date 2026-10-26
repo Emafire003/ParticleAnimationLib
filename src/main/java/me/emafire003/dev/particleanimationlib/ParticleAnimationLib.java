@@ -1,6 +1,7 @@
 package me.emafire003.dev.particleanimationlib;
 
 import me.emafire003.dev.particleanimationlib.util.image.ImageUtils;
+import me.emafire003.dev.particleanimationlib.util.scheduler.SchedulerUtils;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -32,6 +33,10 @@ public class ParticleAnimationLib implements ModInitializer {
 		LOGGER.info("Loading ParticleAnimationLib for awesome particle effects!");
 		//A bit hacky, but there is no other way :/
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER_INSTANCE = server);
+		ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
+			SERVER_INSTANCE = server;
+			SchedulerUtils.registerOnServerTick();
+		});
 	}
 
 	/** Specify a Custom folder where loaded images are going to be cached.
