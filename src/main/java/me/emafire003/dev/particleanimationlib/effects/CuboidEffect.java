@@ -242,9 +242,9 @@ public class CuboidEffect extends TargetedEffect {
 
         if (blockSnap) {
             if(target != null){
-                target = BlockPos.containing(target).getCenter();
+                target = Vec3.atCenterOf(BlockPos.containing(target));
             }
-            minCorner = BlockPos.containing(origin).getCenter();
+            minCorner = Vec3.atCenterOf(BlockPos.containing(origin));
         } else {
             minCorner = origin;
         }
