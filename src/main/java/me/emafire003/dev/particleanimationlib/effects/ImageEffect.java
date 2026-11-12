@@ -10,7 +10,7 @@ import me.emafire003.dev.particleanimationlib.util.VectorUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
 import java.awt.image.BufferedImage;
@@ -275,7 +275,7 @@ public class ImageEffect extends YPREffect {
      * Setting a world, an image path and an origin position is ALWAYS mandatory, hence their presence in this method!
      * If this is an effect that uses Yaw and Pitch, remember to set those as well!
      * */
-    public static Builder builder(ServerLevel world, Vec3 originPos, ResourceLocation image) {
+    public static Builder builder(ServerLevel world, Vec3 originPos, Identifier image) {
         return new Builder().world(world).fileId(image).originPos(originPos);
     }
 
@@ -331,7 +331,7 @@ public class ImageEffect extends YPREffect {
      * Can be used to update the image that is displayed.
      * WARNING! Maye cause issues
      * */
-    public void load(ResourceLocation fileName) {
+    public void load(Identifier fileName) {
         imageLoadCallback = i -> {
             images = i;
             imageLoadCallback = null;
@@ -460,7 +460,7 @@ public class ImageEffect extends YPREffect {
     }
 
     /**It will also update the loaded image!*/
-    public void setFileId(ResourceLocation fileId) {
+    public void setFileId(Identifier fileId) {
         if(fileId != null){
             this.fileName = "id:"+fileId;
             load(fileId);
@@ -711,7 +711,7 @@ public class ImageEffect extends YPREffect {
 
         /**Weather or not the color of the image should be inverted*/
         private boolean invertColors = false;
-        private ResourceLocation fileId;
+        private Identifier fileId;
 
         public Builder() {
         }
@@ -942,7 +942,7 @@ public class ImageEffect extends YPREffect {
          * @param val the {@code fileName} to set
          * @return a reference to this Builder
          */
-        public Builder fileId(ResourceLocation val) {
+        public Builder fileId(Identifier val) {
             fileId = val;
             return this;
         }

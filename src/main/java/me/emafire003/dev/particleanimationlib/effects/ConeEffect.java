@@ -488,7 +488,7 @@ public class ConeEffect extends YPREffect {
         private Entity entityOrigin;
         private Vec3 originOffset;
         private ServerLevel world;
-        private ParticleOptions particle = ParticleTypes.DRAGON_BREATH;
+        private ParticleOptions particle = ParticleTypes.ELECTRIC_SPARK;
         private EffectModifier executeOnStop;
         /**
          * Growing per iteration in the length (0.05)

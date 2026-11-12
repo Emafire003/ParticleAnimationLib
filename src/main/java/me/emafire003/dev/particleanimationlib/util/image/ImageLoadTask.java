@@ -3,7 +3,7 @@ package me.emafire003.dev.particleanimationlib.util.image;
 import me.emafire003.dev.particleanimationlib.ParticleAnimationLib;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -42,7 +42,7 @@ public class ImageLoadTask{
         File imageFile;
 
         if(fileName.startsWith("id:")){
-            ResourceLocation id = ResourceLocation.parse(fileName.replaceFirst("id:", ""));
+            Identifier id = Identifier.parse(fileName.replaceFirst("id:", ""));
             Optional<Resource> resourceOptional = server.getResourceManager().getResource(id);
             if(resourceOptional.isEmpty()){
                 LOGGER.error("Error! Can't find image from the id: " + id);

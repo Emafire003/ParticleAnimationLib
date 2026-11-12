@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class Effect {
@@ -203,7 +202,7 @@ public class Effect {
      * You have access to the effect instance and the current tick
      * */
     public void run(EffectModifier modifier){
-        if(this.world.isClientSide){
+        if(this.world.isClientSide()){
             return;
         }
 
@@ -306,8 +305,8 @@ public class Effect {
     }
 
     public void displayParticle(Vec3 pos, int color, float size){
-        Vector3f col = Vec3.fromRGB24(color).toVector3f();
-        DustParticleOptions dustParticle = new DustParticleOptions(col, size);
+        //Vector3f col = Vec3.fromRGB24(color).toVector3f();
+        DustParticleOptions dustParticle = new DustParticleOptions(color, size);
         this.displayParticle(dustParticle, pos);
     }
 
@@ -326,7 +325,7 @@ public class Effect {
                 return;
             }
         }
-        world.players().forEach(serverPlayerEntity -> world.sendParticles(serverPlayerEntity, effect, forced, pos.x(), pos.y(), pos.z(), 1, vel.x(), vel.y(), vel.z(), 0));
+        world.sendParticles(effect, forced, forced, pos.x(), pos.y(), pos.z(), 1, vel.x(), vel.y(), vel.z() , 0);
     }
 
     public int getIterations() {
